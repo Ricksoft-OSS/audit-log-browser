@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- スケジュールジョブ実行 -->
+    <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
+          class="jp.ricksoft.AuditLogBrowser.schedule.AuditlogArchiveScheduler">
+      <property name="properties">
+		 <ref bean="global-properties"/>
+      </property>
+      <property name="auditLogManager">
+         <ref bean="jp.ricksoft.auditLogManager"/>
+      </property>
+      <property name="csvManager">
+         <ref bean="jp.ricksoft.csvManager"/>
+      </property>
+      <property name="fileManager">
+         <ref bean="jp.ricksoft.fileManager"/>
+      </property>
+      <property name="repositoryFolderManager">
+         <ref bean="jp.ricksoft.repositoryFolderManager"/>
+      </property>
+      <property name="zipManager">
+         <ref bean="jp.ricksoft.zipManager"/>
+      </property>
+    </bean>
+
+    <!-- ジョブの詳細 -->
+    <bean id="jp.ricksoft.schedule.scheduledjob.jobDetail"
+          class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass">
+        	<value>jp.ricksoft.AuditLogBrowser.schedule.ScheduledJob</value>
+        </property>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobScheduler">
+                    <ref bean="jp.ricksoft.schedule.AuditlogArchiveScheduler" />
+                </entry>
+                <entry key="jobLockService">
+                    <ref bean="jobLockService" />
+                </entry>
+                <entry key="isEnabled">
+                    <value>${AuditLogBrowser.schedule.scheduledjob.enabled}</value>
+                </entry>
+                <entry key="doDelete">
+                    <value>${AuditLogBrowser.schedule.scheduledjob.dodelete}</value>
+                </entry>
+                <entry key="storagePeriod">
+                    <value>${AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod}</value>
+                </entry>
+                <entry key="backupDirectory">
+                    <value>${AuditLogBrowser.schedule.backup.directory}</value>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- スケジュールトリガー -->
+    <bean id="jp.ricksoft.schedule.scheduledjob.trigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail">
+            <ref bean="jp.ricksoft.schedule.scheduledjob.jobDetail" />
+        </property>
+        <property name="cronExpression">
+            <value>${AuditLogBrowser.schedule.scheduledjob.cronexpression}</value>
+        </property>
+        <property name="startDelay">
+            <value>${AuditLogBrowser.schedule.scheduledjob.cronstartdelay}</value>
+        </property>
+    </bean>
+
+    <bean id="jp.ricksoft.schedule.scheduledjob.SchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="jp.ricksoft.schedule.scheduledjob.trigger"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>
