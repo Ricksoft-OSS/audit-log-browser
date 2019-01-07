@@ -1,0 +1,12 @@
+<webscript>
+  <!--
+    Copyright 2018 Ricksoft Co., Ltd.
+    All rights reserved.
+   -->
+  <shortname>監査ログ</shortname>
+  <description>監査ログのファイルをダウンロードします</description>
+  <url>/DownloadAuditLogZip?value={contentValue}&amp;fromTime={fromTime}&amp;toTime={toTime}&amp;user={executingUser}&amp;verbose=true</url>
+  <authentication>admin</authentication>
+  <format default=''></format>
+  <family>Ricksoft</family>
+</webscript>
