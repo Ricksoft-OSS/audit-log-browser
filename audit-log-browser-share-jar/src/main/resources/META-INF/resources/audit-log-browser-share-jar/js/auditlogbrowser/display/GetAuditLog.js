@@ -314,7 +314,7 @@ function deleteAuditLogs(endpointURL){
            $('.alert.alert-success').show();
            setTimeout(function(){
              $('#delAuditModal').modal('hide');
-           }, POPUP_HIDE_DELAY);
+           }, AuditLogBrowser.POPUP_HIDE_DELAY);
          },
          scope: this
       },
