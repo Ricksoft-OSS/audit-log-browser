@@ -28,9 +28,9 @@ alfresco-global.properties で以下の設定を変更・追加することが�
 |--------|--------------|------------|
 |スケジュール機能の on/off            |jp.ricksoft.AuditLogBrowser.schedule.scheduledjob.enabled|true|
 |スケジュール設定時の削除機能の on/off|jp.ricksoft.AuditLogBrowser.schedule.scheduledjob.dodelete|false|
-|スケジュール処理の実行タイミング     |jp.ricksoft.AuditLogBrowser.schedule.scheduledjob.cronexpression|0 0/2 * * * ?|
+|スケジュール処理の実行タイミング     |jp.ricksoft.AuditLogBrowser.schedule.scheduledjob.cronexpression|0 0 * * * ?|
 |ACS インスタンスの起動からスケジューラの開始までの時間（ミリ秒）|jp.ricksoft.AuditLogBrowser.schedule.scheduledjob.cronstartdelay|240000|
-|監査ログの保持期間（日）|jp.ricksoft.AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod|5|
+|監査ログの保持期間（日）|jp.ricksoft.AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod|7|
 
 ### Specifications
 
