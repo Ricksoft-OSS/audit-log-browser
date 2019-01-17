@@ -99,10 +99,8 @@ public class CSVFileManager
     /**
      * Add one csv record.
      * 
-     * @param tempDir
-     *            temporary directory for csv
-     * @param recordMap
-     *            audit log entry
+     * @param tempDir temporary directory for csv
+     * @param recordMap audit log entry
      */
     public void addRecord(File csv, Map<String, Object> recordMap)
     {
@@ -168,20 +166,13 @@ public class CSVFileManager
     }
 
     /**
-     * Auditlogを引数で与えられた条件に従って取得し、一時フォルダにcsvファイルとして作成する<br>
+     * Acquire audit log and create csv file.
      * 
-     * @param fromDate
-     *            Auditlogを取得開始する日付
-     * @param toDate
-     *            Auditlogを取得終了する日付
-     * @param appName
-     *            監査アプリケーション名
-     * @param user
-     *            ユーザ名
-     * @param directory
-     *            csvを作成するディレクトリ
-     * @param unitMaxSize
-     *            csvをAlfrescoより取得してくる最大単位
+     * @param fromDate  Start date of the audit log acquisition target period
+     * @param toDate  End date of audit log acquisition period
+     * @param appName  Audit application name
+     * @param user  Username
+     * @param directory  Directory storing the csv file
      * @return Numbre of csv
      * @throws IOException
      */
