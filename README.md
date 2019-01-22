@@ -11,7 +11,7 @@ For more information about features, see **Specifications** section.
 
 ### Installation
 
-1. Download jar file from GitHub Release page.
+1. Download jar file from [GitHub Release page](https://github.com/Ricksoft-OSS/audit-log-browser/releases).
     1. audit-log-browser-platform-jar-x.y.z.jar
     2. audit-log-browser-share-jar-x.y.z.jar
 2. Send jar files to Alfresco server.
