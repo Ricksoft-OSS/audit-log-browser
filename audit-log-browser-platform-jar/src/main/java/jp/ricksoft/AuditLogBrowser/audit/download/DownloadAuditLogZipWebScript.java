@@ -99,7 +99,7 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
             throw new WebScriptException(e.getMessage());
         } finally {
             if (tmpDir.exists()) {
-                fileManager.deleteAll(tmpDir);
+                fileManager.deleteAllFiles(tmpDir);
             }
         }
     }

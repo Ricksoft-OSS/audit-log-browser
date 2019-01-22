@@ -28,12 +28,11 @@ public class FileManager
     }
 
     /**
-     * Delete the file/folder. In the case of a folder, deleted files and folders
-     * are deleted recursively.
+     * Delete the file/folder. In the case of a folder, delete all files in folder.
      * 
      * @param target
      */
-    public void deleteAll(File target)
+    public void deleteAllFiles(File target)
     {
 
         // Existance check
@@ -47,8 +46,7 @@ public class FileManager
             target.delete();
         } else if (target.isDirectory())
         {
-            Stream.of(target.list()).forEach(filename -> deleteAll(new File(target.getAbsolutePath(), filename)));
-            target.delete();
+            Stream.of(target.listFiles()).forEach(t -> t.delete());
         }
     }
 

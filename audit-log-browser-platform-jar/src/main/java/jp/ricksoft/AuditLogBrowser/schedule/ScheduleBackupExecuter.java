@@ -32,14 +32,18 @@ public class ScheduleBackupExecuter extends ActionExecuterAbstractBase {
     @Override
     protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
         String simpleParam = (String) action.getParameterValue(PARAM_SIMPLE);
-
-        LOG.info("Repository Action called from Scheduled Job, [" + PARAM_SIMPLE + "=" + simpleParam + "]");
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Repository Action called from Scheduled Job, [" + PARAM_SIMPLE + "=" + simpleParam + "]");
+        }
 
         if (nodeService.exists(actionedUponNodeRef)) {
             // Start Repository Action Implementation.
             String nodeName = (String)nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_NAME);
-
-            LOG.info("Simple Repo Action invoked on node [name=" + nodeName + "]");
+            
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Simple Repo Action invoked on node [name=" + nodeName + "]");
+            }
         }
     }
 

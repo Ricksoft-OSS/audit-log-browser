@@ -69,11 +69,13 @@ public class AuditlogArchiveScheduler {
      */
     public void execute(int retentionPeriod, boolean doDelete, String dstFolderPath) {
         
-        LOG.debug("============ Start Schedule Job.");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("============ Start Schedule Job.");
+        }
         String sysDefaultPath = System.getProperty("java.io.tmpdir");
         String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
         String dirName = properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp");
-        String csvName = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
+        String csvNameFormat = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
         int unitMaxSize = Integer.valueOf(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
         
         // No backup directory set.
@@ -82,15 +84,13 @@ public class AuditlogArchiveScheduler {
         }
 
         // from
-        LocalDate fromDate = LocalDate.of(2005, 11, 1);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Set fromDate: {}", fromDate);
-        }
-        
+        LocalDate fromDate = LocalDate.of(2005, 11, 1);    
         // to
         LocalDate toDate = LocalDate.now().minusDays(retentionPeriod);
+        
         if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Set toDate: {}", toDate);
+            LOG.debug("============ FromDate: {}", fromDate);
+            LOG.debug("============ ToDate: {}", toDate);
         }
 
         // temporary Directory for CSV
@@ -100,13 +100,18 @@ public class AuditlogArchiveScheduler {
         LocalDate targetDate = fromDate;
 
         while(targetDate.isBefore(toDate)) {
-            LOG.debug("============ Start {} ============", targetDate);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("============ Loop Start {} ============", targetDate);
+            }
+            
             String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
             Long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
             Long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
             
             Long entryId = null;
-            File csv = csvManager.createCSV(tmpDir.getAbsolutePath(), String.format(csvName, targetDateStr));           
+            String csvName = String.format(csvNameFormat, targetDateStr);
+            File csv = csvManager.prepareCSV(tmpDir.getAbsolutePath(), csvName);
+
             List<Map<String, Object>> auditLogs;
                         
             do {
@@ -123,34 +128,46 @@ public class AuditlogArchiveScheduler {
                 entryId = (Long)auditLogs.get(auditLogs.size()-1).get(KEY_ID) + 1;
                 
             } while (auditLogs.size() == unitMaxSize);
-
             
-            if (!csvManager.hasRecord(csv)) {
-                LOG.debug("============ There is no {} data found. ============", targetDateStr);
-                continue;
-            }
-
-            // for Zip
-            File zip = new File(tmpDir.getAbsolutePath(), String.format(NAME_DAILYZIP, targetDateStr));
-            NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder, targetDateStr.split("-"));
-            if (repositoryFolderManager.isExist(dateFolder, NAME_DAILYZIP)) {
-                LOG.debug("============ {} Zip has already created. ============", targetDateStr);
-                continue;
-            }
-
-            zipManager.createZip(zip, tmpDir.listFiles());
-            repositoryFolderManager.addContent(dateFolder, zip);
-            fileManager.deleteAll(tmpDir);
             targetDate = targetDate.plusDays(1);
-
-            LOG.debug("============ loop end ============");
+            
+            // If there is only a header line, subsequent processing is not performed.
+            if (!csv.exists() || !csvManager.hasRecord(csv)) {
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("============ There is no data found: {} ============", targetDateStr);
+                }
+                continue;
+            }
+            
+            NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder, targetDateStr.split("-"));
+            String zipName = String.format(NAME_DAILYZIP, targetDateStr);
+            
+            if (repositoryFolderManager.isExist(dateFolder, zipName)) {
+                continue;
+            }
+            
+            // for Zip
+            File zip = new File(tmpDir.getAbsolutePath(), zipName);
+            File[] csvs = {csv};
+            
+            zipManager.createZip(zip, csvs);
+            repositoryFolderManager.addContent(dateFolder, zip);
+            
+            fileManager.deleteAllFiles(tmpDir);
+            
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("============ Loop End ============");
+            }
+            
         }
         
         if(doDelete) {
             this.cleanUp(fromDate, toDate);
         }
-
-        LOG.debug("============ Finish Backup process.");
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("============ Finish Backup process.");
+        }
 
     }
     
@@ -160,17 +177,22 @@ public class AuditlogArchiveScheduler {
      * @param toDate    Delete end DateTime.
      */
     private void cleanUp(LocalDate fromDate, LocalDate toDate) {
-        LOG.debug("============ Start Delete process");
-        // Even if you delete old logs, there is no problem
-        LOG.debug("============ fromDate: {}", fromDate);
-        LOG.debug("============ toDate: {}", toDate);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("============ Start Delete process");
+            // Even if you delete old logs, there is no problem
+            LOG.debug("============ fromDate: {}", fromDate);
+            LOG.debug("============ toDate: {}", toDate);
+        }
         
         String appName      = properties.getProperty("AuditLogBrowser.schedule.download.appname");        
         Long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
         Long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
         
         auditLogManager.delete(appName, fromEpochMilli, toEpochMilli);
-
+        
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("============ Finish Delete process");
+        }
     }
 
 }

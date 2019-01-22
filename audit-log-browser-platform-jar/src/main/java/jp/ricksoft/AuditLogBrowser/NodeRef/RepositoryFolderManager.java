@@ -62,7 +62,13 @@ public class RepositoryFolderManager {
      */
     public boolean isExist(NodeRef folderNode, String filename) {
         NodeRef result = fileFolderService.searchSimple(folderNode, filename);
-        return fileFolderService.exists(result);
+        
+        if(result == null) {
+            return false;
+        }
+        
+        return fileFolderService.exists(result) ? true : false;
+        
     }
     
     /**
