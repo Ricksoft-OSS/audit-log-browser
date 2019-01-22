@@ -11,7 +11,7 @@ Alfresco の監査ログは Alfresco のデータベースに格納されます�
 
 ### Installation
 
-1. Github のリリースページから Jar ファイルをダウンロードします
+1. [Github のリリースページ](https://github.com/Ricksoft-OSS/audit-log-browser/releases)から Jar ファイルをダウンロードします
     1. audit-log-browser-platform-jar-x.y.z.jar
     2. audit-log-browser-share-jar-x.y.z.jar
 2. Alfresco Content Services がインストールされているサーバに Jar ファイルを配置します
