@@ -5,9 +5,12 @@
 package jp.ricksoft.AuditLogBrowser.file;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -16,10 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.service.ServiceRegistry;
-import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVStrategy;
 
@@ -58,24 +61,32 @@ public class CSVFileManager
     }
 
     /**
-     * Create csv file.
+     * Prepare csv file.
      * 
      * @param path  Parent folder path
      * @param name  csv file name
      * @return  csv file
      */
-    public File createCSV(String path, String name)
+    public File prepareCSV(String path, String name)
     {
 
-        File csv = new File(path, name);
-        if (csv.exists())
+        Path csvPath = Paths.get(path, name);
+        if(Files.exists(csvPath)) {
+            return csvPath.toFile();
+        }
+        
+        try
         {
-            return csv;
+            Files.createFile(csvPath);
+        } catch (IOException e1)
+        {
+            e1.printStackTrace();
+            return null;
         }
 
         String labelsString = messageService.getMessage(LABELS_MESSAGE_ID_DEFAULT);
 
-        try (FileWriter csvWriter = new FileWriter(csv, true);)
+        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true);)
         {
             
             // TODO: a
@@ -83,7 +94,7 @@ public class CSVFileManager
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
             printer.println(labelsString.split(DELIMITER));
             printer.flush();
-            return csv;
+            return csvPath.toFile();
 
         } catch (IOException ioe)
         {
@@ -121,7 +132,7 @@ public class CSVFileManager
                     ret.add("");
                 } else
                 {
-                    ret.add((String) recordMap.get(key));
+                    ret.add(String.valueOf(recordMap.get(key)));
                 }
             });
             String[] record = ret.toArray(new String[0]);
@@ -145,15 +156,9 @@ public class CSVFileManager
      */
     public boolean hasRecord(File csv)
     {
-
-        try (FileReader csvReader = new FileReader(csv);)
-        {
-
-            CSVParser parser = new CSVParser(csvReader,
-                    new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
-
-            return parser.getLineNumber() > 1;
-
+        try  (Stream<String> st = Files.lines(csv.toPath(), StandardCharsets.UTF_8)){
+            return st.count() > 1;
+            
         } catch (IOException ioe)
         {
             ioe.printStackTrace();
@@ -202,7 +207,7 @@ public class CSVFileManager
             }
 
             Long entryId = null;
-            File csv = this.createCSV(directory.getAbsolutePath(), String.format(csvName, targetDateStr));
+            File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, targetDateStr));
             List<Map<String, Object>> auditLogs;
 
             do
