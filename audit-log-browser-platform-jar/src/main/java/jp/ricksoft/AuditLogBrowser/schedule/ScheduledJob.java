@@ -38,7 +38,9 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
         final String backupFolderPath = (String) jobData.get(ID_PROP_FOLDERNAME);
         
         if (!isEnabled) {
-            LOG.debug(MSG_SCHEDULE_DISABLED);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(MSG_SCHEDULE_DISABLED);
+            }
             return;
         }
         
