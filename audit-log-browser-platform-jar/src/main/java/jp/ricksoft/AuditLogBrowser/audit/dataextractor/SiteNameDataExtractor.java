@@ -61,10 +61,13 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
         } else {
             siteTitle = extractSiteNameFromSitePathStr((String)in);
         }
-
         return siteTitle;
     }
     
+    /**
+     * @param sitePath
+     * @return
+     */
     private String extractSiteNameFromSitePathStr(String sitePath) {
         String siteName = "";
         
@@ -72,7 +75,7 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
             siteName = StringUtils.substringBetween(sitePath, "/st:sites/", "/");
         
             if (logger.isDebugEnabled()) {
-                logger.debug("抽出されたサイト名： " + siteName);
+                logger.debug("SiteName： " + siteName);
             }
         }
         
@@ -90,12 +93,19 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
         
             SiteInfo siteInfo = siteService.getSite(siteShortName);
             if (logger.isDebugEnabled()) {
-                logger.debug("サイト情報： " + siteInfo);
+                logger.debug("SiteInfo： " + siteInfo);
             }
+            
             return siteInfo.getTitle();
         }
+    
     }
     
+    /**
+     * 
+     * @param contentRef
+     * @return
+     */
     private String extractSiteNameFromNodeRef(NodeRef contentRef) {
         SiteInfo siteInfo = siteService.getSite(contentRef);
         
@@ -104,7 +114,7 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
         }
         
         if (logger.isDebugEnabled()) {
-            logger.debug("Extracted Site Name： " + siteInfo.getTitle());
+            logger.debug("SiteInfo： " + siteInfo.getTitle());
         }
             
         return siteInfo.getTitle();
