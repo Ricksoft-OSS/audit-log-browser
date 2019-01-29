@@ -19,7 +19,7 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
     private SiteService siteService;
     private MessageService messageService;
 
-    private static final String MESSAGE_ID_NO_SITENAME = "ricksoft.auditLogBrowser.log.noSiteName";
+    private static final String MSG_ID_NO_SITE = "ricksoft.auditLogBrowser.log.noSiteName";
 
     public void setSiteService(SiteService siteService) {
         this.siteService = siteService;
@@ -28,7 +28,7 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
     public void setMessageService(MessageService messageService) {
         this.messageService = messageService;
     }
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
@@ -53,9 +53,9 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
      */
     @Override
     public Serializable extractData(Serializable in) throws Throwable {
-
+        
         String siteTitle = "";
-
+        
         if (in instanceof NodeRef) {
             siteTitle = extractSiteNameFromNodeRef((NodeRef)in);
         } else {
@@ -64,27 +64,30 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
 
         return siteTitle;
     }
-
+    
     private String extractSiteNameFromSitePathStr(String sitePath) {
         String siteName = "";
-
+        
         if (sitePath.contains("st:sites")) {
             siteName = StringUtils.substringBetween(sitePath, "/st:sites/", "/");
-
+        
             if (logger.isDebugEnabled()) {
                 logger.debug("抽出されたサイト名： " + siteName);
             }
         }
-
-
-        // If content is not in a site, or if it is surf config for user dashboard
-        if (StringUtils.isBlank(siteName) || StringUtils.equals(siteName, "cm:surf-config")) {
+        
+        String siteShortName = "";
+        if (!StringUtils.isBlank(siteName)) {
+            siteShortName = siteName.substring(siteName.indexOf(":")+1);
+        }
+        
+        // If site doesn't exist, return no-site message.
+        if (StringUtils.isBlank(siteShortName) || !siteService.hasSite(siteShortName)) {
             // The default site name for content not associated with sites.
-            return this.messageService.getMessage(MESSAGE_ID_NO_SITENAME);
-
+            return String.join(": ", this.messageService.getMessage(MSG_ID_NO_SITE), siteShortName);
+        
         } else {
-            String siteShortName = siteName.substring(siteName.indexOf(":")+1);
-
+        
             SiteInfo siteInfo = siteService.getSite(siteShortName);
             if (logger.isDebugEnabled()) {
                 logger.debug("サイト情報： " + siteInfo);
@@ -92,18 +95,18 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
             return siteInfo.getTitle();
         }
     }
-
+    
     private String extractSiteNameFromNodeRef(NodeRef contentRef) {
         SiteInfo siteInfo = siteService.getSite(contentRef);
-
+        
         if(siteInfo == null) {
-            return this.messageService.getMessage(MESSAGE_ID_NO_SITENAME);
+            return String.join(": ", this.messageService.getMessage(MSG_ID_NO_SITE), contentRef.toString());
         }
         
         if (logger.isDebugEnabled()) {
             logger.debug("Extracted Site Name： " + siteInfo.getTitle());
         }
-        
+            
         return siteInfo.getTitle();
     }
 
