@@ -13,7 +13,6 @@
 <@markup id="js">
    <#-- JavaScript Library -->
    <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share-jar/js/lib/jquery-3.2.1.min.js"/>
-   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share-jar/js/lib/bootstrap.min.js"/>
    <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share-jar/js/lib/bootstrap.bundle.min.js"/>
    <#-- JavaScript Dependencies -->
    <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share-jar/js/auditlogbrowser/display/GetAuditLog.js"/>
