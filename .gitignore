@@ -43,3 +43,6 @@ buildNumber.properties
 
 alf_data_dev/
 *.lic
+
+main.iml
+.idea
