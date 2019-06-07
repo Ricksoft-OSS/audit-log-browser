@@ -242,7 +242,9 @@ function createWhereParams(user, contentName, fromDate, fromTime, toDate, toTime
    }
 
    if (Object.entries(params)) {
-     var paramList = Object.entries(params).map(entry => entry.join("="));
+     var paramList = Object.entries(params).map(function(entry){
+        return entry.join("=");
+     });
    }
 
    if (periods) {
