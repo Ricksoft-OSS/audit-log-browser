@@ -207,7 +207,6 @@ public class CSVFileManager
             }
 
             Long entryId = null;
-            File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, targetDateStr));
             List<Map<String, Object>> auditLogs;
 
             do
@@ -219,6 +218,8 @@ public class CSVFileManager
                 {
                     break;
                 }
+
+                final File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, targetDateStr));
 
                 auditLogs.stream().forEach(entry -> this.addRecord(csv, entry));
 
