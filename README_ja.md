@@ -12,11 +12,11 @@ Alfresco の監査ログは Alfresco のデータベースに格納されます�
 ### Installation
 
 1. [Github のリリースページ](https://github.com/Ricksoft-OSS/audit-log-browser/releases)から Jar ファイルをダウンロードします
-    1. audit-log-browser-platform-jar-x.y.z.jar
-    2. audit-log-browser-share-jar-x.y.z.jar
+    1. audit-log-browser-platform-x.y.z.jar
+    2. audit-log-browser-share-x.y.z.jar
 2. Alfresco Content Services がインストールされているサーバに Jar ファイルを配置します
-3. ＜Alfresco Content Services のインストールディレクトリ＞/module/platform ディレクトリ配下に audit-log-browser-platform-jar-x.y.z.jar を配置します。ディレクトリがない場合は作成してから実行します
-4. ＜Alfresco Content Services のインストールディレクトリ＞/module/share ディレクトリ配下に audit-log-browser-share-jar-x.y.z.jar を配置します。ディレクトリがない場合は作成してから実行します
+3. ＜Alfresco Content Services のインストールディレクトリ＞/module/platform ディレクトリ配下に audit-log-browser-platform-x.y.z.jar を配置します。ディレクトリがない場合は作成してから実行します
+4. ＜Alfresco Content Services のインストールディレクトリ＞/module/share ディレクトリ配下に audit-log-browser-share-x.y.z.jar を配置します。ディレクトリがない場合は作成してから実行します
 5. platform, share ディレクトリ、および 配置した Jar ファイルの所有者を Alfresco Content Services の実行ユーザに変更ます
 6. Alfresco Content Services を再起動します
 

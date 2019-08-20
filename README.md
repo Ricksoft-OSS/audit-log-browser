@@ -12,11 +12,11 @@ For more information about features, see **Specifications** section.
 ### Installation
 
 1. Download jar file from [GitHub Release page](https://github.com/Ricksoft-OSS/audit-log-browser/releases).
-    1. audit-log-browser-platform-jar-x.y.z.jar
-    2. audit-log-browser-share-jar-x.y.z.jar
+    1. audit-log-browser-platform-x.y.z.jar
+    2. audit-log-browser-share-x.y.z.jar
 2. Send jar files to Alfresco server.
-3. Place audit-log-browser-platform-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/platform directory. If the directory doesn't exist, create it before place jar file.
-4. Place audit-log-browser-share-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/share directory. If the directory doesn't exist, create it before place jar file.
+3. Place audit-log-browser-platform-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/platform directory. If the directory doesn't exist, create it before place jar file.
+4. Place audit-log-browser-share-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/share directory. If the directory doesn't exist, create it before place jar file.
 5. Change owner of platform, share directory, and placed jar files to Alfresco Content Services execution user.
 6. Restart Alfresco Content Services.
 
