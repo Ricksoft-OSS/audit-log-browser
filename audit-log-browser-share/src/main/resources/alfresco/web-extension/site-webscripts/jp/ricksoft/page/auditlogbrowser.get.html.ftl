@@ -11,15 +11,20 @@
   <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/auditlogbrowser/normal.css"/>
 </@>
 <@markup id="js">
-   <#-- JavaScript Library -->
-   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery-3.2.1.min.js"/>
-   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/bootstrap.bundle.min.js"/>
    <#-- JavaScript Dependencies -->
-   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/auditlogbrowser/display/GetAuditLog.js"/>
+  <script type=”text/javascript”>
+    //<![CDATA[
+      dojoConfig.packages.push(
+        {name : ‘jquery’, location : ‘resources/audit-log-browser-share/js/lib’, main : ‘jquery-3.2.1.min’},
+        {name : ‘bootstrap’, location : ‘resources/audit-log-browser-share/js/lib’, main : ‘bootstrap.bundle.min’},
+        {name : ‘GetAuditLog’, location : ‘resources/audit-log-browser-share/js/auditlogbrowser/display’, main : ‘GetAuditLog’}
+      );
+    //]]>
+  </script>
 </@>
 <@markup id="html">
   <@uniqueIdDiv>
-    <!-- 削除モーダルウィンドウ -->
+    <!-- Delete Modal Window -->
     <div class="modal fade" id="delAuditModal" tabindex="-1" role="dialog" aria-labelledby="delAuditModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
