@@ -302,7 +302,9 @@
                                 <exclude>**/META-INF/**</exclude>
                                 <exclude>**/*.lib.js</exclude>
                                 <exclude>**/*.css</exclude>
+                                <exclude>**/*min.js</exclude>
                                 <exclude>**/*-min.js</exclude>
+                                <exclude>**/*min.css</exclude>
                                 <exclude>**/*-min.css</exclude>
                             </excludes>
                             <force>true</force>
@@ -321,7 +323,9 @@
                                 <exclude>**/site-webscripts/**</exclude>
                                 <exclude>**/*.lib.js</exclude>
                                 <exclude>**/*.css</exclude>
+                                <exclude>**/*min.js</exclude>
                                 <exclude>**/*-min.js</exclude>
+                                <exclude>**/*min.css</exclude>
                                 <exclude>**/*-min.css</exclude>
                             </excludes>
                             <force>true</force>
