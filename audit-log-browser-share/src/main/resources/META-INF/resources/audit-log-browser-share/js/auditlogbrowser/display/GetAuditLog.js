@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 var AuditLogBrowser = {};
-AuditLogBrowser.ENDPOINT = "api/-default-/public/alfresco/versions/1/audit-applications/share-site-access/audit-entries";
+AuditLogBrowser.ENDPOINT = "proxy/alfresco-api/-default-/public/alfresco/versions/1/audit-applications/share-site-access/audit-entries";
 AuditLogBrowser.MAX_ITEMS = 100;
 AuditLogBrowser.POPUP_HIDE_DELAY = 3000;
 AuditLogBrowser.param = {
@@ -260,7 +260,7 @@ function createWhereParams(user, contentName, fromDate, fromTime, toDate, toTime
 function getAuditLogs(endpointURL,data){
 
   Alfresco.util.Ajax.jsonGet({
-      url: Alfresco.constants.URL_CONTEXT + endpointURL,
+      url:  Alfresco.constants.URL_CONTEXT + endpointURL,
       dataObj: data,
       successCallback: {
          fn: function (result) {
