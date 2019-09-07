@@ -76,17 +76,17 @@ YAHOO.widget.DataTable.Formatter.auditDateFormatter = function(elLiner, oRecord,
 };
 
 $(function(){
+  var paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime;
 
   getAuditLogs(AuditLogBrowser.ENDPOINT, AuditLogBrowser.param);
 
   $('#search-audit-log').on('click',function(){
-
-    var paramUser     = $('#executingUser').val();
-    var paramContent  = $('#contentValue').val();
-    var paramFromdate = $('#fromDate').val();
-    var paramFromtime = $('#fromTime').val();
-    var paramTodate   = $('#toDate').val();
-    var paramTotime   = $('#toTime').val();
+    paramUser = $('#executingUser').val();
+    paramContent  = $('#contentValue').val();
+    paramFromdate = $('#fromDate').val();
+    paramFromtime = $('#fromTime').val();
+    paramTodate   = $('#toDate').val();
+    paramTotime   = $('#toTime').val();
 
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
      || haveOnlyTimeInput(paramTodate, paramTotime)) {
@@ -194,8 +194,7 @@ $(function(){
       $('#confirm-del-audit').show();
     },
     'hidden.bs.modal': function(){
-      var form = document.getElementById('del-form');
-      form.classList.remove('was-validated');
+      $('#del-form').classList.remove('was-validated');
 
       $('#del-from-date').val('');
       $('#del-from-time').val('');
@@ -213,6 +212,10 @@ $(function(){
     AuditLogBrowser.param.skipCount +=  AuditLogBrowser.MAX_ITEMS;
     getAuditLogs(AuditLogBrowser.ENDPOINT, AuditLogBrowser.param);
   });
+  $('#delete-audit-log').on('click',function(){
+    $('#delAuditModal').show();
+  });
+
 
 });
 
@@ -264,7 +267,7 @@ function getAuditLogs(endpointURL,data){
       dataObj: data,
       successCallback: {
          fn: function (result) {
-           // ページング系処理
+           // Paging
            var pagination = result.json["list"]["pagination"];
            $('#prev-page').prop('disabled', !Boolean(pagination.skipCount));
            $('#next-page').prop('disabled', !pagination.hasMoreItems);
@@ -273,7 +276,7 @@ function getAuditLogs(endpointURL,data){
 
            result.json.list.entries = settleEntries(result.json.list.entries);
 
-           // データテーブル形処理
+           // Prepare datatable
            YAHOO.example.Data = result.json;
            var dataSource = new YAHOO.util.DataSource(YAHOO.example.Data);
            dataSource.responseType   = YAHOO.util.DataSource.TYPE_JSON;
@@ -281,7 +284,7 @@ function getAuditLogs(endpointURL,data){
 
            var dataTable = new YAHOO.widget.DataTable("audit-log-table", AuditLogBrowser.COLUMN_DEFINITION, dataSource, AuditLogBrowser.configs);
 
-           // ソート情報
+           // Datatable sort info
            dataTable.subscribe("theadCellClickEvent", function (oArgs) {
              var uiSortedBy = this.getState().sortedBy;
              delete uiSortedBy.column;
@@ -315,7 +318,7 @@ function deleteAuditLogs(endpointURL){
            $('.alert.alert-primary').hide();
            $('.alert.alert-success').show();
            setTimeout(function(){
-             $('#delAuditModal').modal('hide');
+             $('#delAuditModal').hide();
            }, AuditLogBrowser.POPUP_HIDE_DELAY);
          },
          scope: this
@@ -379,10 +382,6 @@ function settleEntries(logs) {
   });
 
   return logs;
-}
-
-function settleProperties() {
-
 }
 
 // format to unordered list
