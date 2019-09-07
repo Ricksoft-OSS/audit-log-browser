@@ -23,7 +23,7 @@
 <@markup id="html">
   <@uniqueIdDiv>
     <!-- Delete Modal Window -->
-    <div class="modal fade" id="delAuditModal" tabindex="-1" role="dialog" aria-labelledby="delAuditModalLabel" aria-hidden="true">
+    <div class="modal" id="delAuditModal" tabindex="-1" role="dialog" aria-labelledby="delAuditModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
