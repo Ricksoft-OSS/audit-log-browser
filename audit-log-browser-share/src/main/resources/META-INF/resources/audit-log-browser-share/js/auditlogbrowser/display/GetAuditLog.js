@@ -77,6 +77,7 @@ YAHOO.widget.DataTable.Formatter.auditDateFormatter = function(elLiner, oRecord,
 
 $(function(){
   var paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime;
+  var delFromdate, delFromtime, delTodate, delTotime
 
   getAuditLogs(AuditLogBrowser.ENDPOINT, AuditLogBrowser.param);
 
@@ -115,12 +116,6 @@ $(function(){
 
   $('#download-audit-log').on('click',function(){
     var downloadURL = "/DownloadAuditLogZip";
-    var paramUser     = $('#executingUser').val();
-    var paramContent  = $('#contentValue').val();
-    var paramFromdate = $('#fromDate').val();
-    var paramFromtime = $('#fromTime').val();
-    var paramTodate   = $('#toDate').val();
-    var paramTotime   = $('#toTime').val();
 
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
      || haveOnlyTimeInput(paramTodate, paramTotime)) {
@@ -136,12 +131,12 @@ $(function(){
     }
 
     var input = {
-      user: $('#executingUser').val(),
-      content: $('#contentValue').val(),
-      fromDate: $('#fromDate').val(),
-      fromTime: $('#fromTime').val(),
-      toDate: $('#toDate').val(),
-      toTime: $('#toTime').val()
+      user: paramUser,
+      content: paramContent,
+      fromDate: paramFromdate,
+      fromTime: paramFromtime,
+      toDate: paramTodate,
+      toTime: paramTotime
     }
 
     document.location.href = Alfresco.constants.PROXY_URI + downloadURL + "?" + $.param(input);
@@ -153,10 +148,10 @@ $(function(){
     var form = document.getElementById('del-form');
 
     if (form.checkValidity()) {
-      var delFromdate = $('#del-from-date').val();
-      var delFromtime = $('#del-from-time').val();
-      var delTodate   = $('#del-to-date'  ).val();
-      var delTotime   = $('#del-to-time'  ).val();
+      delFromdate = $('#del-from-date').val();
+      delFromtime = $('#del-from-time').val();
+      delTodate   = $('#del-to-date'  ).val();
+      delTotime   = $('#del-to-time'  ).val();
       setOutputValues(delFromdate, delFromtime, delTodate, delTotime);
 
       $('#input-del-term' ).hide();
@@ -174,10 +169,6 @@ $(function(){
   });
 
   $('#submit-del-audit').on('click', function(){
-    var delFromdate = $('#del-from-date').val();
-    var delFromtime = $('#del-from-time').val();
-    var delTodate   = $('#del-to-date'  ).val();
-    var delTotime   = $('#del-to-time'  ).val();
     var delTerm = {
       where: "(" + createWhereParams("", "", delFromdate, delFromtime, delTodate, delTotime) + ")"
     };
