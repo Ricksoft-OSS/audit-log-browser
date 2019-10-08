@@ -7,7 +7,7 @@
   <title-id>tool.auditlogbrowser.label</title-id>
   <description>Display a list of audit logs to the administrator console</description>
   <description-id>tool.auditlogbrowser.description</description-id>
-  <url>/auditlogbrowser?value={contentValue}&amp;fromTime={fromTime}&amp;toTime={toTime}&amp;user={executingUser}&amp;verbose=true</url>
+  <url>/auditlogbrowser</url>
   <authentication>admin</authentication>
   <format default="html"></format>
   <family>admin-console</family>
