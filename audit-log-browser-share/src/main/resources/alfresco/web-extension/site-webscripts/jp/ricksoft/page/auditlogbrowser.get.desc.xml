@@ -3,9 +3,9 @@
     Copyright 2018 Ricksoft Co., Ltd.
     All rights reserved.
    -->
-  <shortname>監査ログマネージャ</shortname>
+  <shortname>Audit Log Browser</shortname>
   <title-id>tool.auditlogbrowser.label</title-id>
-  <description>管理者コンソールに監査ログのリストを出力します</description>
+  <description>Display a list of audit logs to the administrator console</description>
   <description-id>tool.auditlogbrowser.description</description-id>
   <url>/auditlogbrowser?value={contentValue}&amp;fromTime={fromTime}&amp;toTime={toTime}&amp;user={executingUser}&amp;verbose=true</url>
   <authentication>admin</authentication>
