@@ -13,12 +13,7 @@
 <@markup id="js">
   <#-- JavaScript Dependencies -->
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery-3.2.1.min.js"/>
-  <script type=”text/javascript”>
-    dojoConfig.packages.push(
-        {name : ‘bootstrap’, location : ‘resources/audit-log-browser-share/js/lib’, main : ‘bootstrap.bundle.min’},
-      );
-  </script>
-  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/auditlogbrowser/display/GetAuditLog.js"/>
+  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/auditlogbrowser/display/audit-log-browser.js"/>
 </@>
 <@markup id="html">
   <@uniqueIdDiv>
