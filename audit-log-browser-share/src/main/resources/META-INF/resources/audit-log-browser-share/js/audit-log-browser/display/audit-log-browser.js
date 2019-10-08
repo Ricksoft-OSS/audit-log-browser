@@ -15,40 +15,40 @@ AuditLogBrowser.param = {
 };
 AuditLogBrowser.COLUMN_DEFINITION = [{
     key: "entry.id",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.id"),
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.id"),
     resizeable: true
   },
   {
     key: "entry.createdAt",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.date"),
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.date"),
     formatter:"auditDateFormatter",
     sortable: true
   },
   {
     key: "entry.user",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.user"),
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.user"),
     sortable: true
   },
   {
     key: "entry.action",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.action")
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.action")
   },
   {
     key: "entry.site",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.site")
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.site")
   },
   {
     key: "entry.nodename",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.content")
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.content")
   },
   {
     key: "entry.nodepath",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.path"),
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.path"),
     resizeable: true
   },
   {
     key: "entry.description",
-    label: Alfresco.util.message("Ricksoft.auditlogbrowser.list.label.description"),
+    label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.description"),
     resizeable: true
   }
 ];
@@ -92,12 +92,12 @@ $(function(){
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
      || haveOnlyTimeInput(paramTodate, paramTotime)) {
        Alfresco.util.PopupManager.displayMessage({
-         text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.nodateinput")
+         text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.nodateinput")
        });
        return;
     } else if (generateFromDate(paramFromdate, paramFromtime) > generateToDate(paramTodate, paramTotime)) {
       Alfresco.util.PopupManager.displayMessage({
-        text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.reverseorder")
+        text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.reverseorder")
       });
       return;
     }
@@ -120,12 +120,12 @@ $(function(){
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
      || haveOnlyTimeInput(paramTodate, paramTotime)) {
        Alfresco.util.PopupManager.displayMessage({
-         text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.nodateinput")
+         text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.nodateinput")
        });
        return;
     } else if (generateFromDate(paramFromdate, paramFromtime) > generateToDate(paramTodate, paramTotime)) {
       Alfresco.util.PopupManager.displayMessage({
-        text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.reverseorder")
+        text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.reverseorder")
       });
       return;
     }

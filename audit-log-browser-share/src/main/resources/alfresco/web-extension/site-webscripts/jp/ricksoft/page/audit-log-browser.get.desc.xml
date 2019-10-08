@@ -4,10 +4,10 @@
     All rights reserved.
    -->
   <shortname>Audit Log Browser</shortname>
-  <title-id>tool.auditlogbrowser.label</title-id>
+  <title-id>tool.audit-log-browser.label</title-id>
   <description>Display a list of audit logs to the administrator console</description>
-  <description-id>tool.auditlogbrowser.description</description-id>
-  <url>/auditlogbrowser</url>
+  <description-id>tool.audit-log-browser.description</description-id>
+  <url>/audit-log-browser</url>
   <authentication>admin</authentication>
   <format default="html"></format>
   <family>admin-console</family>

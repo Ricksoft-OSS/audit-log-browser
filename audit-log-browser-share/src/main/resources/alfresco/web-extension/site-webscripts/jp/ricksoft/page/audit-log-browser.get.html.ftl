@@ -8,12 +8,13 @@
   <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/lib/bootstrap-grid.min.css"/>
   <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/lib/bootstrap-reboot.min.css"/>
   <#-- CSS Dependencies -->
-  <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/auditlogbrowser/normal.css"/>
+  <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/audit-log-browser/normal.css"/>
+  <@link rel="stylesheet" type="text/css" href="${url.context}/res/resources/audit-log-browser-share/css/audit-log-browser/audit-log-browser.css"/>
 </@>
 <@markup id="js">
   <#-- JavaScript Dependencies -->
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery-3.2.1.min.js"/>
-  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/auditlogbrowser/display/audit-log-browser.js"/>
+  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/audit-log-browser/display/audit-log-browser.js"/>
 </@>
 <@markup id="html">
   <@uniqueIdDiv>
