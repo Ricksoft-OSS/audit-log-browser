@@ -16,46 +16,52 @@
 <@markup id="html">
   <@uniqueIdDiv>
     <div class="audit-log-browser">
-      <form action="${url.context}/page/console/admin-console/audit-log-browser" method="get">
-        <fieldset>
-          <div class="form-part">
-            <label for="fromDate">${msg("form.label.from")}</label>
-            <div>
-              <input type="date" name="fromDate" id="fromDate"/>
+      <form action="${url.context}/page/console/admin-console/audit-log-browser" method="get" class="yui-skin-lightTheme">
+        <span>
+          <fieldset>
+            <div class="form-part">
+              <label for="fromDate">${msg("form.label.from")}</label>
+              <div>
+                <input type="date" name="fromDate" id="fromDate"/>
+              </div>
+              <div>
+                <input type="time" name="fromTime" id="fromTime"/>
+              </div>
             </div>
-            <div>
-              <input type="time" name="fromTime" id="fromTime"/>
+            <div class="form-part">
+              <label for="toDate">${msg("form.label.to")}</label>
+              <div>
+                <input type="date" name="toDate" id="toDate"/>
+              </div>
+              <div>
+                <input type="time" name="toTime" id="toTime"/>
+              </div>
             </div>
-          </div>
-          <div class="form-part">
-            <label for="toDate">${msg("form.label.to")}</label>
-            <div>
-              <input type="date" name="toDate" id="toDate"/>
-            </div>
-            <div>
-              <input type="time" name="toTime" id="toTime"/>
-            </div>
-          </div>
-        </fieldset>
-        <div class="form-part">
+          </fieldset>
           <div>
-            <label for="executingUser">${msg("form.label.user")}</label>
-            <input type="text" id="executingUser">
+            <div class="form-part">
+              <label for="executingUser">${msg("form.label.user")}</label>
+              <input type="text" id="executingUser">
+            </div>
+            <div class="form-part">
+              <label for="contentValue">${msg("form.label.content")}</label>
+              <input type="text" name="contentValue" id="contentValue"/>
+            </div>
           </div>
-          <div>
-            <label for="contentValue">${msg("form.label.content")}</label>
-            <input type="text" name="contentValue" id="contentValue"/>
-          </div>
-        </div>
-        <button id="search-audit-log"   value="${msg("button.form.search")}">
-        <button id="download-audit-log" value="${msg("button.form.download")}">
-        <button id="delete-audit-log"   value="${msg("button.form.delete")}">
+        </span>
+        <span class="yui-button alf-primary-button form-part">
+          <button id="search-audit-log">${msg("button.form.search")}</button>
+          <button id="download-audit-log">${msg("button.form.download")}</button>
+          <button id="delete-audit-log">${msg("button.form.delete")}</button>
+        </span>
       </form>
     </div>
     <div id="audit-log-table" class="table table-bordered"></div>
-    <div>
-      <input id="prev-page" type="button" value="${msg("button.paging.previous")}">
-      <input id="next-page" type="button" value="${msg("button.paging.next")}">
+    <div class="yui-skin-lightTheme">
+      <span class="yui-button alf-primary-button">
+        <button id="prev-page">${msg("button.paging.previous")}</button>
+        <button id="next-page">${msg("button.paging.next")}</button>
+      </span>
     </div>
   </@>
 </@>
