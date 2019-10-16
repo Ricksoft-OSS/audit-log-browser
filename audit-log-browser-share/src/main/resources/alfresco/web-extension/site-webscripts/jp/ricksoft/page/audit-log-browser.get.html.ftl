@@ -12,43 +12,46 @@
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery-3.2.1.min.js"/>
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/audit-log-browser/display/audit-log-browser.js"/>
 </@>
+<@processJsonModel />
 <@markup id="html">
   <@uniqueIdDiv>
-    <form action="${url.context}/page/console/admin-console/audit-log-browser" method="get">
-      <fieldset>
+    <div class="audit-log-browser">
+      <form action="${url.context}/page/console/admin-console/audit-log-browser" method="get">
+        <fieldset>
+          <div class="form-part">
+            <label for="fromDate">${msg("form.label.from")}</label>
+            <div>
+              <input type="date" name="fromDate" id="fromDate"/>
+            </div>
+            <div>
+              <input type="time" name="fromTime" id="fromTime"/>
+            </div>
+          </div>
+          <div class="form-part">
+            <label for="toDate">${msg("form.label.to")}</label>
+            <div>
+              <input type="date" name="toDate" id="toDate"/>
+            </div>
+            <div>
+              <input type="time" name="toTime" id="toTime"/>
+            </div>
+          </div>
+        </fieldset>
         <div class="form-part">
-          <label for="fromDate">${msg("form.label.from")}</label>
           <div>
-            <input type="date" name="fromDate" id="fromDate"/>
+            <label for="executingUser">${msg("form.label.user")}</label>
+            <input type="text" id="executingUser">
           </div>
           <div>
-            <input type="time" name="fromTime" id="fromTime"/>
+            <label for="contentValue">${msg("form.label.content")}</label>
+            <input type="text" name="contentValue" id="contentValue"/>
           </div>
         </div>
-        <div class="form-part">
-          <label for="toDate">${msg("form.label.to")}</label>
-          <div>
-            <input type="date" name="toDate" id="toDate"/>
-          </div>
-          <div>
-            <input type="time" name="toTime" id="toTime"/>
-          </div>
-        </div>
-      </fieldset>
-      <div class="form-part">
-        <div>
-          <label for="executingUser">${msg("form.label.user")}</label>
-          <input type="text" id="executingUser">
-        </div>
-        <div>
-          <label for="contentValue">${msg("form.label.content")}</label>
-          <input type="text" name="contentValue" id="contentValue"/>
-        </div>
-      </div>
-      <input id="search-audit-log"   type="button" value="${msg("button.form.search")}">
-      <input id="download-audit-log" type="button" value="${msg("button.form.download")}">
-      <input id="delete-audit-log"   type="button" value="${msg("button.form.delete")}">
-    </form>
+        <button id="search-audit-log"   value="${msg("button.form.search")}">
+        <button id="download-audit-log" value="${msg("button.form.download")}">
+        <button id="delete-audit-log"   value="${msg("button.form.delete")}">
+      </form>
+    </div>
     <div id="audit-log-table" class="table table-bordered"></div>
     <div>
       <input id="prev-page" type="button" value="${msg("button.paging.previous")}">
