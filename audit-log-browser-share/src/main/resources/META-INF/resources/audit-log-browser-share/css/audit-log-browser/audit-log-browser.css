@@ -1,3 +1,15 @@
 .form-part {
     display: inline-flex;
 }
+
+.form-part-left {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+.form-part-center {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
