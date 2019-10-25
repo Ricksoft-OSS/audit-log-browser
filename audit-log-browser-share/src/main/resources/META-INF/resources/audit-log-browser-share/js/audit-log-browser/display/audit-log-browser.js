@@ -81,6 +81,8 @@ $(function(){
 
   getAuditLogs(AuditLogBrowser.ENDPOINT, AuditLogBrowser.param);
 
+  $('.modal').modaal();
+
   $('#search-audit-log').on('click',function(){
     paramUser = $('#executingUser').val();
     paramContent  = $('#contentValue').val();
