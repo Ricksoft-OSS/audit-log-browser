@@ -67,7 +67,7 @@
       </form>
     </div>
     <div id="audit-log-table" class="table table-bordered"></div>
-    <div class="yui-skin-lightTheme">
+    <div class="yui-skin-lightTheme paging-button">
       <span class="yui-button alf-primary-button">
         <button id="prev-page">${msg("button.paging.previous")}</button>
       </span>
