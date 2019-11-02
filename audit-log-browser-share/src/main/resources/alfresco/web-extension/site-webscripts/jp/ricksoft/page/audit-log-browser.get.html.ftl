@@ -63,7 +63,7 @@
             <button id="download-audit-log">${msg("button.form.download")}</button>
           </span>
           <span class="yui-button alf-primary-button form-part">
-            <button id="delete-audit-log">${msg("button.form.delete")}</button>
+            <a href="#delAuditModal" class="modal">${msg("button.form.delete")}</a>
           </span>
         </span>
       </form>
