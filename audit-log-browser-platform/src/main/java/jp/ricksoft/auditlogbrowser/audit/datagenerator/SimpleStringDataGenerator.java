@@ -22,8 +22,7 @@ public class SimpleStringDataGenerator extends AbstractDataGenerator
     }
 
     @Override
-    public Serializable getData() throws Throwable
-    {
+    public Serializable getData() {
         return innerString;
     }
 
