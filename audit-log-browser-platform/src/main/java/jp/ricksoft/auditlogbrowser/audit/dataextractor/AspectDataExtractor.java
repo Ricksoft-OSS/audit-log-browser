@@ -30,11 +30,11 @@ public class AspectDataExtractor extends AbstractDataExtractor {
 
     @Override
     public boolean isSupported(Serializable data) {
-        return (data != null && data instanceof Set);
+        return (data instanceof Set);
     }
 
     @Override
-    public Serializable extractData(Serializable in) throws Throwable {
+    public Serializable extractData(Serializable in) {
         
         if (logger.isDebugEnabled()) {
             logger.debug("AspectLogInput： " + in);
@@ -46,7 +46,7 @@ public class AspectDataExtractor extends AbstractDataExtractor {
         
         return qNames.stream()
                      .map(item -> item.getPrefixedQName(namespaceService))
-                     .map(item -> item.toPrefixString())
+                     .map(QName::toPrefixString)
                      .collect(Collectors.joining(","));
         
     }

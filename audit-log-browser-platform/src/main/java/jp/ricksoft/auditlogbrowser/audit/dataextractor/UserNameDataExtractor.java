@@ -40,26 +40,21 @@ public class UserNameDataExtractor extends AbstractDataExtractor {
      *
      * @param in a string containing the site id
      * @return the site id
-     * @throws Throwable
      */
     @Override
-    public Serializable extractData(Serializable in) throws Throwable {
+    public Serializable extractData(Serializable in) {
 
         // The data type of all arguments are passed in Serializable and italready checked using "isSupported" method.
         @SuppressWarnings("unchecked")
         Map<QName, Serializable> path = (Map<QName, Serializable>)in;
         
-        HashMap<String, String> propMap = new HashMap<String, String>();
-        path.forEach((key, value) -> {
-            propMap.put(convertPrefixedQName(key), convertSerializableToString(value));
-        });
-        
-        String result = propMap.entrySet().stream()
+        HashMap<String, String> propMap = new HashMap<>();
+        path.forEach((key, value) -> propMap.put(convertPrefixedQName(key), convertSerializableToString(value)));
+
+        return propMap.entrySet().stream()
                                 .filter(e -> e.getKey().equals("cm:userName"))
                                 .findFirst()
                                 .get().getValue();
-        
-        return result;
         
     }
     

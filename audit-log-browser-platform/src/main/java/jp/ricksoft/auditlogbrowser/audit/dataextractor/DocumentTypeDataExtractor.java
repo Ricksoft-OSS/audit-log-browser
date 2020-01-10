@@ -35,11 +35,11 @@ public class DocumentTypeDataExtractor extends AbstractDataExtractor {
 
     @Override
     public boolean isSupported(Serializable data) {
-        return (data != null && data instanceof NodeRef);
+        return (data instanceof NodeRef);
     }
 
     @Override
-    public Serializable extractData(Serializable in) throws Throwable {
+    public Serializable extractData(Serializable in) {
         
         NodeRef nodeRef = (NodeRef) in;
         if (!nodeService.exists(nodeRef)) {

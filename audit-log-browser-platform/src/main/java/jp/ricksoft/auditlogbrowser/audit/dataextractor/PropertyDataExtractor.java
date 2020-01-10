@@ -30,7 +30,7 @@ public class PropertyDataExtractor extends AbstractDataExtractor {
      */
     @Override
     public boolean isSupported(Serializable data) {
-        return (data != null && data instanceof Map);
+        return (data instanceof Map);
     }
 
     /**
@@ -38,19 +38,16 @@ public class PropertyDataExtractor extends AbstractDataExtractor {
      *
      * @param in a string containing the site id
      * @return the site id
-     * @throws Throwable
      */
     @Override
-    public Serializable extractData(Serializable in) throws Throwable {
+    public Serializable extractData(Serializable in) {
 
         // The data type of all arguments are passed in Serializable and italready checked using "isSupported" method.
         @SuppressWarnings("unchecked")
         Map<QName, Serializable> path = (Map<QName, Serializable>)in;
 
-        HashMap<String, String> propMap = new HashMap<String, String>();
-        path.forEach((key, value) -> {
-            propMap.put(convertPrefixedQName(key), convertSerializableToString(value));
-        });
+        HashMap<String, String> propMap = new HashMap<>();
+        path.forEach((key, value) -> propMap.put(convertPrefixedQName(key), convertSerializableToString(value)));
 
         List<String> results = propMap.entrySet().stream()
                     .map(e -> String.join(" : ", e.getKey(), e.getValue()))

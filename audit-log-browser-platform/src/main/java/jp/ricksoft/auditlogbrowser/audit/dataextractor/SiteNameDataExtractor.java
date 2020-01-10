@@ -41,7 +41,7 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
      */
     @Override
     public boolean isSupported(Serializable data) {
-        return ((data != null) && (data instanceof String || data instanceof NodeRef));
+        return ((data instanceof String || data instanceof NodeRef));
     }
 
     /**
@@ -49,10 +49,9 @@ public class SiteNameDataExtractor extends AbstractDataExtractor {
      *
      * @param in a string containing the site id
      * @return the site id
-     * @throws Throwable
      */
     @Override
-    public Serializable extractData(Serializable in) throws Throwable {
+    public Serializable extractData(Serializable in) {
         
         String siteTitle = "";
         
