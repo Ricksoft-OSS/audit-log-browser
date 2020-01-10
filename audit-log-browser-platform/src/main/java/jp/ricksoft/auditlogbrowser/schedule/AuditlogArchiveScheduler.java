@@ -76,7 +76,7 @@ public class AuditlogArchiveScheduler {
         String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
         String dirName = properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp");
         String csvNameFormat = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
-        int unitMaxSize = Integer.valueOf(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
+        int unitMaxSize = Integer.parseInt(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
         
         // No backup directory set.
         if(dstFolderPath == null || dstFolderPath.isEmpty()) {

@@ -67,7 +67,7 @@ public class RepositoryFolderManager {
             return false;
         }
         
-        return fileFolderService.exists(result) ? true : false;
+        return fileFolderService.exists(result);
         
     }
     

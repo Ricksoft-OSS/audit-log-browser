@@ -9,7 +9,6 @@ import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.schedule.AbstractScheduledLockedJob;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +26,14 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
     private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
 
     @Override
-    public void executeJob(JobExecutionContext jobContext) throws JobExecutionException {
+    public void executeJob(JobExecutionContext jobContext) {
         JobDataMap jobData = jobContext.getJobDetail().getJobDataMap();
 
         // Job executer and setting params.
         Object executerObj = jobData.get(JOB_SCHEDULER);
-        boolean isEnabled  = Boolean.valueOf((String) jobData.get(IS_ENABLED));
-        boolean doDelete   = Boolean.valueOf((String) jobData.get(DO_DELETE));
-        int storagePeriod  = Integer.valueOf((String) jobData.get(STORAGE_PERIOD));
+        boolean isEnabled  = Boolean.parseBoolean((String) jobData.get(IS_ENABLED));
+        boolean doDelete   = Boolean.parseBoolean((String) jobData.get(DO_DELETE));
+        int storagePeriod  = Integer.parseInt((String) jobData.get(STORAGE_PERIOD));
         final String backupFolderPath = (String) jobData.get(ID_PROP_FOLDERNAME);
         
         if (!isEnabled) {
@@ -45,18 +44,16 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
         }
         
         // No valid job scheduler.
-        if (executerObj == null || !(executerObj instanceof AuditlogArchiveScheduler)) {
+        if (!(executerObj instanceof AuditlogArchiveScheduler)) {
             throw new AlfrescoRuntimeException(MSG_NO_SCHEDULER);
         }
 
         final AuditlogArchiveScheduler jobScheduler = (AuditlogArchiveScheduler) executerObj;
 
         // Run schedule job as 
-        AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
-            public Object doWork() throws Exception {
-                jobScheduler.execute(storagePeriod, doDelete, backupFolderPath);
-                return null;
-            }
+        AuthenticationUtil.runAs(() -> {
+            jobScheduler.execute(storagePeriod, doDelete, backupFolderPath);
+            return null;
         }, AuthenticationUtil.getSystemUserName());
     }
 
