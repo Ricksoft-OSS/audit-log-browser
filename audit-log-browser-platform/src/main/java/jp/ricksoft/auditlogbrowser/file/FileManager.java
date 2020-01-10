@@ -11,9 +11,9 @@ public class FileManager
 {
 
     /**
-     * @param  Parent folder path
-     * @param  Directory Name
-     * @return Folder
+     * @param  parent   Parent folder path
+     * @param  dirName  Directory Name
+     * @return directory
      */
     public File createDir(String parent, String dirName)
     {

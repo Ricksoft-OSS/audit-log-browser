@@ -44,7 +44,7 @@ public class AuditLogManager
     {
 
         // Audit log query callback function setting.
-        AuditQueryCallback callback = new MyAuditQueryCallback();
+        MyAuditQueryCallback callback = new MyAuditQueryCallback();
 
         // Query Condition Setting
         AuditQueryParameters params = new AuditQueryParameters();
@@ -71,7 +71,7 @@ public class AuditLogManager
         // Execute Query
         auditService.auditQuery(callback, params, maxItems);
 
-        return ((MyAuditQueryCallback) callback).getEntries();
+        return callback.getEntries();
     }
 
     /**
@@ -89,7 +89,7 @@ public class AuditLogManager
     private class MyAuditQueryCallback implements AuditQueryCallback
     {
         // Query result save
-        private List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
+        private List<Map<String, Object>> entries = new ArrayList<>();
 
         public List<Map<String, Object>> getEntries()
         {
@@ -135,7 +135,7 @@ public class AuditLogManager
         public boolean handleAuditEntry(Long entryId, String appName, String user, long time,
                 Map<String, Serializable> values)
         {
-            Map<String, Object> entry = new HashMap<String, Object>();
+            Map<String, Object> entry = new HashMap<>();
             entry.put(KEY_ID, entryId);
             entry.put(KEY_TIME, DateTimeUtil.generateLocalDateTime(time)
                     .format(FORMAT_DATETIME.withResolverStyle(ResolverStyle.STRICT)));

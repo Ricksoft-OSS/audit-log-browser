@@ -96,13 +96,9 @@ public class CSVFileManager
             printer.flush();
             return csvPath.toFile();
 
-        } catch (IOException ioe)
+        } catch (Exception ioe)
         {
             ioe.printStackTrace();
-            return null;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
             return null;
         }
     }
@@ -159,13 +155,9 @@ public class CSVFileManager
         try  (Stream<String> st = Files.lines(csv.toPath(), StandardCharsets.UTF_8)){
             return st.count() > 1;
             
-        } catch (IOException ioe)
+        } catch (Exception ioe)
         {
             ioe.printStackTrace();
-            return false;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
             return false;
         }
     }
@@ -174,18 +166,18 @@ public class CSVFileManager
      * Acquire audit log and create csv file.
      * 
      * @param fromDate  Start date of the audit log acquisition target period
+     * @param fromTime  Start time of the audit log acquisition target period
      * @param toDate  End date of audit log acquisition period
-     * @param appName  Audit application name
+     * @param toTime  End time of audit log acquisition period
      * @param user  Username
      * @param directory  Directory storing the csv file
-     * @return Numbre of csv
      * @throws IOException
      */
     public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user,
             File directory) throws IOException
     {
 
-        int unitMaxItems = Integer.valueOf(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
+        int unitMaxItems = Integer.parseInt(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
         String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
         String csvName = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
 

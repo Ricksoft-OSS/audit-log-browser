@@ -70,8 +70,7 @@ public class ZipFileManager
     /**
      * Prepare Zip
      * 
-     * @param tmpDir  temporary directory
-     * @param os  output stream
+     * @param folder  temporary directory
      * @return created zip file
      * @throws IOException
      */
