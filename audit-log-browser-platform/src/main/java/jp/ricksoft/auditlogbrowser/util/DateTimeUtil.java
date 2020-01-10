@@ -1,4 +1,4 @@
-package jp.ricksoft.audit_log_browser.util;
+package jp.ricksoft.auditlogbrowser.util;
 
 import java.time.Instant;
 import java.time.LocalDate;

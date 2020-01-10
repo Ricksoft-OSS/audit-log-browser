@@ -1,22 +1,20 @@
-/*
- * Copyright 2018 Ricksoft Co., Ltd.
- * All rights reserved.
- */
-package jp.ricksoft.audit_log_browser.audit.dataextractor;
+package jp.ricksoft.auditlogbrowser.audit.dataextractor;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.alfresco.repo.audit.extractor.AbstractDataExtractor;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.PropertyCheck;
 
-public class UserNameDataExtractor extends AbstractDataExtractor {
-    
+public class PropertyDataExtractor extends AbstractDataExtractor {
+
     private NamespaceService namespaceService;
-    
+
     public void setNamespaceService(NamespaceService namespaceService) {
         this.namespaceService = namespaceService;
     }
@@ -48,25 +46,24 @@ public class UserNameDataExtractor extends AbstractDataExtractor {
         // The data type of all arguments are passed in Serializable and italready checked using "isSupported" method.
         @SuppressWarnings("unchecked")
         Map<QName, Serializable> path = (Map<QName, Serializable>)in;
-        
+
         HashMap<String, String> propMap = new HashMap<String, String>();
         path.forEach((key, value) -> {
             propMap.put(convertPrefixedQName(key), convertSerializableToString(value));
         });
-        
-        String result = propMap.entrySet().stream()
-                                .filter(e -> e.getKey().equals("cm:userName"))
-                                .findFirst()
-                                .get().getValue();
-        
-        return result;
-        
+
+        List<String> results = propMap.entrySet().stream()
+                    .map(e -> String.join(" : ", e.getKey(), e.getValue()))
+                    .collect(Collectors.toList());
+
+        return (Serializable) results;
+
     }
-    
+
     private String convertPrefixedQName(QName key) {
         return key.getPrefixedQName(namespaceService).toPrefixString();
     }
-    
+
     private String convertSerializableToString(Serializable value) {
         if (value instanceof Object) {
             return value.toString();

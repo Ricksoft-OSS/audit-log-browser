@@ -15,7 +15,7 @@
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
    <bean id="webscript.jp.ricksoft.audit.DownloadAuditLogZip.get"
-      class="jp.ricksoft.audit_log_browser.audit.download.DownloadAuditLogZipWebScript"
+      class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipWebScript"
       parent="webscript">
       <property name="properties">
 		 <ref bean="global-properties"/>

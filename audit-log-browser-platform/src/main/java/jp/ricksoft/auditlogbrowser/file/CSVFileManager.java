@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.audit_log_browser.file;
+package jp.ricksoft.auditlogbrowser.file;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -26,8 +26,8 @@ import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVStrategy;
 
-import jp.ricksoft.audit_log_browser.audit.AuditLogManager;
-import jp.ricksoft.audit_log_browser.util.DateTimeUtil;
+import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
+import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 
 public class CSVFileManager
 {

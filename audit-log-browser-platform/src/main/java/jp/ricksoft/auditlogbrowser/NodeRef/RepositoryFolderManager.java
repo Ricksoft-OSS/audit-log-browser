@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.audit_log_browser.NodeRef;
+package jp.ricksoft.auditlogbrowser.NodeRef;
 
 import java.io.File;
 

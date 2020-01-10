@@ -6,7 +6,7 @@
 
     <!-- スケジュールジョブ実行 -->
     <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
-          class="jp.ricksoft.audit_log_browser.schedule.AuditlogArchiveScheduler">
+          class="jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler">
       <property name="properties">
 		 <ref bean="global-properties"/>
       </property>
@@ -31,7 +31,7 @@
     <bean id="jp.ricksoft.schedule.scheduledjob.jobDetail"
           class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass">
-        	<value>jp.ricksoft.audit_log_browser.schedule.ScheduledJob</value>
+        	<value>jp.ricksoft.auditlogbrowser.schedule.ScheduledJob</value>
         </property>
         <property name="jobDataAsMap">
             <map>
