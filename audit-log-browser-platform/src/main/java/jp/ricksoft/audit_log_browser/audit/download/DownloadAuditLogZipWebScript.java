@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.AuditLogBrowser.audit.download;
+package jp.ricksoft.audit_log_browser.audit.download;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +15,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import com.google.common.io.Files;
 
-import jp.ricksoft.AuditLogBrowser.file.CSVFileManager;
-import jp.ricksoft.AuditLogBrowser.file.FileManager;
-import jp.ricksoft.AuditLogBrowser.file.ZipFileManager;
+import jp.ricksoft.audit_log_browser.file.CSVFileManager;
+import jp.ricksoft.audit_log_browser.file.FileManager;
+import jp.ricksoft.audit_log_browser.file.ZipFileManager;
 
 public class DownloadAuditLogZipWebScript extends AbstractWebScript {
 

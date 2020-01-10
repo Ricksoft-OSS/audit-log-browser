@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.AuditLogBrowser.audit;
+package jp.ricksoft.audit_log_browser.audit;
 
 import java.io.Serializable;
 import java.time.format.DateTimeFormatter;
@@ -16,7 +16,7 @@ import org.alfresco.service.cmr.audit.AuditQueryParameters;
 import org.alfresco.service.cmr.audit.AuditService;
 import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
 
-import jp.ricksoft.AuditLogBrowser.util.DateTimeUtil;
+import jp.ricksoft.audit_log_browser.util.DateTimeUtil;
 
 public class AuditLogManager
 {

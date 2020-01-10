@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.AuditLogBrowser.audit.datagenerator;
+package jp.ricksoft.audit_log_browser.audit.datagenerator;
 
 import java.io.Serializable;
 

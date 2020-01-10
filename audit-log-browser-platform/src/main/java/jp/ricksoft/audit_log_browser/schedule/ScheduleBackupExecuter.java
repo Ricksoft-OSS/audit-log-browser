@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.AuditLogBrowser.schedule;
+package jp.ricksoft.audit_log_browser.schedule;
 
 import java.util.List;
 

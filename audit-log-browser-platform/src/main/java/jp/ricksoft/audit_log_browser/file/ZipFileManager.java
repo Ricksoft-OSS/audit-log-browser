@@ -2,7 +2,7 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.AuditLogBrowser.file;
+package jp.ricksoft.audit_log_browser.file;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
