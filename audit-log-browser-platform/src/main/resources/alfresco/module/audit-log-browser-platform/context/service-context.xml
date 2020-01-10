@@ -61,229 +61,155 @@
 
     <!-- ====================== Data Generator ====================== -->
     <bean id="jp.ricksoft.loginGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>LOGIN</value>
-      </property>
+      <property name="innerString" value="LOGIN"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.loginFailureGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>LOGIN FAILURE</value>
-      </property>
+      <property name="innerString" value="LOGIN FAILURE"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.logoutGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>LOGOUT</value>
-      </property>
+      <property name="innerString" value="LOGOUT"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.createUserGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CREATE USER</value>
-      </property>
+      <property name="innerString" value="CREATE USER"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.modUserGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET USERPROP</value>
-      </property>
+      <property name="innerString" value="SET USERPROP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.deleteUserGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE USER</value>
-      </property>
+      <property name="innerString" value="DELETE USER"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.createAuthGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CREATE GROUP</value>
-      </property>
+      <property name="innerString" value="CREATE GROUP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.deleteAuthGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE GROUP</value>
-      </property>
+      <property name="innerString" value="DELETE GROUP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.setPropsGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET PROPERTIES</value>
-      </property>
+      <property name="innerString" value="SET PROPERTIES"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.modAuthGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>MOD GROUPNAME</value>
-      </property>
+      <property name="innerString" value="MOD GROUPNAME"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.addAuthGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>ADD SUBMEMBER</value>
-      </property>
+      <property name="innerString" value="ADD SUBMEMBER"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.removeAuthGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE SUBMEMBER</value>
-      </property>
+      <property name="innerString" value="DELETE SUBMEMBER"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.setPermissionGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET PERMISSION</value>
-      </property>
+      <property name="innerString" value="SET PERMISSION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.deletePermissionGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE PERMISSION</value>
-      </property>
+      <property name="innerString" value="DELETE PERMISSION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.clearPermissionGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CLEAR PERMISSION</value>
-      </property>
+      <property name="innerString" value="CLEAR PERMISSION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.setInheritParentPermissionsGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET INHERIT PARENT PERMISSIONS</value>
-      </property>
+      <property name="innerString" value="SET INHERIT PARENT PERMISSIONS"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     
     <bean id="jp.ricksoft.inviteNominatedGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>INVITE NOMINATED</value>
-      </property>
+      <property name="innerString" value="INVITE NOMINATED"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.inviteModeratedGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>INVITE MODERATED</value>
-      </property>
+      <property name="innerString" value="INVITE MODERATED"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.sendNominatedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SEND NOMINATED INVITATION</value>
-      </property>
+      <property name="innerString" value="SEND NOMINATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.sendModeratedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SEND MODERATED INVITATION</value>
-      </property>
+      <property name="innerString" value="SEND MODERATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.updateModeratedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>UPDATE MODERATED INVITATION</value>
-      </property>
+      <property name="innerString" value="UPDATE MODERATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.rejectInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>REJECT INVITATION</value>
-      </property>
+      <property name="innerString" value="REJECT INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.rejectModeratedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>REJECT MODERATED INVITATION</value>
-      </property>
+      <property name="innerString" value="REJECT MODERATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.acceptInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>ACCEPT INVITATION</value>
-      </property>
+      <property name="innerString" value="ACCEPT INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.acceptNominatedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>ACCEPT NOMITATED INVITATION</value>
-      </property>
+      <property name="innerString" value="ACCEPT NOMITATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.approveInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>APPROVE INVITATION</value>
-      </property>
+      <property name="innerString" value="APPROVE INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.approveModeratedInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>APPROVE MODERATED INVITATION</value>
-      </property>
+      <property name="innerString" value="APPROVE MODERATED INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.cancelInvGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CANCEL INV</value>
-      </property>
+      <property name="innerString" value="CANCEL INV"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.cancelInvitationGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CANCEL INVITATION</value>
-      </property>
+      <property name="innerString" value="CANCEL INVITATION"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.deleteAuthenticationIfUnusedGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE AUTH IF UNUSED</value>
-      </property>
+      <property name="innerString" value="DELETE AUTH IF UNUSED"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     
     <bean id="jp.ricksoft.setOwnerGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET OWNER</value>
-      </property>
+      <property name="innerString" value="SET OWNER"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.takeOwnershipGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>TAKE OWNERSHIP</value>
-      </property>
+      <property name="innerString" value="TAKE OWNERSHIP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     
     <bean id="jp.ricksoft.changeDoctypeGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CHANGE DOCUMENT TYPE</value>
-      </property>
+      <property name="innerString" value="CHANGE DOCUMENT TYPE"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     
     <bean id="jp.ricksoft.createSiteGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>CREATE SITE</value>
-      </property>
+      <property name="innerString" value="CREATE SITE"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.deleteSiteGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>DELETE SITE</value>
-      </property>
+      <property name="innerString" value="DELETE SITE"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.setMembershipGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>SET MEMBERSHIP</value>
-      </property>
+      <property name="innerString" value="SET MEMBERSHIP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <bean id="jp.ricksoft.removeMembershipGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
-      <property name="innerString">
-         <value>REMOVE MEMBERSHIP</value>
-      </property>
+      <property name="innerString" value="REMOVE MEMBERSHIP"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
     </bean>
     <!-- ====================== その他 ====================== -->
@@ -293,18 +219,12 @@
     
     <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVFileManager">
       <property name="serviceRegistry" ref="ServiceRegistry" />
-      <property name="properties">
-		 <ref bean="global-properties"/>
-      </property>
-      <property name="auditLogManager">
-		 <ref bean="jp.ricksoft.auditLogManager"/>
-      </property>
+      <property name="properties" ref="global-properties"/>
+      <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
     </bean>
     
     <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipFileManager">
-      <property name="properties">
-		 <ref bean="global-properties"/>
-      </property>
+      <property name="properties" ref="global-properties"/>
     </bean>
     
     <bean id="jp.ricksoft.repositoryFolderManager" class="jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager">
