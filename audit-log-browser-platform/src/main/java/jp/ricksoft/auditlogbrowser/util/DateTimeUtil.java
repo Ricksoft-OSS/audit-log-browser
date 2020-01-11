@@ -13,11 +13,11 @@ public class DateTimeUtil
 
     /**
      * Convert FromDate
-     * @param date
-     * @param time
+     * @param tDate
+     * @param tTime
      * @return datetime
      */
-    public static Long generateFromEpochMilli(String tDate, String tTime) {
+    public static Long convertFromEpochMilli(String tDate, String tTime) {
 
         if (StringUtils.isBlank(tDate)) {
             // Alfresco launch since November 2005.
@@ -33,11 +33,11 @@ public class DateTimeUtil
 
     /**
      * Convert ToDate
-     * @param date
-     * @param time
+     * @param tDate
+     * @param tTime
      * @return Long
      */
-    public static Long generateToEpochMilli(String tDate, String tTime) {
+    public static Long convertToEpochMilli(String tDate, String tTime) {
         
         if (StringUtils.isBlank(tDate)) {
             return DateTimeUtil.convertEpochMilli(LocalDateTime.now());
@@ -50,7 +50,7 @@ public class DateTimeUtil
 
     }
     
-    public static LocalDateTime generateLocalDateTime(Long EpochMilli) {
+    public static LocalDateTime convertLocalDateTime(Long EpochMilli) {
         return LocalDateTime.ofInstant(Instant.ofEpochMilli(EpochMilli), ZoneId.systemDefault());
     }
 

@@ -137,7 +137,7 @@ public class AuditLogManager
         {
             Map<String, Object> entry = new HashMap<>();
             entry.put(KEY_ID, entryId);
-            entry.put(KEY_TIME, DateTimeUtil.generateLocalDateTime(time)
+            entry.put(KEY_TIME, DateTimeUtil.convertLocalDateTime(time)
                     .format(FORMAT_DATETIME.withResolverStyle(ResolverStyle.STRICT)));
 
             if (values != null)

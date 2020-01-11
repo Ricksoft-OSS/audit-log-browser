@@ -183,12 +183,12 @@ public class CSVManager
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        Long startEpochMilli = DateTimeUtil.generateFromEpochMilli(fromDate, fromTime);
-        Long endEpochMilli = DateTimeUtil.generateToEpochMilli(toDate, toTime);
-        LocalDateTime targetDate = DateTimeUtil.generateLocalDateTime(startEpochMilli);
+        Long startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
+        Long endEpochMilli = DateTimeUtil.convertToEpochMilli(toDate, toTime);
+        LocalDateTime targetDate = DateTimeUtil.convertLocalDateTime(startEpochMilli);
 
         // Get Daily AuditLogs
-        while (targetDate.isBefore(DateTimeUtil.generateLocalDateTime(endEpochMilli)))
+        while (targetDate.isBefore(DateTimeUtil.convertLocalDateTime(endEpochMilli)))
         {
             String targetDateStr = targetDate.format(dateFormat.withResolverStyle(ResolverStyle.STRICT));
             Long fromEpochMilli = DateTimeUtil.convertEpochMilli(targetDate);
