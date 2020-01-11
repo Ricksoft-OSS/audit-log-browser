@@ -37,9 +37,8 @@ public class AuditLogManager
      * 
      * @author ebihara.yuki
      * @param appName  Audit Application Name
-     * @param maxItems  Max Size per Query
      */
-    public List<Map<String, Object>> getAuditLogs(String appName, int maxItems, Long fromTime, Long toTime, Long fromId,
+    public List<Map<String, Object>> getAuditLogs(String appName, Long fromTime, Long toTime, Long fromId,
             String user) throws IllegalArgumentException
     {
 
@@ -69,7 +68,7 @@ public class AuditLogManager
         params.setForward(true);
 
         // Execute Query
-        auditService.auditQuery(callback, params, maxItems);
+        auditService.auditQuery(callback, params, 100);
 
         return callback.getEntries();
     }

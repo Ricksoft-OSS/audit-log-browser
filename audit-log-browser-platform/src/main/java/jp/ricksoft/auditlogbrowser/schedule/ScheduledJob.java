@@ -17,9 +17,6 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
 
     private static final String JOB_SCHEDULER = "jobScheduler";
     private static final String IS_ENABLED = "isEnabled";
-    private static final String DO_DELETE  = "doDelete";
-    private static final String STORAGE_PERIOD = "storagePeriod";
-    private static final String ID_PROP_FOLDERNAME = "backupDirectory";
     private static final String MSG_NO_SCHEDULER = "No valid job scheduler.";
     private static final String MSG_SCHEDULE_DISABLED = "Scheduler is disabled.";
     
@@ -32,9 +29,6 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
         // Job executer and setting params.
         Object executerObj = jobData.get(JOB_SCHEDULER);
         boolean isEnabled  = Boolean.parseBoolean((String) jobData.get(IS_ENABLED));
-        boolean doDelete   = Boolean.parseBoolean((String) jobData.get(DO_DELETE));
-        int storagePeriod  = Integer.parseInt((String) jobData.get(STORAGE_PERIOD));
-        final String backupFolderPath = (String) jobData.get(ID_PROP_FOLDERNAME);
         
         if (!isEnabled) {
             if (LOG.isDebugEnabled()) {
@@ -52,7 +46,7 @@ public class ScheduledJob extends AbstractScheduledLockedJob implements Stateful
 
         // Run schedule job as 
         AuthenticationUtil.runAs(() -> {
-            jobScheduler.execute(storagePeriod, doDelete, backupFolderPath);
+            jobScheduler.execute();
             return null;
         }, AuthenticationUtil.getSystemUserName());
     }

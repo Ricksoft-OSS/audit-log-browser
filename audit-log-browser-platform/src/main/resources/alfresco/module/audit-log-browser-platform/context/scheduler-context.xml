@@ -7,7 +7,11 @@
     <!-- Exec Scheduled Job -->
     <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
           class="jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler">
-      <property name="properties" ref="global-properties"/>
+      <property name="csvName" value="${AuditLogBrowser.schedule.download.filename.csv}"/>
+      <property name="appName" value="${AuditLogBrowser.schedule.download.appname}"/>
+      <property name="doDelete" value="${AuditLogBrowser.schedule.scheduledjob.dodelete}"/>
+      <property name="retentionPeriod" value="${AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod}"/>
+      <property name="dstFolderPath" value="${AuditLogBrowser.schedule.backup.directory}"/>
       <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
       <property name="fileManager" ref="jp.ricksoft.fileManager"/>
@@ -24,9 +28,6 @@
                 <entry key="jobScheduler" value-ref="jp.ricksoft.schedule.AuditlogArchiveScheduler"/>
                 <entry key="jobLockService" value-ref="jobLockService"/>
                 <entry key="isEnabled" value="${AuditLogBrowser.schedule.scheduledjob.enabled}"/>
-                <entry key="doDelete" value="${AuditLogBrowser.schedule.scheduledjob.dodelete}"/>
-                <entry key="storagePeriod" value="${AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod}"/>
-                <entry key="backupDirectory" value="${AuditLogBrowser.schedule.backup.directory}"/>
             </map>
         </property>
     </bean>

@@ -18,11 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.stream.Stream;
 
-import org.alfresco.repo.i18n.MessageService;
-import org.alfresco.service.ServiceRegistry;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVStrategy;
 
@@ -37,27 +34,33 @@ public class CSVManager
     private static final char CSV_COMMENT_START = '#';
 
     private static final String KEY_ID = "id";
-    private static final String DELIMITER = ",";
-    private static final String LABELS_MESSAGE_ID_DEFAULT = "ricksoft.auditLogBrowser.csv.labels";
-    private static final String KEYS_DEFAULT = "AuditLogBrowser.csv.column.default.keys";
 
-    private Properties properties;
+    private String appName;
+    private String csvName;
+    private String[] labels;
+    private String[] keys;
+
     private AuditLogManager auditLogManager;
-    private MessageService messageService;
 
-    public void setProperties(Properties properties)
-    {
-        this.properties = properties;
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public void setCsvName(String csvName) {
+        this.csvName = csvName;
+    }
+
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
+    public void setKeys(String[] keys) {
+        this.keys = keys;
     }
 
     public void setAuditLogManager(AuditLogManager auditLogManager)
     {
         this.auditLogManager = auditLogManager;
-    }
-
-    public void setServiceRegistry(ServiceRegistry serviceRegistry)
-    {
-        this.messageService = serviceRegistry.getMessageService();
     }
 
     /**
@@ -84,15 +87,11 @@ public class CSVManager
             return null;
         }
 
-        String labelsString = messageService.getMessage(LABELS_MESSAGE_ID_DEFAULT);
-
         try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true);)
         {
-            
-            // TODO: a
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
-            printer.println(labelsString.split(DELIMITER));
+            printer.println(labels);
             printer.flush();
             return csvPath.toFile();
 
@@ -106,13 +105,11 @@ public class CSVManager
     /**
      * Add one csv record.
      * 
-     * @param tempDir temporary directory for csv
+     * @param csv target csv
      * @param recordMap audit log entry
      */
     public void addRecord(File csv, Map<String, Object> recordMap)
     {
-
-        String[] keys = properties.getProperty(KEYS_DEFAULT).split(DELIMITER);
 
         try (FileWriter csvWriter = new FileWriter(csv, true);)
         {
@@ -177,10 +174,6 @@ public class CSVManager
             File directory) throws IOException
     {
 
-        int unitMaxItems = Integer.parseInt(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
-        String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
-        String csvName = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
-
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         Long startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
@@ -203,8 +196,7 @@ public class CSVManager
 
             do
             {
-                auditLogs = auditLogManager.getAuditLogs(appName, unitMaxItems, fromEpochMilli, toEpochMilli, entryId,
-                        user);
+                auditLogs = auditLogManager.getAuditLogs(appName, fromEpochMilli, toEpochMilli, entryId, user);
 
                 if (auditLogs.isEmpty())
                 {
@@ -218,11 +210,10 @@ public class CSVManager
                 // For Next Audit Query Param
                 entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
 
-            } while (auditLogs.size() == unitMaxItems);
+            } while (auditLogs.size() == 100);
 
             targetDate = targetDate.toLocalDate().plusDays(1).atStartOfDay();
 
         }
     }
-
 }

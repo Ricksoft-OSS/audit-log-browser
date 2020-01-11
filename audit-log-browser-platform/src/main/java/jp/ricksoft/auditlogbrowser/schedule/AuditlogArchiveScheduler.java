@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -32,16 +31,37 @@ public class AuditlogArchiveScheduler {
     private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
-    
-    private Properties properties;
+
+    private String csvName;
+    private String appName;
+    private boolean doDelete;
+    private int retentionPeriod;
+    private String dstFolderPath;
+
     private AuditLogManager auditLogManager;
     private CSVManager csvManager;
     private ZipManager zipManager;
     private RepositoryFolderManager repositoryFolderManager;
     private FileManager fileManager;
-    
-    public void setProperties(Properties properties) {
-        this.properties = properties;
+
+    public void setCsvName(String csvName) {
+        this.csvName = csvName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public void setDoDelete(String doDelete) {
+        this.doDelete = Boolean.parseBoolean(doDelete);
+    }
+
+    public void setRetentionPeriod(String retentionPeriod) {
+        this.retentionPeriod = Integer.parseInt(retentionPeriod);
+    }
+
+    public void setDstFolderPath(String dstFolderPath) {
+        this.dstFolderPath = dstFolderPath;
     }
     
     public void setAuditLogManager(AuditLogManager auditLogManager) {
@@ -67,14 +87,11 @@ public class AuditlogArchiveScheduler {
     /**
      * Executer implementation
      */
-    public void execute(int retentionPeriod, boolean doDelete, String dstFolderPath) {
+    public void execute() {
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("============ Start Schedule Job.");
         }
-        String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
-        String csvNameFormat = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
-        int unitMaxSize = Integer.parseInt(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
         
         // No backup directory set.
         if(dstFolderPath == null || dstFolderPath.isEmpty()) {
@@ -107,14 +124,14 @@ public class AuditlogArchiveScheduler {
             Long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
             
             Long entryId = null;
-            String csvName = String.format(csvNameFormat, targetDateStr);
+            String csvName = String.format(this.csvName, targetDateStr);
             File csv = csvManager.prepareCSV(tmpDir.getAbsolutePath(), csvName);
 
             List<Map<String, Object>> auditLogs;
                         
             do {
                 
-                auditLogs = auditLogManager.getAuditLogs(appName, unitMaxSize, fromEpochMilli, toEpochMilli, entryId, null);
+                auditLogs = auditLogManager.getAuditLogs(appName, fromEpochMilli, toEpochMilli, entryId, null);
                 
                 if (auditLogs.isEmpty()) {
                     break;
@@ -125,7 +142,7 @@ public class AuditlogArchiveScheduler {
                 // For next query parameter
                 entryId = (Long)auditLogs.get(auditLogs.size()-1).get(KEY_ID) + 1;
                 
-            } while (auditLogs.size() == unitMaxSize);
+            } while (auditLogs.size() == 100);
             
             targetDate = targetDate.plusDays(1);
             
@@ -181,8 +198,7 @@ public class AuditlogArchiveScheduler {
             LOG.debug("============ fromDate: {}", fromDate);
             LOG.debug("============ toDate: {}", toDate);
         }
-        
-        String appName      = properties.getProperty("AuditLogBrowser.schedule.download.appname");        
+
         Long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
         Long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
         
@@ -192,5 +208,4 @@ public class AuditlogArchiveScheduler {
             LOG.debug("============ Finish Delete process");
         }
     }
-
 }

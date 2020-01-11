@@ -20,7 +20,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <!-- ====================== Data Extrator ====================== -->
+    <!--
+    ====================== Data Extrator ======================
+     -->
     <bean id="jp.ricksoft.siteExtractor" class="jp.ricksoft.auditlogbrowser.audit.dataextractor.SiteNameDataExtractor">
       <property name="registry" ref="auditModel.extractorRegistry" />
       <property name="siteService" ref="SiteService" />
@@ -59,7 +61,9 @@
       <property name="namespaceService" ref="NamespaceService" />
     </bean>
 
-    <!-- ====================== Data Generator ====================== -->
+    <!--
+    ====================== Data Generator ======================
+     -->
     <bean id="jp.ricksoft.loginGenerator" class="jp.ricksoft.auditlogbrowser.audit.datagenerator.SimpleStringDataGenerator">
       <property name="innerString" value="LOGIN"/>
       <property name="registry" ref="auditModel.generatorRegistry" />
@@ -218,8 +222,31 @@
     </bean>
     
     <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVManager">
-      <property name="serviceRegistry" ref="ServiceRegistry" />
-      <property name="properties" ref="global-properties"/>
+      <property name="appName" value="${AuditLogBrowser.schedule.download.appname}"/>
+      <property name="csvName" value="${AuditLogBrowser.schedule.download.filename.csv}"/>
+        <property name="labels">
+            <array value-type="java.lang.String">
+                <value>${AuditLogBrowser.csv.label.id}</value>
+                <value>${AuditLogBrowser.csv.label.date}</value>
+                <value>${AuditLogBrowser.csv.label.user}</value>
+                <value>${AuditLogBrowser.csv.label.action}</value>
+                <value>${AuditLogBrowser.csv.label.site}</value>
+                <value>${AuditLogBrowser.csv.label.content}</value>
+                <value>${AuditLogBrowser.csv.label.path}</value>
+            </array>
+        </property>
+        <property name="keys">
+            <array value-type="java.lang.String">
+                <value>id</value>
+                <value>time</value>
+                <value>user</value>
+                <value>action</value>
+                <value>site</value>
+                <value>nodename</value>
+                <value>nodepath</value>
+                <value>description</value>
+            </array>
+        </property>
       <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
     </bean>
     
