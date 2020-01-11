@@ -29,7 +29,7 @@ import org.apache.commons.csv.CSVStrategy;
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 
-public class CSVFileManager
+public class CSVManager
 {
 
     private static final char CSV_DELIMITER = ',';

@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
 
 import jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager;
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
-import jp.ricksoft.auditlogbrowser.file.CSVFileManager;
+import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.FileManager;
-import jp.ricksoft.auditlogbrowser.file.ZipFileManager;
+import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateUtil;
 
 public class AuditlogArchiveScheduler {
@@ -35,8 +35,8 @@ public class AuditlogArchiveScheduler {
     
     private Properties properties;
     private AuditLogManager auditLogManager;
-    private CSVFileManager csvManager;
-    private ZipFileManager zipManager;
+    private CSVManager csvManager;
+    private ZipManager zipManager;
     private RepositoryFolderManager repositoryFolderManager;
     private FileManager fileManager;
     
@@ -48,11 +48,11 @@ public class AuditlogArchiveScheduler {
         this.auditLogManager = auditLogManager;
     }
     
-    public void setCsvManager(CSVFileManager csvManager) {
+    public void setCsvManager(CSVManager csvManager) {
         this.csvManager = csvManager;
     }
     
-    public void setZipManager(ZipFileManager zipManager) {
+    public void setZipManager(ZipManager zipManager) {
         this.zipManager = zipManager;
     }
     

@@ -217,13 +217,13 @@
       <property name="auditService" ref="AuditService" />
     </bean>
     
-    <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVFileManager">
+    <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVManager">
       <property name="serviceRegistry" ref="ServiceRegistry" />
       <property name="properties" ref="global-properties"/>
       <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
     </bean>
     
-    <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipFileManager">
+    <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipManager">
       <property name="properties" ref="global-properties"/>
     </bean>
     

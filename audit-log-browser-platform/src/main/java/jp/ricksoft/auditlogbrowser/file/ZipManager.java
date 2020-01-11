@@ -17,7 +17,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.google.common.io.Files;
 
-public class ZipFileManager
+public class ZipManager
 {
 
     private Properties properties;

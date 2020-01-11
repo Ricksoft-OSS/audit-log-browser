@@ -15,9 +15,9 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import com.google.common.io.Files;
 
-import jp.ricksoft.auditlogbrowser.file.CSVFileManager;
+import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.FileManager;
-import jp.ricksoft.auditlogbrowser.file.ZipFileManager;
+import jp.ricksoft.auditlogbrowser.file.ZipManager;
 
 public class DownloadAuditLogZipWebScript extends AbstractWebScript {
 
@@ -25,19 +25,19 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
     private static final String MIMETYPE_ZIP  = "application/zip";
     
     private Properties properties;
-    private CSVFileManager csvManager;
-    private ZipFileManager zipManager;
+    private CSVManager csvManager;
+    private ZipManager zipManager;
     private FileManager fileManager;
     
     public void setProperties(Properties properties) {
         this.properties = properties;
     }
     
-    public void setCsvManager(CSVFileManager csvManager) {
+    public void setCsvManager(CSVManager csvManager) {
         this.csvManager = csvManager;
     }
     
-    public void setZipManager(ZipFileManager zipManager) {
+    public void setZipManager(ZipManager zipManager) {
         this.zipManager = zipManager;
     }
     
