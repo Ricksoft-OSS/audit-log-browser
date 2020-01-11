@@ -58,7 +58,7 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) {
 
-        // zipファイルを返却する為にResponse Headerを設定
+        // Response Header for returning Zip file.
         res.setContentType(MIMETYPE_ZIP);
         res.setContentEncoding(ENCODING_UTF8);
         res.setHeader("Content-Disposition", "attachment;filename=" + zipName);
@@ -67,7 +67,7 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
         res.setHeader("Pragma", "no-cache");
         res.setHeader("Expires", "0");
 
-        // 取得期間設定
+        // Acquisition period setting
         String fromDate = req.getParameter("fromDate");
         String fromTime = req.getParameter("fromTime");
         String toDate   = req.getParameter("toDate");
