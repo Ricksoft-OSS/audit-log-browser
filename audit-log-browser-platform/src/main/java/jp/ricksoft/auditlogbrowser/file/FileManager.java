@@ -5,16 +5,14 @@
 package jp.ricksoft.auditlogbrowser.file;
 
 import java.io.File;
-import java.util.Properties;
 import java.util.stream.Stream;
 
 public class FileManager
 {
+    private String tmpDirName;
 
-    private Properties properties;
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
+    public void setTmpDirName(String tmpDirName) {
+        this.tmpDirName = tmpDirName;
     }
 
     /**
@@ -58,7 +56,7 @@ public class FileManager
     }
 
     public File prepareTmpDir() {
-        return this.createDir(System.getProperty("java.io.tmpdir"), properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp"));
+        return this.createDir(System.getProperty("java.io.tmpdir"), tmpDirName);
     }
 
 }
