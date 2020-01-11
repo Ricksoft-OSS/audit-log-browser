@@ -6,7 +6,6 @@ package jp.ricksoft.auditlogbrowser.audit.download;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -23,14 +22,25 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
 
     private static final String ENCODING_UTF8 = "UTF-8";
     private static final String MIMETYPE_ZIP  = "application/zip";
-    
-    private Properties properties;
+
+    private String zipName;
+    private String msgNoCsv;
+    private String msgFailCreateZip;
+
     private CSVManager csvManager;
     private ZipManager zipManager;
     private FileManager fileManager;
-    
-    public void setProperties(Properties properties) {
-        this.properties = properties;
+
+    public void setZipName(String zipName) {
+        this.zipName = zipName;
+    }
+
+    public void setMsgNoCsv(String msgNoCsv) {
+        this.msgNoCsv = msgNoCsv;
+    }
+
+    public void setMsgFailCreateZip(String msgFailCreateZip) {
+        this.msgFailCreateZip = msgFailCreateZip;
     }
     
     public void setCsvManager(CSVManager csvManager) {
@@ -47,9 +57,6 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) {
-        String zipName          = properties.getProperty("AuditLogBrowser.schedule.download.filename.zip");
-        String msgNoCsv         = properties.getProperty("AuditLogBrowser.schedule.download.message.no-csv");
-        String msgFailCreateZip = properties.getProperty("AuditLogBrowser.schedule.download.message.fail-create-zip");
 
         // zipファイルを返却する為にResponse Headerを設定
         res.setContentType(MIMETYPE_ZIP);
@@ -102,5 +109,5 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
             }
         }
     }
-    
+
 }
