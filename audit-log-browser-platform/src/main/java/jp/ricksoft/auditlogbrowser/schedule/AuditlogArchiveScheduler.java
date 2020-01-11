@@ -72,9 +72,7 @@ public class AuditlogArchiveScheduler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("============ Start Schedule Job.");
         }
-        String sysDefaultPath = System.getProperty("java.io.tmpdir");
         String appName = properties.getProperty("AuditLogBrowser.schedule.download.appname");
-        String dirName = properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp");
         String csvNameFormat = properties.getProperty("AuditLogBrowser.schedule.download.filename.csv");
         int unitMaxSize = Integer.parseInt(properties.getProperty("AuditLogBrowser.schedule.download.unit-maxsize"));
         
@@ -94,7 +92,7 @@ public class AuditlogArchiveScheduler {
         }
 
         // temporary Directory for CSV
-        File tmpDir = fileManager.createDir(sysDefaultPath, dirName);
+        File tmpDir = fileManager.prepareTmpDir();
         // Need to prepare folder for Backup data.
         NodeRef auditRootFolder = repositoryFolderManager.prepareNestedFolder(repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
         LocalDate targetDate = fromDate;

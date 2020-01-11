@@ -47,7 +47,6 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) {
-        String tmpDirName       = properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp");
         String zipName          = properties.getProperty("AuditLogBrowser.schedule.download.filename.zip");
         String msgNoCsv         = properties.getProperty("AuditLogBrowser.schedule.download.message.no-csv");
         String msgFailCreateZip = properties.getProperty("AuditLogBrowser.schedule.download.message.fail-create-zip");
@@ -72,7 +71,7 @@ public class DownloadAuditLogZipWebScript extends AbstractWebScript {
         try {
             
             // For CSV and ZIP place.
-            tmpDir = fileManager.createDir(System.getProperty("java.io.tmpdir"), tmpDirName);
+            tmpDir = fileManager.prepareTmpDir();
             
             if (!tmpDir.exists()) {
                 throw new IOException(msgFailCreateZip);

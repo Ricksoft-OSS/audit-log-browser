@@ -5,10 +5,17 @@
 package jp.ricksoft.auditlogbrowser.file;
 
 import java.io.File;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 public class FileManager
 {
+
+    private Properties properties;
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
     /**
      * @param  parent   Parent folder path
@@ -48,6 +55,10 @@ public class FileManager
         {
             Stream.of(target.listFiles()).forEach(t -> t.delete());
         }
+    }
+
+    public File prepareTmpDir() {
+        return this.createDir(System.getProperty("java.io.tmpdir"), properties.getProperty("AuditLogBrowser.schedule.download.directoryname.tmp"));
     }
 
 }

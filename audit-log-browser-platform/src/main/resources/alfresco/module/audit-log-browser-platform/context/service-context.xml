@@ -231,6 +231,8 @@
       <property name="serviceRegistry" ref="ServiceRegistry" />
     </bean>
     
-    <bean id="jp.ricksoft.fileManager" class="jp.ricksoft.auditlogbrowser.file.FileManager" />
+    <bean id="jp.ricksoft.fileManager" class="jp.ricksoft.auditlogbrowser.file.FileManager">
+        <property name="properties" ref="global-properties"/>
+    </bean>
 
 </beans>
