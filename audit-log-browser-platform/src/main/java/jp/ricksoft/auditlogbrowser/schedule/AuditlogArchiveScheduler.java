@@ -8,8 +8,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.List;
-import java.util.Map;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -32,8 +30,6 @@ public class AuditlogArchiveScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
 
-    private String csvName;
-    private String appName;
     private boolean doDelete;
     private int retentionPeriod;
     private String dstFolderPath;
@@ -43,14 +39,6 @@ public class AuditlogArchiveScheduler {
     private ZipManager zipManager;
     private RepositoryFolderManager repositoryFolderManager;
     private FileManager fileManager;
-
-    public void setCsvName(String csvName) {
-        this.csvName = csvName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
 
     public void setDoDelete(String doDelete) {
         this.doDelete = Boolean.parseBoolean(doDelete);
@@ -122,27 +110,8 @@ public class AuditlogArchiveScheduler {
             String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
             Long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
             Long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
-            
-            Long entryId = null;
-            String csvName = String.format(this.csvName, targetDateStr);
-            File csv = csvManager.prepareCSV(tmpDir.getAbsolutePath(), csvName);
 
-            List<Map<String, Object>> auditLogs;
-                        
-            do {
-                
-                auditLogs = auditLogManager.getAuditLogs(appName, fromEpochMilli, toEpochMilli, entryId, null);
-                
-                if (auditLogs.isEmpty()) {
-                    break;
-                }
-                
-                auditLogs.stream().forEach(entry -> csvManager.addRecord(csv, entry));
-                
-                // For next query parameter
-                entryId = (Long)auditLogs.get(auditLogs.size()-1).get(KEY_ID) + 1;
-                
-            } while (auditLogs.size() == 100);
+            File csv = csvManager.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, null, tmpDir);
             
             targetDate = targetDate.plusDays(1);
             
@@ -202,7 +171,7 @@ public class AuditlogArchiveScheduler {
         Long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
         Long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
         
-        auditLogManager.delete(appName, fromEpochMilli, toEpochMilli);
+        auditLogManager.delete(fromEpochMilli, toEpochMilli);
         
         if (LOG.isDebugEnabled()) {
             LOG.debug("============ Finish Delete process");

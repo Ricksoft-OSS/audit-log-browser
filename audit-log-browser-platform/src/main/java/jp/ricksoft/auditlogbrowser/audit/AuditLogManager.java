@@ -24,8 +24,13 @@ public class AuditLogManager
     private static final String KEY_ID = "id";
     private static final String KEY_TIME = "time";
 
+    private String appName;
     private AuditService auditService;
     private static final DateTimeFormatter FORMAT_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
 
     public void setAuditService(AuditService auditService)
     {
@@ -36,9 +41,8 @@ public class AuditLogManager
      * Get Audit Logs
      * 
      * @author ebihara.yuki
-     * @param appName  Audit Application Name
      */
-    public List<Map<String, Object>> getAuditLogs(String appName, Long fromTime, Long toTime, Long fromId,
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId,
             String user) throws IllegalArgumentException
     {
 
@@ -75,12 +79,11 @@ public class AuditLogManager
 
     /**
      * Delete Audit Logs（Need to set period）
-     * 
-     * @param appName   Audit Application Name
+     *
      * @param fromTime  FromDate to EpochMilli
      * @param toTime    ToDate to EpochMilli
      */
-    public void delete(String appName, Long fromTime, Long toTime)
+    public void delete(Long fromTime, Long toTime)
     {
         auditService.clearAudit(appName, fromTime, toTime);
     }

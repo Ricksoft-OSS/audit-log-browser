@@ -218,11 +218,11 @@
     </bean>
     <!-- ====================== その他 ====================== -->
     <bean id="jp.ricksoft.auditLogManager" class="jp.ricksoft.auditlogbrowser.audit.AuditLogManager">
+      <property name="appName" value="${AuditLogBrowser.schedule.download.appname}"/>
       <property name="auditService" ref="AuditService" />
     </bean>
     
     <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVManager">
-      <property name="appName" value="${AuditLogBrowser.schedule.download.appname}"/>
       <property name="csvName" value="${AuditLogBrowser.schedule.download.filename.csv}"/>
         <property name="labels">
             <array value-type="java.lang.String">

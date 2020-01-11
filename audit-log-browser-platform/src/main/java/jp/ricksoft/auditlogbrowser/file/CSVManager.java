@@ -35,16 +35,11 @@ public class CSVManager
 
     private static final String KEY_ID = "id";
 
-    private String appName;
     private String csvName;
     private String[] labels;
     private String[] keys;
 
     private AuditLogManager auditLogManager;
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
 
     public void setCsvName(String csvName) {
         this.csvName = csvName;
@@ -87,7 +82,7 @@ public class CSVManager
             return null;
         }
 
-        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true);)
+        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true))
         {
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
@@ -111,13 +106,13 @@ public class CSVManager
     public void addRecord(File csv, Map<String, Object> recordMap)
     {
 
-        try (FileWriter csvWriter = new FileWriter(csv, true);)
+        try (FileWriter csvWriter = new FileWriter(csv, true))
         {
 
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
 
-            List<String> ret = new ArrayList<String>();
+            List<String> ret = new ArrayList<>();
             Arrays.stream(keys).forEach(key ->
             {
                 if (recordMap.get(key) == null)
@@ -135,17 +130,14 @@ public class CSVManager
         } catch (IOException ioe)
         {
             ioe.printStackTrace();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 
     /**
      * Check whether csv has row.
      * 
-     * @param csv
-     * @return
+     * @param csv target CSV File
+     * @return true if record exists
      */
     public boolean hasRecord(File csv)
     {
@@ -168,10 +160,9 @@ public class CSVManager
      * @param toTime  End time of audit log acquisition period
      * @param user  Username
      * @param directory  Directory storing the csv file
-     * @throws IOException
      */
     public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user,
-            File directory) throws IOException
+            File directory)
     {
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -191,29 +182,33 @@ public class CSVManager
                 toEpochMilli = endEpochMilli;
             }
 
-            Long entryId = null;
-            List<Map<String, Object>> auditLogs;
-
-            do
-            {
-                auditLogs = auditLogManager.getAuditLogs(appName, fromEpochMilli, toEpochMilli, entryId, user);
-
-                if (auditLogs.isEmpty())
-                {
-                    break;
-                }
-
-                final File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, targetDateStr));
-
-                auditLogs.stream().forEach(entry -> this.addRecord(csv, entry));
-
-                // For Next Audit Query Param
-                entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
-
-            } while (auditLogs.size() == 100);
+            this.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, user, directory);
 
             targetDate = targetDate.toLocalDate().plusDays(1).atStartOfDay();
 
         }
+    }
+
+    public File createOneDayAuditLogCSV(String dateStr, Long fromEpochMilli, Long toEpochMilli, String user, File directory){
+        File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, dateStr));
+        Long entryId = null;
+        List<Map<String, Object>> auditLogs;
+
+        do
+        {
+            auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId, user);
+
+            if (auditLogs.isEmpty())
+            {
+                break;
+            }
+
+            auditLogs.stream().forEach(entry -> this.addRecord(csv, entry));
+
+            entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
+
+        } while (auditLogs.size() == 100);
+
+        return csv;
     }
 }
