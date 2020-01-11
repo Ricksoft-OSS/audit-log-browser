@@ -57,10 +57,10 @@
         </span>
         <span>
           <span class="yui-button alf-primary-button form-part">
-            <button id="search-audit-log">${msg("button.form.search")}</button>
+            <button id="search-audit-log" type="button">${msg("button.form.search")}</button>
           </span>
           <span class="yui-button alf-primary-button form-part">
-            <button id="download-audit-log">${msg("button.form.download")}</button>
+            <button id="download-audit-log" type="button">${msg("button.form.download")}</button>
           </span>
           <span class="yui-button alf-primary-button form-part">
             <a href="#delAuditModal" class="modal">${msg("button.form.delete")}</a>
