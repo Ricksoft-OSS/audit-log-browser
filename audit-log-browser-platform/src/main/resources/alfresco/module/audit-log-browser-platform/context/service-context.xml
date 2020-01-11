@@ -224,7 +224,7 @@
     </bean>
     
     <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipManager">
-      <property name="properties" ref="global-properties"/>
+      <property name="zipName" value="${AuditLogBrowser.schedule.download.filename.zip}"/>
     </bean>
     
     <bean id="jp.ricksoft.repositoryFolderManager" class="jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager">

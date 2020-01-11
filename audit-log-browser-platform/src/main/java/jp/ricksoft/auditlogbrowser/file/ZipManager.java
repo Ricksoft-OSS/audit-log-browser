@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -20,11 +19,10 @@ import com.google.common.io.Files;
 public class ZipManager
 {
 
-    private Properties properties;
+    private String zipName;
 
-    public void setProperties(Properties properties)
-    {
-        this.properties = properties;
+    public void setZipName(String zipName) {
+        this.zipName = zipName;
     }
 
     /**
@@ -76,15 +74,13 @@ public class ZipManager
      */
     public File prepareZip(File folder) throws IOException
     {
-        String tmpDirPath = folder.getAbsolutePath();
-        String zipName = properties.getProperty("AuditLogBrowser.schedule.download.filename.zip");
 
         if (folder.list() == null || folder.list().length < 1)
         {
             return null;
         }
 
-        File zip = new File(tmpDirPath, zipName);
+        File zip = new File(folder.getAbsolutePath(), zipName);
         this.createZip(zip, folder.listFiles());
 
         return zip;
