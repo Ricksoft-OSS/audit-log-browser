@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
-    <!-- スケジュールジョブ実行 -->
+    <!-- Exec Scheduled Job -->
     <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
           class="jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler">
       <property name="properties" ref="global-properties"/>
@@ -15,7 +15,7 @@
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
     </bean>
 
-    <!-- ジョブの詳細 -->
+    <!-- Job Detail -->
     <bean id="jp.ricksoft.schedule.scheduledjob.jobDetail"
           class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="jp.ricksoft.auditlogbrowser.schedule.ScheduledJob"/>
@@ -31,7 +31,7 @@
         </property>
     </bean>
 
-    <!-- スケジュールトリガー -->
+    <!-- Scheculed Trigger -->
     <bean id="jp.ricksoft.schedule.scheduledjob.trigger"
           class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jp.ricksoft.schedule.scheduledjob.jobDetail"/>
