@@ -23,7 +23,6 @@ import jp.ricksoft.auditlogbrowser.util.DateUtil;
 
 public class AuditlogArchiveScheduler {
 
-    private static final String KEY_ID = "id";
     private static final String NAME_DAILYZIP = "Auditlogs_%s.zip";
     private static final String MSG_NO_BACKUP_DIRECTORY = "No backup directory set.";
     private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
