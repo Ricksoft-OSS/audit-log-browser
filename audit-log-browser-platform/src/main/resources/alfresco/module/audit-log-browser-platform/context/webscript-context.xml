@@ -18,8 +18,8 @@
       class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipWebScript"
       parent="webscript">
       <property name="zipName" value="${AuditLogBrowser.schedule.download.filename.zip}"/>
-      <property name="msgNoCsv" value="${AuditLogBrowser.schedule.download.filename.zip}"/>
-      <property name="msgFailCreateZip" value="${AuditLogBrowser.schedule.download.filename.zip}"/>
+      <property name="msgNoCsv" value="${AuditLogBrowser.schedule.download.message.no-csv}"/>
+      <property name="msgFailCreateZip" value="${AuditLogBrowser.schedule.download.message.fail-create-zip}"/>
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
       <property name="fileManager" ref="jp.ricksoft.fileManager"/>
