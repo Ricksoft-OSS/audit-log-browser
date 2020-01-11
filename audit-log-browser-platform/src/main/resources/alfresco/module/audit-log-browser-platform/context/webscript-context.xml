@@ -17,17 +17,9 @@
    <bean id="webscript.jp.ricksoft.audit.DownloadAuditLogZip.get"
       class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipWebScript"
       parent="webscript">
-      <property name="properties">
-		 <ref bean="global-properties"/>
-      </property>
-      <property name="csvManager">
-         <ref bean="jp.ricksoft.csvManager"/>
-      </property>
-      <property name="zipManager">
-         <ref bean="jp.ricksoft.zipManager"/>
-      </property>
-      <property name="fileManager">
-         <ref bean="jp.ricksoft.fileManager"/>
-      </property>
+      <property name="properties" ref="global-properties"/>
+      <property name="csvManager" ref="jp.ricksoft.csvManager"/>
+      <property name="zipManager" ref="jp.ricksoft.zipManager"/>
+      <property name="fileManager" ref="jp.ricksoft.fileManager"/>
    </bean>
 </beans>
