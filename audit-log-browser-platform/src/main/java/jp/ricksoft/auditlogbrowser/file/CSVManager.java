@@ -25,9 +25,15 @@ import org.apache.commons.csv.CSVStrategy;
 
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
 
+@Configuration
 public class CSVManager
 {
+    private static final Logger LOG = LoggerFactory.getLogger(CSVManager.class);
 
     private static final char CSV_DELIMITER = ',';
     private static final char CSV_ENCAPSULATOR = '"';
@@ -161,9 +167,11 @@ public class CSVManager
      * @param user  Username
      * @param directory  Directory storing the csv file
      */
+    @Async
     public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user,
             File directory)
     {
+        LOG.info("Starting Create Audit log CSV.");
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -193,6 +201,8 @@ public class CSVManager
             targetDate = targetDate.toLocalDate().plusDays(1).atStartOfDay();
 
         }
+
+        LOG.info("Finish Create Audit log CSV.");
     }
 
     public File createOneDayAuditLogCSV(String dateStr, Long fromEpochMilli, Long toEpochMilli, String user, File directory){
