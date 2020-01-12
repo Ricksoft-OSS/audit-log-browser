@@ -77,7 +77,7 @@ public class AuditlogArchiveScheduler {
     public void execute() {
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Start Schedule Job.");
+            LOG.debug("============ Start Schedule Archive.");
         }
         
         // No backup directory set.
@@ -86,7 +86,7 @@ public class AuditlogArchiveScheduler {
         }
 
         // from
-        LocalDate fromDate = LocalDate.of(2005, 11, 1);    
+        LocalDate fromDate = auditLogManager.getOldestLoggedDateTime().toLocalDate();
         // to
         LocalDate toDate = LocalDate.now().minusDays(retentionPeriod);
         
@@ -149,7 +149,7 @@ public class AuditlogArchiveScheduler {
         }
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Finish Backup process.");
+            LOG.debug("============ Finish Schedule Archive.");
         }
 
     }
@@ -161,7 +161,7 @@ public class AuditlogArchiveScheduler {
      */
     private void cleanUp(LocalDate fromDate, LocalDate toDate) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Start Delete process");
+            LOG.debug("============ Delete old audit log start");
             // Even if you delete old logs, there is no problem
             LOG.debug("============ fromDate: {}", fromDate);
             LOG.debug("============ toDate: {}", toDate);
@@ -173,7 +173,7 @@ public class AuditlogArchiveScheduler {
         auditLogManager.delete(fromEpochMilli, toEpochMilli);
         
         if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Finish Delete process");
+            LOG.debug("============ Delete old audit log end");
         }
     }
 }

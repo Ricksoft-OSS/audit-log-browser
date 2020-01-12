@@ -5,8 +5,8 @@
 package jp.ricksoft.auditlogbrowser.audit;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,13 +37,17 @@ public class AuditLogManager
         this.auditService = auditService;
     }
 
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user) throws IllegalArgumentException
+    {
+        return this.getAuditLogs(fromTime, toTime, fromId, user, 100);
+    }
+
     /**
      * Get Audit Logs
      * 
      * @author ebihara.yuki
      */
-    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId,
-            String user) throws IllegalArgumentException
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit) throws IllegalArgumentException
     {
 
         // Audit log query callback function setting.
@@ -72,9 +76,14 @@ public class AuditLogManager
         params.setForward(true);
 
         // Execute Query
-        auditService.auditQuery(callback, params, 100);
+        auditService.auditQuery(callback, params, maxUnit);
 
         return callback.getEntries();
+    }
+
+    public LocalDateTime getOldestLoggedDateTime(){
+        Map<String, Object> entry = this.getAuditLogs(null, null, null, null, 1).get(0);
+        return (LocalDateTime) entry.get(KEY_TIME);
     }
 
     /**
@@ -139,8 +148,7 @@ public class AuditLogManager
         {
             Map<String, Object> entry = new HashMap<>();
             entry.put(KEY_ID, entryId);
-            entry.put(KEY_TIME, DateTimeUtil.convertLocalDateTime(time)
-                    .format(FORMAT_DATETIME.withResolverStyle(ResolverStyle.STRICT)));
+            entry.put(KEY_TIME, DateTimeUtil.convertLocalDateTime(time));
 
             if (values != null)
             {
