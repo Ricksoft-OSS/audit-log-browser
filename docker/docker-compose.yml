@@ -1,3 +1,4 @@
+#set( $symbol_dollar = '$' )
 version: '3.4'
 services:
   audit-log-browser-share:
@@ -27,7 +28,7 @@ services:
     depends_on:
       - audit-log-browser-postgres
   audit-log-browser-postgres:
-    image: postgres:9.6
+    image: ${docker.db.image}:${alfresco.db.version}
     environment:
       POSTGRES_DB: alfresco
       POSTGRES_USER: alfresco
@@ -38,7 +39,7 @@ services:
     volumes:
       - audit-log-browser-db-volume:/var/lib/postgresql/data
   audit-log-browser-ass:
-    image: alfresco/alfresco-search-services:1.2.0
+    image: ${docker.solr.image}:${alfresco.solr.version}
     environment:
       SOLR_ALFRESCO_HOST: audit-log-browser-acs
       SOLR_ALFRESCO_PORT: 8080

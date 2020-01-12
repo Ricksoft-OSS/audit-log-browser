@@ -22,7 +22,7 @@
          class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
       <property name="resourceBundles">
          <list>
-             <value>alfresco.web-extension.messages.audit-log-browser</value>
+             <value>alfresco.web-extension.messages.audit-log-browser-share</value>
          </list>
       </property>
    </bean>

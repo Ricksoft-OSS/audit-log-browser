@@ -22,9 +22,7 @@
         This setting will tell the Rhinoscript Processor not to compile and cache the JS files.
         Cool, we can now change server side JS files and have the changes picked up,
         without having to restart or refresh web scripts.
-
         But… Due to a known bug in the Surf framework (ALF-9970) this will break the admin consoles in Share.
-
         Override this bean and disable javascript compilation so that webscripts can be hot reloaded.
         We have changed the 'compile' property from true to false.
         -->
