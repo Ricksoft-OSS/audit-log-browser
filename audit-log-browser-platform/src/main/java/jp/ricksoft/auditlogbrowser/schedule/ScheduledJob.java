@@ -7,13 +7,14 @@ package jp.ricksoft.auditlogbrowser.schedule;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.schedule.AbstractScheduledLockedJob;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
-import org.quartz.StatefulJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ScheduledJob extends AbstractScheduledLockedJob implements StatefulJob {
+@DisallowConcurrentExecution
+public class ScheduledJob extends AbstractScheduledLockedJob {
 
     private static final String JOB_SCHEDULER = "jobScheduler";
     private static final String IS_ENABLED = "isEnabled";
