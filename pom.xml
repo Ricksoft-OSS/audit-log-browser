@@ -93,6 +93,11 @@
                        but alfresco version can/should be overridden in your project's pom
             -->
             <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-core</artifactId>
+                <version>2.3.0.1</version>
+            </dependency>
+            <dependency>
                 <groupId>${alfresco.groupId}</groupId>
                 <artifactId>${alfresco.bomDependencyArtifactId}</artifactId>
                 <version>${alfresco.platform.version}</version>
