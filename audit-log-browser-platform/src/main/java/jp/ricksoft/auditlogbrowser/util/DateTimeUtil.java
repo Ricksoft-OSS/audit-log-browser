@@ -19,10 +19,7 @@ public class DateTimeUtil
      */
     public static Long convertFromEpochMilli(String tDate, String tTime) {
 
-        if (StringUtils.isBlank(tDate)) {
-            // Alfresco launch since November 2005.
-            return DateTimeUtil.convertEpochMilli(LocalDate.of(2005, 11, 1).atStartOfDay());
-        } else if (StringUtils.isBlank(tTime)) {
+        if (StringUtils.isBlank(tTime)) {
             return DateTimeUtil.convertEpochMilli(LocalDate.parse(tDate).atStartOfDay());
         } else {
             LocalTime time = LocalTime.parse(tTime);

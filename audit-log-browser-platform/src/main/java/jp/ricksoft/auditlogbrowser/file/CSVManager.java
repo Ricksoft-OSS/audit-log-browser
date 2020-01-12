@@ -167,7 +167,13 @@ public class CSVManager
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        Long startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
+        Long startEpochMilli;
+
+        if (fromDate.isBlank()){
+            startEpochMilli = DateTimeUtil.convertEpochMilli(auditLogManager.getOldestLoggedDateTime());
+        } else {
+            startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
+        }
         Long endEpochMilli = DateTimeUtil.convertToEpochMilli(toDate, toTime);
         LocalDateTime targetDate = DateTimeUtil.convertLocalDateTime(startEpochMilli);
 
