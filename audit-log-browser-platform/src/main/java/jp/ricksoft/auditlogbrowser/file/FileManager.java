@@ -7,56 +7,35 @@ package jp.ricksoft.auditlogbrowser.file;
 import java.io.File;
 import java.util.stream.Stream;
 
-public class FileManager
-{
-    private String tmpDirName;
+public class FileManager {
+    private String tmpDirPath;
 
-    public void setTmpDirName(String tmpDirName) {
-        this.tmpDirName = tmpDirName;
-    }
-
-    /**
-     * @param  parent   Parent folder path
-     * @param  dirName  Directory Name
-     * @return directory
-     */
-    public File createDir(String parent, String dirName)
-    {
-        File dir = new File(parent, dirName);
-
-        if (!dir.exists())
-        {
-            dir.mkdir();
-        }
-
-        return dir;
+    public void setTmpDirPath(String tmpDirPath) {
+        this.tmpDirPath = tmpDirPath;
     }
 
     /**
      * Delete the file/folder. In the case of a folder, delete all files in folder.
-     * 
+     *
      * @param target
      */
-    public void deleteAllFiles(File target)
-    {
+    public void deleteAllFiles(File target) {
 
         // Existance check
-        if (target == null || !target.exists())
-        {
+        if (target == null || !target.exists()) {
             return;
         }
 
-        if (target.isFile())
-        {
+        if (target.isFile()) {
             target.delete();
-        } else if (target.isDirectory())
-        {
+        } else if (target.isDirectory()) {
             Stream.of(target.listFiles()).forEach(t -> t.delete());
         }
     }
 
-    public File prepareTmpDir() {
-        return this.createDir(System.getProperty("java.io.tmpdir"), tmpDirName);
+    public void cleanupTmpDir() {
+        File tmpDir = new File(tmpDirPath);
+        this.deleteAllFiles(tmpDir);
     }
 
 }

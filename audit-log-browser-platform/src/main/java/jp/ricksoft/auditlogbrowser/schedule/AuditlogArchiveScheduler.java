@@ -4,22 +4,21 @@
  */
 package jp.ricksoft.auditlogbrowser.schedule;
 
-import java.io.File;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
-
-import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager;
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.FileManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateUtil;
+import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
 
 public class AuditlogArchiveScheduler {
 
@@ -95,8 +94,6 @@ public class AuditlogArchiveScheduler {
             LOG.debug("============ ToDate: {}", toDate);
         }
 
-        // temporary Directory for CSV
-        File tmpDir = fileManager.prepareTmpDir();
         // Need to prepare folder for Backup data.
         NodeRef auditRootFolder = repositoryFolderManager.prepareNestedFolder(repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
         LocalDate targetDate = fromDate;
@@ -110,7 +107,7 @@ public class AuditlogArchiveScheduler {
             Long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
             Long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
 
-            File csv = csvManager.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, null, tmpDir);
+            File csv = csvManager.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, null);
             
             targetDate = targetDate.plusDays(1);
             
@@ -121,27 +118,26 @@ public class AuditlogArchiveScheduler {
                 }
                 continue;
             }
-            
+
             NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder, targetDateStr.split("-"));
             String zipName = String.format(NAME_DAILYZIP, targetDateStr);
-            
+
             if (repositoryFolderManager.isExist(dateFolder, zipName)) {
                 continue;
             }
-            
+
             // for Zip
-            File zip = new File(tmpDir.getAbsolutePath(), zipName);
             File[] csvs = {csv};
-            
-            zipManager.createZip(zip, csvs);
+
+            File zip = zipManager.createZip(csvs);
             repositoryFolderManager.addContent(dateFolder, zip);
-            
-            fileManager.deleteAllFiles(tmpDir);
-            
+
+            fileManager.cleanupTmpDir();
+
             if (LOG.isDebugEnabled()) {
                 LOG.debug("============ Loop End ============");
             }
-            
+
         }
         
         if(doDelete) {

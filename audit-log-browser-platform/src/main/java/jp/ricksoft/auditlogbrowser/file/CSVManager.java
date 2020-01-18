@@ -41,11 +41,17 @@ public class CSVManager
 
     private static final String KEY_ID = "id";
 
+    private String tmpDirPath;
     private String csvName;
     private String[] labels;
     private String[] keys;
 
     private AuditLogManager auditLogManager;
+    private String name;
+
+    public void setTmpDirPath(String tmpDirPath) {
+        this.tmpDirPath = tmpDirPath;
+    }
 
     public void setCsvName(String csvName) {
         this.csvName = csvName;
@@ -70,25 +76,23 @@ public class CSVManager
      * @param name csv file name
      * @return csv file
      */
-    public File prepareCSV(String path, String name)
-    {
+    public File prepareCSV(String name) {
+        this.name = name;
 
-        Path csvPath = Paths.get(path, name);
-        if(Files.exists(csvPath)) {
+        Path csvPath = Paths.get(tmpDirPath, name);
+        if (Files.exists(csvPath)) {
+
             return csvPath.toFile();
         }
-        
-        try
-        {
+
+        try {
             Files.createFile(csvPath);
-        } catch (IOException e1)
-        {
+        } catch (IOException e1) {
             e1.printStackTrace();
             return null;
         }
 
-        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true))
-        {
+        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true)) {
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
             printer.println(labels);
@@ -166,9 +170,7 @@ public class CSVManager
      * @param user     Username
      */
     @Async
-    public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user,
-            File directory)
-    {
+    public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user) {
         LOG.info("Starting Create Audit log CSV.");
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -194,7 +196,7 @@ public class CSVManager
                 toEpochMilli = endEpochMilli;
             }
 
-            this.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, user, directory);
+            this.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, user);
 
             targetDate = targetDate.toLocalDate().plusDays(1).atStartOfDay();
 
@@ -203,8 +205,8 @@ public class CSVManager
         LOG.info("Finish Create Audit log CSV.");
     }
 
-    public File createOneDayAuditLogCSV(String dateStr, Long fromEpochMilli, Long toEpochMilli, String user, File directory){
-        File csv = this.prepareCSV(directory.getAbsolutePath(), String.format(csvName, dateStr));
+    public File createOneDayAuditLogCSV(String dateStr, Long fromEpochMilli, Long toEpochMilli, String user) {
+        File csv = this.prepareCSV(String.format(csvName, dateStr));
         Long entryId = null;
         List<Map<String, Object>> auditLogs;
 
@@ -212,8 +214,7 @@ public class CSVManager
         do {
             auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId, user);
 
-            if (auditLogs.isEmpty())
-            {
+            if (auditLogs.isEmpty()) {
                 break;
             }
 
