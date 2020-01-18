@@ -6,6 +6,18 @@
 
     <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
 		 workflow, and loading custom content models.  -->
+    <bean id="jp.ricksoft.InitConfigModuleComponent"
+          class="jp.ricksoft.auditlogbrowser.setup.InitConfigModuleComponent"
+          parent="module.baseComponent">
+
+        <!-- Module Details -->
+        <property name="moduleId" value="${project.artifactId}" />
+        <property name="name" value="${project.name}" />
+        <property name="description" value="${project.description}" />
+        <property name="sinceVersion" value="1.0" />
+        <property name="appliesFromVersion" value="1.0" />
+        <property name="tmpDirPath" value="${AuditLogBrowser.schedule.download.directoryname.tmp}"/>
+    </bean>
 
     <!-- Registration of new models -->
     <bean id="audit-log-browser-platform.dictionaryBootstrap" parent="dictionaryModelBootstrap" depends-on="dictionaryBootstrap">
