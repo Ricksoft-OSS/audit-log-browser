@@ -124,7 +124,7 @@ $(function(){
        Alfresco.util.PopupManager.displayMessage({
          text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.nodateinput")
        });
-       return;
+      return;
     } else if (generateFromDate(paramFromdate, paramFromtime) > generateToDate(paramTodate, paramTotime)) {
       Alfresco.util.PopupManager.displayMessage({
         text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.reverseorder")
@@ -132,16 +132,24 @@ $(function(){
       return;
     }
 
-    var input = {
-      user: paramUser,
-      content: paramContent,
-      fromDate: paramFromdate,
-      fromTime: paramFromtime,
-      toDate: paramTodate,
-      toTime: paramTotime
-    }
+    var input = createDownloadParams(paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime);
 
-    document.location.href = Alfresco.constants.PROXY_URI + downloadURL + "?" + $.param(input);
+    Alfresco.util.Ajax.jsonGet({
+      url: Alfresco.constants.PROXY_URI + downloadURL,
+      dataObj: input,
+      successCallback: {
+        fn: function (result) {
+          console.log(result);
+        },
+        scope: this
+      },
+      failureCallback: {
+        fn: function (res) {
+          console.log(res);
+        },
+        scope: this
+      }
+    });
 
   });
 
@@ -216,58 +224,95 @@ $(function(){
  * Where condition Setting
  */
 function createWhereParams(user, contentName, fromDate, fromTime, toDate, toTime) {
-   var params = {};
+  var params = {};
 
-   // User
-   if (user) {
-     params.createdByUser = "'" + user + "'";
-   }
+  // User
+  if (user) {
+    params.createdByUser = "'" + user + "'";
+  }
 
-   // Content
-   if (contentName) {
-     params.valuesKey   = "'/share-site-access/transaction/nodename'";
-     params.valuesValue = "'" + contentName + "'";
-   }
+  // Content
+  if (contentName) {
+    params.valuesKey = "'/share-site-access/transaction/nodename'";
+    params.valuesValue = "'" + contentName + "'";
+  }
 
-   // Period
-   if (fromDate || toDate) {
-     var periods = [];
-     periods.push(generateFromDate(fromDate, fromTime).toISOString());
-     periods.push(generateToDate(toDate, toTime).toISOString());
+  // Period
+  if (fromDate || toDate) {
+    var periods = [];
+    periods.push(generateFromDate(fromDate, fromTime).toISOString());
+    periods.push(generateToDate(toDate, toTime).toISOString());
 
-   }
+  }
 
-   if (Object.entries(params)) {
-     var paramList = Object.entries(params).map(function(entry){
-        return entry.join("=");
-     });
-   }
+  if (Object.entries(params)) {
+    var paramList = Object.entries(params).map(function (entry) {
+      return entry.join("=");
+    });
+  }
 
-   if (periods) {
-     paramList.push("createdAt BETWEEN('" + periods.join("','") + "')");
-   }
+  if (periods) {
+    paramList.push("createdAt BETWEEN('" + periods.join("','") + "')");
+  }
 
-   return paramList.join(' and ');
- }
+  return paramList.join(' and ');
+}
+
+function createDownloadParams(user, contentName, fromDate, fromTime, toDate, toTime) {
+  var params = {};
+
+  // User
+  if (user) {
+    params.createdByUser = user;
+  }
+
+  // Content
+  if (contentName) {
+    params.valuesKey = "'/share-site-access/transaction/nodename'";
+    params.valuesValue = contentName;
+  }
+
+  // fromDate
+  if (fromDate) {
+    params.fromDate = fromDate;
+  }
+  // fromTime
+  if (fromTime) {
+    params.fromTime = fromTime;
+  }
+
+  // toDate
+  if (toDate) {
+    params.toDate = toDate;
+  }
+
+  // toTime
+  if (toTime) {
+    params.toTime = toTime;
+  }
+
+  return params;
+
+}
 
 /**
  * Get Audit Logs method
  */
-function getAuditLogs(endpointURL,data){
+function getAuditLogs(endpointURL, data) {
 
   Alfresco.util.Ajax.jsonGet({
-      url:  Alfresco.constants.URL_CONTEXT + endpointURL,
-      dataObj: data,
-      successCallback: {
-         fn: function (result) {
-           // Paging
-           var pagination = result.json["list"]["pagination"];
-           $('#prev-page').prop('disabled', !Boolean(pagination.skipCount));
-           $('#next-page').prop('disabled', !pagination.hasMoreItems);
-           $('#download-audit-log').prop('disabled', false);
-           $('#delete-audit-log').prop('disabled', false);
+    url: Alfresco.constants.URL_CONTEXT + endpointURL,
+    dataObj: data,
+    successCallback: {
+      fn: function (result) {
+        // Paging
+        var pagination = result.json["list"]["pagination"];
+        $('#prev-page').prop('disabled', !Boolean(pagination.skipCount));
+        $('#next-page').prop('disabled', !pagination.hasMoreItems);
+        $('#download-audit-log').prop('disabled', false);
+        $('#delete-audit-log').prop('disabled', false);
 
-           result.json.list.entries = settleEntries(result.json.list.entries);
+        result.json.list.entries = settleEntries(result.json.list.entries);
 
            // Prepare datatable
            YAHOO.example.Data = result.json;

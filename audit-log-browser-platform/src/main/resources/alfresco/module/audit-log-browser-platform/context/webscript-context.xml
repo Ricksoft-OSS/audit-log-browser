@@ -10,18 +10,19 @@
    OF ANY KIND, either express or implied. See the License for the specific
    language governing permissions and limitations under the License. -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
    <bean id="webscript.jp.ricksoft.audit.DownloadAuditLogZip.get"
-      class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipWebScript"
-      parent="webscript">
-      <property name="zipName" value="${AuditLogBrowser.schedule.download.filename.zip}"/>
-      <property name="msgNoCsv" value="${AuditLogBrowser.schedule.download.message.no-csv}"/>
+         class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipWebScript"
+         parent="webscript">
+      <property name="downloadAuditLogZipHandler" ref="jp.ricksoft.DownloadAuditLogZipHandler"/>
+   </bean>
+   <bean id="jp.ricksoft.DownloadAuditLogZipHandler"
+         class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler">
       <property name="msgFailCreateZip" value="${AuditLogBrowser.schedule.download.message.fail-create-zip}"/>
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
-      <property name="fileManager" ref="jp.ricksoft.fileManager"/>
    </bean>
 </beans>

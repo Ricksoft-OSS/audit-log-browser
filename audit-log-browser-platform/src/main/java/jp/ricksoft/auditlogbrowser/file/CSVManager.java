@@ -4,6 +4,16 @@
  */
 package jp.ricksoft.auditlogbrowser.file;
 
+import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
+import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVStrategy;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Async;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -19,16 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVStrategy;
-
-import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
-import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 
 @Configuration
 public class CSVManager
@@ -66,10 +66,9 @@ public class CSVManager
 
     /**
      * Prepare csv file.
-     * 
-     * @param path  Parent folder path
-     * @param name  csv file name
-     * @return  csv file
+     *
+     * @param name csv file name
+     * @return csv file
      */
     public File prepareCSV(String path, String name)
     {
@@ -159,13 +158,12 @@ public class CSVManager
 
     /**
      * Acquire audit log and create csv file.
-     * 
-     * @param fromDate  Start date of the audit log acquisition target period
-     * @param fromTime  Start time of the audit log acquisition target period
-     * @param toDate  End date of audit log acquisition period
-     * @param toTime  End time of audit log acquisition period
-     * @param user  Username
-     * @param directory  Directory storing the csv file
+     *
+     * @param fromDate Start date of the audit log acquisition target period
+     * @param fromTime Start time of the audit log acquisition target period
+     * @param toDate   End date of audit log acquisition period
+     * @param toTime   End time of audit log acquisition period
+     * @param user     Username
      */
     @Async
     public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user,
@@ -176,12 +174,12 @@ public class CSVManager
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         Long startEpochMilli;
-
-        if (fromDate.isBlank()){
+        if (StringUtils.isBlank(fromDate)) {
             startEpochMilli = DateTimeUtil.convertEpochMilli(auditLogManager.getOldestLoggedDateTime());
         } else {
             startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
         }
+
         Long endEpochMilli = DateTimeUtil.convertToEpochMilli(toDate, toTime);
         LocalDateTime targetDate = DateTimeUtil.convertLocalDateTime(startEpochMilli);
 
@@ -210,8 +208,8 @@ public class CSVManager
         Long entryId = null;
         List<Map<String, Object>> auditLogs;
 
-        do
-        {
+        LOG.info("Start Create {} Audit log CSV.", dateStr);
+        do {
             auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId, user);
 
             if (auditLogs.isEmpty())
@@ -224,6 +222,8 @@ public class CSVManager
             entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
 
         } while (auditLogs.size() == 100);
+
+        LOG.info("End Create {} Audit log CSV.", dateStr);
 
         return csv;
     }
