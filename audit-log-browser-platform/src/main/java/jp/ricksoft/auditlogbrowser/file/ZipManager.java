@@ -5,6 +5,8 @@
 package jp.ricksoft.auditlogbrowser.file;
 
 import com.google.common.io.Files;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,6 +16,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipManager {
+    private static final Logger LOG = LoggerFactory.getLogger(ZipManager.class);
+
     private String tmpDirPath;
     private String zipName;
 
@@ -31,11 +35,15 @@ public class ZipManager {
      * @param files Compressed file
      */
     public File createZip(File[] files) {
+        LOG.info("Starting Zip create.");
+
         File zip = new File(tmpDirPath, zipName);
         try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
             this.createZip(zos, files);
+            LOG.info("Finished Zip create.");
             return zip;
         } catch (IOException e) {
+            LOG.error("Fail to create Zip.");
             e.printStackTrace();
             return null;
         }
