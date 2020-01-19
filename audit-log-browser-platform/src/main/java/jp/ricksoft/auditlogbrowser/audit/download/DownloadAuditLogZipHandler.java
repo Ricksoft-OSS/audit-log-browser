@@ -2,7 +2,6 @@ package jp.ricksoft.auditlogbrowser.audit.download;
 
 import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 
@@ -43,7 +42,7 @@ public class DownloadAuditLogZipHandler {
             }
 
         } catch (IOException e) {
-            throw new AlfrescoRuntimeException(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
