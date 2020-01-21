@@ -78,7 +78,6 @@ public class CSVManager
 
         Path csvPath = Paths.get(tmpDirPath, name);
         if (Files.exists(csvPath)) {
-
             return csvPath.toFile();
         }
 
@@ -206,7 +205,7 @@ public class CSVManager
                 break;
             }
 
-            auditLogs.stream().forEach(entry -> this.addRecord(csv, entry));
+            auditLogs.forEach(entry -> this.addRecord(csv, entry));
 
             entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
 
