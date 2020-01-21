@@ -27,7 +27,6 @@ import java.time.format.ResolverStyle;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Configuration
@@ -119,10 +118,9 @@ public class CSVManager
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
 
-            List<String> ret = Arrays.stream(keys)
-                                        .map(key -> convertToStr(recordMap.get(key)))
-                                        .collect(Collectors.toList());
-            String[] record = ret.toArray(new String[0]);
+            String[] record = Arrays.stream(keys)
+                                    .map(key -> convertToStr(recordMap.get(key)))
+                                    .toArray(String[]::new);
             printer.println(record);
             printer.flush();
 
