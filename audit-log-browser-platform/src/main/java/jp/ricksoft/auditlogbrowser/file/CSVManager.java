@@ -47,7 +47,6 @@ public class CSVManager
     private String[] keys;
 
     private AuditLogManager auditLogManager;
-    private String name;
 
     public void setTmpDirPath(String tmpDirPath) {
         this.tmpDirPath = tmpDirPath;
@@ -77,7 +76,6 @@ public class CSVManager
      * @return csv file
      */
     public File prepareCSV(String name) {
-        this.name = name;
 
         Path csvPath = Paths.get(tmpDirPath, name);
         if (Files.exists(csvPath)) {
