@@ -17,6 +17,7 @@
         <property name="sinceVersion" value="1.0" />
         <property name="appliesFromVersion" value="1.0" />
         <property name="tmpDirPath" value="${AuditLogBrowser.schedule.download.directoryname.tmp}"/>
+        <property name="executeOnceOnly" value="false" />
     </bean>
 
     <!-- Registration of new models -->
