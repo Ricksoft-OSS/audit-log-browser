@@ -24,10 +24,10 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Configuration
@@ -119,17 +119,9 @@ public class CSVManager
             CSVPrinter printer = new CSVPrinter(csvWriter,
                     new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
 
-            List<String> ret = new ArrayList<>();
-            Arrays.stream(keys).forEach(key ->
-            {
-                if (recordMap.get(key) == null)
-                {
-                    ret.add("");
-                } else
-                {
-                    ret.add(String.valueOf(recordMap.get(key)));
-                }
-            });
+            List<String> ret = Arrays.stream(keys)
+                                        .map(key -> convertToStr(recordMap.get(key)))
+                                        .collect(Collectors.toList());
             String[] record = ret.toArray(new String[0]);
             printer.println(record);
             printer.flush();
@@ -225,5 +217,9 @@ public class CSVManager
         LOG.info("End Create {} Audit log CSV.", dateStr);
 
         return csv;
+    }
+
+    private String convertToStr(Object obj) {
+        return (obj == null) ? "" : String.valueOf(obj);
     }
 }
