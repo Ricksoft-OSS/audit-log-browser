@@ -134,7 +134,7 @@ $(function(){
 
     var input = createDownloadParams(paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime);
 
-    Alfresco.util.Ajax.jsonGet({
+    Alfresco.util.Ajax.jsonPost({
       url: Alfresco.constants.PROXY_URI + downloadURL,
       dataObj: input,
       successCallback: {
