@@ -26,11 +26,11 @@ You can set the following properties in alfresco-global.properties file. The def
 
 |Setting contents|Property key|Default|
 |--------|--------------|------------|
-|Enable Schedule function |AuditLogBrowser.schedule.scheduledjob.enabled|true|
-|Enable Delete function at schedule setting|AuditLogBrowser.schedule.scheduledjob.dodelete|false|
-|Schedule processing execution timing |AuditLogBrowser.schedule.scheduledjob.cronexpression|0 0 * * * ?|
-|Time from the start of the ACS instance to the start of the scheduler (milli second)|AuditLogBrowser.schedule.scheduledjob.cronstartdelay|240000|
-|Retention period for Audit log (day)|AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod|7|
+|Enable Schedule function |AuditLogBrowser.schedule.enabled|true|
+|Enable Delete function at schedule setting|AuditLogBrowser.schedule.delete.enabled|false|
+|Schedule processing execution timing |AuditLogBrowser.schedule.cron.expression|0 0 * * * ?|
+|Time from the start of the ACS instance to the start of the scheduler (milli second)|AuditLogBrowser.schedule.cron.start.delay|240000|
+|Retention period for Audit log (day)|AuditLogBrowser.schedule.archive.storage.period|7|
 
 ### Specifications
 
