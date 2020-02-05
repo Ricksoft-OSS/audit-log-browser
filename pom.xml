@@ -252,6 +252,12 @@
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>3.0.0-M3</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>2.0.0</version>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -398,6 +404,22 @@
                     <alwaysGenerate>true</alwaysGenerate>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-licenses</id>
+                        <goals>
+                            <goal>aggregate-add-third-party</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <useMissingFile>true</useMissingFile>
+                    <excludedScopes>provided,test</excludedScopes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -458,10 +480,10 @@
             </snapshots>
         </repository>
         <!-- Alfresco Enterprise Edition Artifacts, put username/pwd for server in settings.xml -->
-        <repository>
-            <id>alfresco-private-repository</id>
-            <url>https://artifacts.alfresco.com/nexus/content/groups/private</url>
-        </repository>
+        <!--        <repository>-->
+        <!--            <id>alfresco-private-repository</id>-->
+        <!--            <url>https://artifacts.alfresco.com/nexus/content/groups/private</url>-->
+        <!--        </repository>-->
     </repositories>
 
     <pluginRepositories>
