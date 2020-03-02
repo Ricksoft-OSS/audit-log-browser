@@ -7,6 +7,6 @@
   <description>Download Audit log Zip file</description>
   <url>/DownloadAuditLogZip</url>
   <authentication>admin</authentication>
-  <format default='json'></format>
+  <format default='json'>json</format>
   <family>Ricksoft</family>
 </webscript>
