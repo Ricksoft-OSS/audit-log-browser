@@ -3,14 +3,11 @@
   All rights reserved.
  -->
 <webscript>
-  <!--
-    Copyright 2018 Ricksoft Co., Ltd.
-    All rights reserved.
-   -->
   <shortname>Download Audit log</shortname>
   <description>Download Audit log Zip file</description>
   <url>/DownloadAuditLogZip</url>
   <authentication>admin</authentication>
-  <format default='json'>json</format>
+  <format default="json"/>
+  <family>Admin</family>
   <family>Ricksoft</family>
 </webscript>
