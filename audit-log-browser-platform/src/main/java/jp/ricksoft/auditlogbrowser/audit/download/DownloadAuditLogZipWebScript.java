@@ -31,7 +31,6 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String user = req.getParameter("user");
 
         handler.execCreateAuditLogsZip(fromDate, fromTime, toDate, toTime, user);
-        status.setCode(202, "Audit Log zip export job started: ");
 
         Map<String, Object> model = new HashMap<>();
         model.put("user", user);
