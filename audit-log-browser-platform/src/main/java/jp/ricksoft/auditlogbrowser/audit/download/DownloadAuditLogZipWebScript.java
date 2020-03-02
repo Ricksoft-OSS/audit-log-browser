@@ -33,7 +33,7 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         handler.execCreateAuditLogsZip(fromDate, fromTime, toDate, toTime, user);
 
         Map<String, Object> model = new HashMap<>();
-        model.put("user", user);
+        model.put("staatus", "Success");
 
         return model;
     }
