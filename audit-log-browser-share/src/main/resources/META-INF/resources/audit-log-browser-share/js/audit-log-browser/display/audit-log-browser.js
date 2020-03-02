@@ -154,7 +154,7 @@ $(function(){
   });
 
   $('#confirm-del-audit').on('click', function(event){
-    // フォームの内容を取得
+    // get form date
     var form = document.getElementById('del-form');
 
     if (form.checkValidity()) {
