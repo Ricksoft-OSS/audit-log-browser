@@ -19,8 +19,8 @@
         <alfresco.bomDependencyArtifactId>acs-community-packaging</alfresco.bomDependencyArtifactId>
         <alfresco.platform.version>6.2.0-ga</alfresco.platform.version>
         <alfresco.share.version>6.2.0</alfresco.share.version>
-        <alfresco.solr.version>1.4.0</alfresco.solr.version>
-        <alfresco.db.version>11.6</alfresco.db.version>
+        <alfresco.solr.version>1.4.1.1</alfresco.solr.version>
+        <alfresco.db.version>11.7-alpine</alfresco.db.version>
 
         <!-- Docker images -->
         <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>
