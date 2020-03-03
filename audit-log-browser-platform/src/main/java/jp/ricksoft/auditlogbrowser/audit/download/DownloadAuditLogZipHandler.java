@@ -21,9 +21,17 @@ import java.time.format.ResolverStyle;
 @Configuration
 public class DownloadAuditLogZipHandler {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
+
+    private static String STATUS_IN_PROGRESS = "In Progress";
+    private static String STATUS_FINISHED = "Finished";
+
     private String msgFailCreateZip;
     private CSVManager csvManager;
     private ZipManager zipManager;
+    private String progress;
+
+    private AuditLogManager auditLogManager;
 
     public void setMsgFailCreateZip(String msgFailCreateZip) {
         this.msgFailCreateZip = msgFailCreateZip;
@@ -37,13 +45,28 @@ public class DownloadAuditLogZipHandler {
         this.zipManager = zipManager;
     }
 
+    public void setAuditLogManager(AuditLogManager auditLogManager)
+    {
+        this.auditLogManager = auditLogManager;
+    }
+
+    public String getProgress() {
+        return this.progress;
+    }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
     @Async
     public void execCreateAuditLogsZip(String fromDate, String fromTime, String toDate, String toTime, String user) {
         LOG.info("Starting Create Audit log CSV.");
 
         try {
 
-            csvManager.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
+            this.setProgress(STATUS_IN_PROGRESS);
+
+            this.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
 
             File zip = zipManager.prepareZip();
 
@@ -51,6 +74,10 @@ public class DownloadAuditLogZipHandler {
             if (!zip.exists()) {
                 throw new IOException(msgFailCreateZip);
             }
+
+            LOG.info("Finish Create Audit log CSV.");
+
+            this.setProgress(STATUS_FINISHED);
 
         } catch (IOException e) {
             e.printStackTrace();
