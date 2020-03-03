@@ -74,7 +74,7 @@ public class CSVManager
      * @param name csv file name
      * @return csv file
      */
-    public File prepareCSV(String name) {
+    private File prepareCSV(String name) {
 
         Path csvPath = Paths.get(tmpDirPath, name);
         if (Files.exists(csvPath)) {
@@ -108,7 +108,7 @@ public class CSVManager
      * @param csv target csv
      * @param recordMap audit log entry
      */
-    public void addRecord(File csv, Map<String, Object> recordMap)
+    private void addRecord(File csv, Map<String, Object> recordMap)
     {
 
         try (FileWriter csvWriter = new FileWriter(csv, true))
