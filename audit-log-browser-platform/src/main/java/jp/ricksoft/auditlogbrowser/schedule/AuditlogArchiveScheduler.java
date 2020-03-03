@@ -104,10 +104,10 @@ public class AuditlogArchiveScheduler {
             }
             
             String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
-            Long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
-            Long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
+            long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
+            long toEpochMilli    = DateUtil.generateToEpochMilli(targetDate);
 
-            File csv = csvManager.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, null);
+            File csv = csvManager.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, null);
             
             targetDate = targetDate.plusDays(1);
             
@@ -163,8 +163,8 @@ public class AuditlogArchiveScheduler {
             LOG.debug("============ toDate: {}", toDate);
         }
 
-        Long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
-        Long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
+        long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
+        long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
         
         auditLogManager.delete(fromEpochMilli, toEpochMilli);
         

@@ -248,7 +248,6 @@
                 <value>description</value>
             </array>
         </property>
-      <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
     </bean>
 
     <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipManager">

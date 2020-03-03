@@ -13,7 +13,7 @@ public class DateUtil
      * @param time
      * @return datetime
      */
-    public static Long generateFromEpochMilli(LocalDate tDate) {
+    public static long generateFromEpochMilli(LocalDate tDate) {
 
         if (tDate == null) {
             // Alfresco launch since November 2005.
@@ -28,9 +28,9 @@ public class DateUtil
      * Convert ToDate
      * @param date
      * @param time
-     * @return Long
+     * @return long
      */
-    public static Long generateToEpochMilli(LocalDate tDate) {
+    public static long generateToEpochMilli(LocalDate tDate) {
         
         if (tDate == null) {
             return convertEpochMilli(LocalDateTime.now());
@@ -39,17 +39,13 @@ public class DateUtil
         }
 
     }
-    
-    public static LocalDate generateLocalDateTime(Long EpochMilli) {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(EpochMilli), ZoneId.systemDefault()).toLocalDate();
-    }
 
-    private static Instant convertToInstant(LocalDateTime target) {
+    private static Instant localDateTimeToInstant(LocalDateTime target) {
         ZoneId TIMEZONE_DEFAULT = ZoneId.systemDefault();
         return target.toInstant(TIMEZONE_DEFAULT.getRules().getOffset(Instant.EPOCH));
     }
 
-    private static Long convertEpochMilli(LocalDateTime target) {
-        return convertToInstant(target).toEpochMilli();
+    private static long convertEpochMilli(LocalDateTime target) {
+        return localDateTimeToInstant(target).toEpochMilli();
     }
 }
