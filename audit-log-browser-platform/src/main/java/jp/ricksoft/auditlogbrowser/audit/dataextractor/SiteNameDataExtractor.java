@@ -4,15 +4,15 @@
  */
 package jp.ricksoft.auditlogbrowser.audit.dataextractor;
 
-import java.io.Serializable;
-
 import org.alfresco.repo.audit.extractor.AbstractDataExtractor;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.site.SiteInfo;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.util.PropertyCheck;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
+
+import java.io.Serializable;
 
 public class SiteNameDataExtractor extends AbstractDataExtractor {
 
