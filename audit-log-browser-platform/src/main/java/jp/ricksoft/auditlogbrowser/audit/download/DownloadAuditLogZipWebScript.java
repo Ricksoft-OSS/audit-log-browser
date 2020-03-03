@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
+    private static String STATUS_STARTED = "Started";
+
     private DownloadAuditLogZipHandler handler;
 
     public void setDownloadAuditLogZipHandler(DownloadAuditLogZipHandler downloadAuditLogZipHandler) {
@@ -30,10 +32,12 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String toTime = req.getParameter("toTime");
         String user = req.getParameter("user");
 
+        handler.setProgress(STATUS_STARTED);
+
         handler.execCreateAuditLogsZip(fromDate, fromTime, toDate, toTime, user);
 
         Map<String, Object> model = new HashMap<>();
-        model.put("status", "Success");
+        model.put("status", handler.getProgress());
 
         return model;
     }
