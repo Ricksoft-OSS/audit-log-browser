@@ -6,6 +6,7 @@ package jp.ricksoft.auditlogbrowser.file;
 
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+import net.sf.cglib.core.Local;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVStrategy;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -32,8 +34,6 @@ import java.util.stream.Stream;
 @Configuration
 public class CSVManager
 {
-    private static final Logger LOG = LoggerFactory.getLogger(CSVManager.class);
-
     private static final char CSV_DELIMITER = ',';
     private static final char CSV_ENCAPSULATOR = '"';
     private static final char CSV_COMMENT_START = '#';
@@ -147,57 +147,11 @@ public class CSVManager
         }
     }
 
-    /**
-     * Acquire audit log and create csv file.
-     *
-     * @param fromDate Start date of the audit log acquisition target period
-     * @param fromTime Start time of the audit log acquisition target period
-     * @param toDate   End date of audit log acquisition period
-     * @param toTime   End time of audit log acquisition period
-     * @param user     Username
-     */
-    @Async
-    public void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user) {
-        LOG.info("Starting Create Audit log CSV.");
-
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        Long startEpochMilli;
-        if (StringUtils.isBlank(fromDate)) {
-            startEpochMilli = DateTimeUtil.convertEpochMilli(auditLogManager.getOldestLoggedDateTime());
-        } else {
-            startEpochMilli = DateTimeUtil.convertFromEpochMilli(fromDate, fromTime);
-        }
-
-        Long endEpochMilli = DateTimeUtil.convertToEpochMilli(toDate, toTime);
-        LocalDateTime targetDate = DateTimeUtil.convertLocalDateTime(startEpochMilli);
-
-        // Get Daily AuditLogs
-        while (targetDate.isBefore(DateTimeUtil.convertLocalDateTime(endEpochMilli)))
-        {
-            String targetDateStr = targetDate.format(dateFormat.withResolverStyle(ResolverStyle.STRICT));
-            Long fromEpochMilli = DateTimeUtil.convertEpochMilli(targetDate);
-            Long toEpochMilli = DateTimeUtil.convertEpochMilli(targetDate.toLocalDate().plusDays(1).atStartOfDay()) - 1;
-            if (toEpochMilli >= endEpochMilli)
-            {
-                toEpochMilli = endEpochMilli;
-            }
-
-            this.createOneDayAuditLogCSV(targetDateStr, fromEpochMilli, toEpochMilli, user);
-
-            targetDate = targetDate.toLocalDate().plusDays(1).atStartOfDay();
-
-        }
-
-        LOG.info("Finish Create Audit log CSV.");
-    }
-
-    public File createOneDayAuditLogCSV(String dateStr, Long fromEpochMilli, Long toEpochMilli, String user) {
-        File csv = this.prepareCSV(String.format(csvName, dateStr));
+    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user) {
+        File csv = this.prepareCSV(String.format(csvName, DateTimeUtil.convertEpochMilliToYYYYMMDD(fromEpochMilli)));
         Long entryId = null;
         List<Map<String, Object>> auditLogs;
 
-        LOG.info("Start Create {} Audit log CSV.", dateStr);
         do {
             auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId, user);
 
@@ -207,11 +161,9 @@ public class CSVManager
 
             auditLogs.forEach(entry -> this.addRecord(csv, entry));
 
-            entryId = (Long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
+            entryId = (long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
 
         } while (auditLogs.size() == 100);
-
-        LOG.info("End Create {} Audit log CSV.", dateStr);
 
         return csv;
     }
