@@ -4,7 +4,7 @@ import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
