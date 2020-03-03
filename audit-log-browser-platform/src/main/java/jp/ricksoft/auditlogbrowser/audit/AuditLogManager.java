@@ -26,7 +26,6 @@ public class AuditLogManager
 
     private String appName;
     private AuditService auditService;
-    private static final DateTimeFormatter FORMAT_DATETIME = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void setAppName(String appName) {
         this.appName = appName;
