@@ -42,7 +42,7 @@ public class AuditLogManager
 
     /**
      * Get Audit Logs
-     * 
+     *
      * @author ebihara.yuki
      */
     public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit) throws IllegalArgumentException
@@ -107,7 +107,7 @@ public class AuditLogManager
 
         /**
          * Determines whether the value argument needs to be set when the handleAuditEntry method is called from this callback.
-         * 
+         *
          * @return Need to set 'values' argument, set true.
          */
         @Override
@@ -118,7 +118,7 @@ public class AuditLogManager
 
         /**
          * Process audit entry error
-         * 
+         *
          * @param entryId  Audit entry ID
          * @param errorMsg  Error Message
          * @param error    Exception cause of error
@@ -132,7 +132,7 @@ public class AuditLogManager
 
         /**
          * Process audit log entry
-         * 
+         *
          * @param entryId  Audit entry ID
          * @param appName  Audit app name
          * @param user  Audit action user
@@ -142,7 +142,7 @@ public class AuditLogManager
          */
         @Override
         public boolean handleAuditEntry(Long entryId, String appName, String user, long time,
-                Map<String, Serializable> values)
+                                        Map<String, Serializable> values)
         {
             Map<String, Object> entry = new HashMap<>();
             entry.put(KEY_ID, entryId);
