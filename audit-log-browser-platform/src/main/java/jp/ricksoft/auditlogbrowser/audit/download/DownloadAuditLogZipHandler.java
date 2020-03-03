@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 
 @Configuration
 public class DownloadAuditLogZipHandler {
@@ -66,7 +64,11 @@ public class DownloadAuditLogZipHandler {
 
             this.setProgress(STATUS_IN_PROGRESS);
 
+            LOG.info("Set In Progress.");
+
             this.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
+
+            LOG.info("Exec createAuditLogsCSV.");
 
             File zip = zipManager.prepareZip();
 
