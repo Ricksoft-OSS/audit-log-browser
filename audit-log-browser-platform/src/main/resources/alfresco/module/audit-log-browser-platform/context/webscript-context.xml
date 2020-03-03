@@ -24,5 +24,6 @@
       <property name="msgFailCreateZip" value="${AuditLogBrowser.schedule.download.message.fail-create-zip}"/>
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
+      <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
    </bean>
 </beans>
