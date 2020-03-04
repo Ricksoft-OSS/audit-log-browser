@@ -225,6 +225,7 @@
     <bean id="jp.ricksoft.csvManager" class="jp.ricksoft.auditlogbrowser.file.CSVManager">
         <property name="tmpDirPath" value="${AuditLogBrowser.dir.tmp}"/>
         <property name="csvName" value="${AuditLogBrowser.daily.csv.name}"/>
+        <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
         <property name="labels">
             <array value-type="java.lang.String">
                 <value>${AuditLogBrowser.csv.label.id}</value>
