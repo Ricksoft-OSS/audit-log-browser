@@ -3,17 +3,15 @@ package jp.ricksoft.auditlogbrowser.setup;
 import org.alfresco.repo.module.AbstractModuleComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 
 public class InitConfigModuleComponent extends AbstractModuleComponent {
     private static final Logger LOG = LoggerFactory.getLogger(InitConfigModuleComponent.class);
 
+    @Value("${AuditLogBrowser.dir.tmp}")
     private String tmpDirPath;
-
-    public void setTmpDirPath(String tmpDirPath) {
-        this.tmpDirPath = tmpDirPath;
-    }
 
     @Override
     protected void executeInternal() {

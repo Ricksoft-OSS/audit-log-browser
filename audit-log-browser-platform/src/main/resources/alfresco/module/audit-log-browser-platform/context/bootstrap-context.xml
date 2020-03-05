@@ -16,23 +16,7 @@
         <property name="description" value="${project.description}"/>
         <property name="sinceVersion" value="1.0"/>
         <property name="appliesFromVersion" value="1.0"/>
-        <property name="tmpDirPath" value="${AuditLogBrowser.dir.tmp}"/>
         <property name="executeOnceOnly" value="false"/>
     </bean>
-
-    <!--    <bean id="jp.ricksoft.InitSharedRepositoryModuleComponent"-->
-    <!--          class="jp.ricksoft.auditlogbrowser.setup.InitSharedRepositoryModuleComponent"-->
-    <!--          parent="module.baseComponent" depends-on="jp.ricksoft.repositoryFolderManager">-->
-
-    <!--        &lt;!&ndash; Module Details &ndash;&gt;-->
-    <!--        <property name="moduleId" value="${project.artifactId}" />-->
-    <!--        <property name="name" value="${project.name}" />-->
-    <!--        <property name="description" value="${project.description}" />-->
-    <!--        <property name="sinceVersion" value="1.0" />-->
-    <!--        <property name="appliesFromVersion" value="1.0" />-->
-    <!--        <property name="manager" ref="jp.ricksoft.repositoryFolderManager" />-->
-    <!--        <property name="backupDir" value="${AuditLogBrowser.schedule.backup.directory}"/>-->
-    <!--        <property name="executeOnceOnly" value="false" />-->
-    <!--    </bean>-->
 
 </beans>
