@@ -1,1 +1,3 @@
-${status}
+{
+"exportStatus": "${exportStatus}"
+}
