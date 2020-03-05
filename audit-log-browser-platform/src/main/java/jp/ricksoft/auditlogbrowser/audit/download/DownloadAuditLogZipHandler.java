@@ -7,8 +7,8 @@ import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,13 +16,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Configuration
+@Controller
 public class DownloadAuditLogZipHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
 
-    private static String STATUS_IN_PROGRESS = "In Progress";
-    private static String STATUS_FINISHED = "Finished";
+    public static String STATUS_STARTED = "Started";
+    public static String STATUS_IN_PROGRESS = "In Progress";
+    public static String STATUS_FINISHED = "Finished";
 
     private String msgFailCreateZip;
     private CSVManager csvManager;
@@ -61,10 +62,7 @@ public class DownloadAuditLogZipHandler {
         LOG.info("Starting Create Audit log CSV.");
 
         try {
-
             this.setProgress(STATUS_IN_PROGRESS);
-
-            LOG.info("Set In Progress.");
 
             this.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
 
