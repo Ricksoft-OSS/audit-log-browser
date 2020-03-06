@@ -13,6 +13,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -45,14 +46,17 @@ public class ZipManager {
     }
 
 
-    private void createZip(ZipOutputStream zos, File[] files) throws IOException
+    private void createZip(ZipOutputStream zos, File[] files)
     {
-        for (File file : files)
-        {
-            ZipEntry entry = new ZipEntry(file.getName());
-            zos.putNextEntry(entry);
-            Files.copy(file, zos);
-        }
+        Stream.of(files)
+                .forEach(file -> {
+                    try {
+                        zos.putNextEntry(new ZipEntry(file.getName()));
+                        Files.copy(file, zos);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
     }
 
     /**
