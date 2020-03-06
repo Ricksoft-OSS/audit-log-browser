@@ -30,16 +30,15 @@ public class ZipManager {
      *
      * @param files Compressed file
      */
-    public File createZip(File[] files) {
-        LOG.info("Starting Zip create.");
+    public File prepareZip(File zip, File[] files) {
+        LOG.info("Starting Zip prepare.");
 
-        File zip = new File(tmpDirPath, zipName);
         try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
             this.addEntries(zos, files);
-            LOG.info("Finished Zip create.");
+            LOG.info("Finished Zip prepare.");
             return zip;
         } catch (IOException e) {
-            LOG.error("Fail to create Zip.");
+            LOG.error("Fail to prepare Zip.");
             e.printStackTrace();
             return null;
         }
@@ -65,14 +64,10 @@ public class ZipManager {
      * @return created zip file
      * @throws IOException
      */
-    public File prepareZip() {
-        File tmpDir = new File(tmpDirPath);
-
-        if (tmpDir.list() == null || tmpDir.list().length < 1) {
-            return null;
-        }
-
-        return this.createZip(tmpDir.listFiles());
+    public File createBlankZip(String suffix) throws IOException {
+        File zip = new File(tmpDirPath, zipName + suffix + ".zip");
+        zip.createNewFile();
+        return zip;
     }
 
 }
