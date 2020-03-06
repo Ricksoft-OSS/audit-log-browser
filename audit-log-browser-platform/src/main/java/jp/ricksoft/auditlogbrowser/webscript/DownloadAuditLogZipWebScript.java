@@ -2,8 +2,9 @@
  * Copyright 2018 Ricksoft Co., Ltd.
  * All rights reserved.
  */
-package jp.ricksoft.auditlogbrowser.audit.download;
+package jp.ricksoft.auditlogbrowser.webscript;
 
+import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -16,8 +17,8 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
     private DownloadAuditLogZipHandler handler;
 
-    public void setDownloadAuditLogZipHandler(DownloadAuditLogZipHandler downloadAuditLogZipHandler) {
-        this.handler = downloadAuditLogZipHandler;
+    public void setDownloadAuditLogZipHandler(DownloadAuditLogZipHandler handler) {
+        this.handler = handler;
     }
 
     @Override
