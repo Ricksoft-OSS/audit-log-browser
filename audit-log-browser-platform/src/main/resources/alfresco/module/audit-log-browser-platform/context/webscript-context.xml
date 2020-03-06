@@ -20,6 +20,12 @@
       <property name="handler" ref="jp.ricksoft.audit.handler"/>
    </bean>
 
+   <bean id="webscript.jp.ricksoft.audit.ExportStatus.get"
+         class="jp.ricksoft.auditlogbrowser.webscript.ExportStatusWebScript"
+         parent="webscript">
+      <property name="handler" ref="jp.ricksoft.audit.handler"/>
+   </bean>
+
    <bean id="jp.ricksoft.audit.handler"
          class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler">
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
