@@ -38,4 +38,8 @@ public class FileManager {
         this.deleteAllFiles(tmpDir);
     }
 
+    public File getTmpDir() {
+        return new File(tmpDirPath);
+    }
+
 }

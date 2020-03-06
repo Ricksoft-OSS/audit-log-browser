@@ -22,9 +22,9 @@
 
    <bean id="jp.ricksoft.audit.handler"
          class="jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler">
-      <property name="msgFailCreateZip" value="${AuditLogBrowser.schedule.download.message.fail-create-zip}"/>
       <property name="csvManager" ref="jp.ricksoft.csvManager"/>
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
+      <property name="fileManager" ref="jp.ricksoft.fileManager"/>
       <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
    </bean>
 </beans>
