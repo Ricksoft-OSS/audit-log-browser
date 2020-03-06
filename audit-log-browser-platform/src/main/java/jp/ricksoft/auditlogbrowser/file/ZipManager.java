@@ -7,6 +7,7 @@ package jp.ricksoft.auditlogbrowser.file;
 import com.google.common.io.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,16 +19,10 @@ import java.util.zip.ZipOutputStream;
 public class ZipManager {
     private static final Logger LOG = LoggerFactory.getLogger(ZipManager.class);
 
+    @Value("${AuditLogBrowser.dir.tmp}")
     private String tmpDirPath;
+    @Value("${AuditLogBrowser.zip.name}")
     private String zipName;
-
-    public void setTmpDirPath(String tmpDirPath) {
-        this.tmpDirPath = tmpDirPath;
-    }
-
-    public void setZipName(String zipName) {
-        this.zipName = zipName;
-    }
 
     /**
      * Create Zip file

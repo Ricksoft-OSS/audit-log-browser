@@ -4,15 +4,15 @@
  */
 package jp.ricksoft.auditlogbrowser.file;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.io.File;
 import java.util.stream.Stream;
 
 public class FileManager {
-    private String tmpDirPath;
 
-    public void setTmpDirPath(String tmpDirPath) {
-        this.tmpDirPath = tmpDirPath;
-    }
+    @Value("${AuditLogBrowser.dir.tmp}")
+    private String tmpDirPath;
 
     /**
      * Delete the file/folder. In the case of a folder, delete all files in folder.
