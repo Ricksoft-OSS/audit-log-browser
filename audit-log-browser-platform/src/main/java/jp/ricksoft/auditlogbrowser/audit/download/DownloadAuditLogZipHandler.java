@@ -58,7 +58,7 @@ public class DownloadAuditLogZipHandler {
     }
 
     @Async
-    public void execCreateAuditLogsZip(String fromDate, String fromTime, String toDate, String toTime, String user) {
+    public void execExport(String fromDate, String fromTime, String toDate, String toTime, String user) {
         LOG.info("Starting Create Audit log CSV.");
 
         try {
