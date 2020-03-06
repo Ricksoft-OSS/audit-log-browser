@@ -35,7 +35,7 @@ public class ZipManager {
 
         File zip = new File(tmpDirPath, zipName);
         try (ZipOutputStream zos = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zip)))) {
-            this.createZip(zos, files);
+            this.addEntries(zos, files);
             LOG.info("Finished Zip create.");
             return zip;
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class ZipManager {
     }
 
 
-    private void createZip(ZipOutputStream zos, File[] files)
+    private void addEntries(ZipOutputStream zos, File[] files)
     {
         Stream.of(files)
                 .forEach(file -> {
