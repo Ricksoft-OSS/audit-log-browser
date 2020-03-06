@@ -251,17 +251,12 @@
         </property>
     </bean>
 
-    <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipManager">
-        <property name="tmpDirPath" value="${AuditLogBrowser.dir.tmp}"/>
-        <property name="zipName" value="${AuditLogBrowser.zip.name}"/>
-    </bean>
-    
+    <bean id="jp.ricksoft.zipManager" class="jp.ricksoft.auditlogbrowser.file.ZipManager"/>
+
     <bean id="jp.ricksoft.repositoryFolderManager" class="jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager">
-      <property name="serviceRegistry" ref="ServiceRegistry" />
+        <property name="serviceRegistry" ref="ServiceRegistry"/>
     </bean>
-    
-    <bean id="jp.ricksoft.fileManager" class="jp.ricksoft.auditlogbrowser.file.FileManager">
-        <property name="tmpDirPath" value="${AuditLogBrowser.dir.tmp}"/>
-    </bean>
+
+    <bean id="jp.ricksoft.fileManager" class="jp.ricksoft.auditlogbrowser.file.FileManager"/>
 
 </beans>

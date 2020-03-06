@@ -14,6 +14,7 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -28,8 +29,11 @@ public class AuditlogArchiveScheduler {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
 
-    private boolean doDelete;
+    @Value("${AuditLogBrowser.schedule.delete.enabled}")
+    private boolean isDeleteEnabled;
+    @Value("${AuditLogBrowser.schedule.archive.storage.period}")
     private int retentionPeriod;
+    @Value("${AuditLogBrowser.schedule.backup.directory}")
     private String dstFolderPath;
 
     private AuditLogManager auditLogManager;
@@ -37,18 +41,6 @@ public class AuditlogArchiveScheduler {
     private ZipManager zipManager;
     private RepositoryFolderManager repositoryFolderManager;
     private FileManager fileManager;
-
-    public void setDoDelete(String doDelete) {
-        this.doDelete = Boolean.parseBoolean(doDelete);
-    }
-
-    public void setRetentionPeriod(String retentionPeriod) {
-        this.retentionPeriod = Integer.parseInt(retentionPeriod);
-    }
-
-    public void setDstFolderPath(String dstFolderPath) {
-        this.dstFolderPath = dstFolderPath;
-    }
     
     public void setAuditLogManager(AuditLogManager auditLogManager) {
         this.auditLogManager = auditLogManager;
@@ -139,8 +131,8 @@ public class AuditlogArchiveScheduler {
             }
 
         }
-        
-        if(doDelete) {
+
+        if (isDeleteEnabled) {
             this.cleanUp(fromDate, toDate);
         }
         
