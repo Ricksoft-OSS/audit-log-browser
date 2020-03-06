@@ -32,7 +32,7 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String user = req.getParameter("user");
 
         handler.setProgress(handler.STATUS_STARTED);
-        handler.execCreateAuditLogsZip(fromDate, fromTime, toDate, toTime, user);
+        handler.execExport(fromDate, fromTime, toDate, toTime, user);
 
         Map<String, Object> model = new HashMap<>();
         model.put("exportStatus", handler.getProgress());
