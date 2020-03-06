@@ -66,10 +66,8 @@ public class AuditlogArchiveScheduler {
      * Executer implementation
      */
     public void execute() {
-        
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Start Schedule Archive.");
-        }
+
+        LOG.debug("============ Start Schedule Archive.");
         
         // No backup directory set.
         if(dstFolderPath == null || dstFolderPath.isEmpty()) {
@@ -80,20 +78,16 @@ public class AuditlogArchiveScheduler {
         LocalDate fromDate = auditLogManager.getOldestLoggedDateTime().toLocalDate();
         // to
         LocalDate toDate = LocalDate.now().minusDays(retentionPeriod);
-        
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ FromDate: {}", fromDate);
-            LOG.debug("============ ToDate: {}", toDate);
-        }
+
+        LOG.debug("============ FromDate: {}", fromDate);
+        LOG.debug("============ ToDate: {}", toDate);
 
         // Need to prepare folder for Backup data.
         NodeRef auditRootFolder = repositoryFolderManager.prepareNestedFolder(repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
         LocalDate targetDate = fromDate;
 
         while(targetDate.isBefore(toDate)) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("============ Loop Start {} ============", targetDate);
-            }
+            LOG.debug("============ Loop Start {} ============", targetDate);
             
             String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
             long fromEpochMilli  = DateUtil.generateFromEpochMilli(targetDate);
@@ -105,9 +99,7 @@ public class AuditlogArchiveScheduler {
             
             // If there is only a header line, subsequent processing is not performed.
             if (!csv.exists() || !csvManager.hasRecord(csv)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("============ There is no data found: {} ============", targetDateStr);
-                }
+                LOG.debug("============ There is no data found: {} ============", targetDateStr);
                 continue;
             }
 
@@ -126,19 +118,15 @@ public class AuditlogArchiveScheduler {
 
             fileManager.cleanupTmpDir();
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("============ Loop End ============");
-            }
+            LOG.debug("============ Loop End ============");
 
         }
 
         if (isDeleteEnabled) {
             this.cleanUp(fromDate, toDate);
         }
-        
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Finish Schedule Archive.");
-        }
+
+        LOG.debug("============ Finish Schedule Archive.");
 
     }
     
@@ -148,20 +136,16 @@ public class AuditlogArchiveScheduler {
      * @param toDate    Delete end DateTime.
      */
     private void cleanUp(LocalDate fromDate, LocalDate toDate) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Delete old audit log start");
-            // Even if you delete old logs, there is no problem
-            LOG.debug("============ fromDate: {}", fromDate);
-            LOG.debug("============ toDate: {}", toDate);
-        }
+        LOG.debug("============ Delete old audit log start");
+        // Even if you delete old logs, there is no problem
+        LOG.debug("============ fromDate: {}", fromDate);
+        LOG.debug("============ toDate: {}", toDate);
 
         long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
         long toEpochMilli   = DateUtil.generateToEpochMilli(toDate);
         
         auditLogManager.delete(fromEpochMilli, toEpochMilli);
-        
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("============ Delete old audit log end");
-        }
+
+        LOG.debug("============ Delete old audit log end");
     }
 }
