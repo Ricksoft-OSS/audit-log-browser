@@ -2,6 +2,7 @@ package jp.ricksoft.auditlogbrowser.audit.download;
 
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.file.CSVManager;
+import jp.ricksoft.auditlogbrowser.file.FileManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 import org.apache.commons.lang.StringUtils;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.UUID;
 
 @Controller
 public class DownloadAuditLogZipHandler {
@@ -20,16 +22,15 @@ public class DownloadAuditLogZipHandler {
     public static String STATUS_STARTED = "Started";
     public static String STATUS_IN_PROGRESS = "In Progress";
     public static String STATUS_FINISHED = "Finished";
+    public static String STATUS_FAILURE = "Failure";
 
     private CSVManager csvManager;
     private ZipManager zipManager;
-    private String progress;
-
+    private FileManager fileManager;
     private AuditLogManager auditLogManager;
 
-    public void setMsgFailCreateZip(String msgFailCreateZip) {
-        this.msgFailCreateZip = msgFailCreateZip;
-    }
+    private String progress;
+    private String processId;
 
     public void setCsvManager(CSVManager csvManager) {
         this.csvManager = csvManager;
@@ -37,6 +38,10 @@ public class DownloadAuditLogZipHandler {
 
     public void setZipManager(ZipManager zipManager) {
         this.zipManager = zipManager;
+    }
+
+    public void setFileManager(FileManager fileManager) {
+        this.fileManager = fileManager;
     }
 
     public void setAuditLogManager(AuditLogManager auditLogManager)
@@ -52,26 +57,28 @@ public class DownloadAuditLogZipHandler {
         this.progress = progress;
     }
 
-    @Async
+    public String getProcessId() {
+        return this.processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+
     public void execExport(String fromDate, String fromTime, String toDate, String toTime, String user) {
 
+        this.setProgress(STATUS_IN_PROGRESS);
+        this.setProcessId(String.valueOf(UUID.randomUUID()));
+
         try {
-            this.setProgress(STATUS_IN_PROGRESS);
-
-            this.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
-
-            File zip = zipManager.prepareZip();
-
-            // Check whether zip exist.
-            if (!zip.exists()) {
-                throw new IOException(msgFailCreateZip);
-            }
-
-            this.setProgress(STATUS_FINISHED);
-
+            File zip = zipManager.createBlankZip(processId);
+            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user);
         } catch (IOException e) {
+            this.setProgress(STATUS_FAILURE);
             e.printStackTrace();
         }
+
     }
 
     /**
@@ -83,7 +90,8 @@ public class DownloadAuditLogZipHandler {
      * @param toTime   End time of audit log acquisition period
      * @param user     Username
      */
-    private void createAuditLogsCSV(String fromDate, String fromTime, String toDate, String toTime, String user) {
+    @Async
+    private void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime, String user) {
 
         long start = prepareStartEpochMilli(fromDate, fromTime);
 
@@ -104,6 +112,10 @@ public class DownloadAuditLogZipHandler {
             start = dayEnd + 1;
 
         }
+
+        zipManager.prepareZip(zip, fileManager.getTmpDir().listFiles());
+
+        this.setProgress(STATUS_FINISHED);
     }
 
     private long prepareStartEpochMilli(String date, String time) {

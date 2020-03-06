@@ -1,3 +1,4 @@
 {
-"exportStatus": "${exportStatus}"
+    "exportStatus": "${exportStatus}",
+    "processId": "${processId}"
 }
