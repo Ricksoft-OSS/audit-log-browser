@@ -7,9 +7,6 @@
     <!-- Exec Scheduled Job -->
     <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
           class="jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler">
-        <property name="doDelete" value="${AuditLogBrowser.schedule.delete.enabled}"/>
-        <property name="retentionPeriod" value="${AuditLogBrowser.schedule.archive.storage.period}"/>
-        <property name="dstFolderPath" value="${AuditLogBrowser.schedule.backup.directory}"/>
         <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
         <property name="csvManager" ref="jp.ricksoft.csvManager"/>
         <property name="fileManager" ref="jp.ricksoft.fileManager"/>
