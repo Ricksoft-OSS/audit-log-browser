@@ -13,7 +13,8 @@ AuditLogBrowser.param = {
   skipCount: 0,
   maxItems: AuditLogBrowser.MAX_ITEMS
 };
-AuditLogBrowser.COLUMN_DEFINITION = [{
+AuditLogBrowser.COLUMN_DEFINITION = [
+  {
     key: "entry.id",
     label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.id"),
     resizeable: true
@@ -21,7 +22,7 @@ AuditLogBrowser.COLUMN_DEFINITION = [{
   {
     key: "entry.createdAt",
     label: Alfresco.util.message("Ricksoft.audit-log-browser.list.label.date"),
-    formatter:"auditDateFormatter",
+    formatter: "auditDateFormatter",
     sortable: true
   },
   {
@@ -58,26 +59,28 @@ AuditLogBrowser.configs = {
 AuditLogBrowser.RESPONSE_SCHEMA = {
  resultsList: "list.entries",
  fields: [
-   { key: "entry.id" },
-   { key: "entry.createdAt", parser: "date" },
-   { key: "entry.user" },
-   { key: "entry.action" },
-   { key: "entry.site" },
-   { key: "entry.nodename" },
-   { key: "entry.nodepath" },
-   { key: "entry.description" }
+   {key: "entry.id"},
+   {key: "entry.createdAt", parser: "date"},
+   {key: "entry.user"},
+   {key: "entry.action"},
+   {key: "entry.site"},
+   {key: "entry.nodename"},
+   {key: "entry.nodepath"},
+   {key: "entry.description"}
  ]
 };
 
-YAHOO.widget.DataTable.Formatter.auditDateFormatter = function(elLiner, oRecord, oColumn, oData) {
-  if(oRecord.getData("entry.createdAt")){
+AuditLogBrowser.checkProcessId;
+
+YAHOO.widget.DataTable.Formatter.auditDateFormatter = function (elLiner, oRecord, oColumn, oData) {
+  if (oRecord.getData("entry.createdAt")) {
     elLiner.innerHTML = YAHOO.util.Date.format(oData, {format: "%Y-%m-%d %T %Z"});
   }
 };
 
-$(function(){
+$(function () {
   var paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime;
-  var delFromdate, delFromtime, delTodate, delTotime
+  var delFromdate, delFromtime, delTodate, delTotime;
 
   getAuditLogs(AuditLogBrowser.ENDPOINT, AuditLogBrowser.param);
 
@@ -139,7 +142,8 @@ $(function(){
       dataObj: input,
       successCallback: {
         fn: function (result) {
-          console.log(result);
+          AuditLogBrowser.checkProcessId = setInterval(getExportStatus, 5000);
+          console.log(result.json);
         },
         scope: this
       },
@@ -340,20 +344,44 @@ function getAuditLogs(endpointURL, data) {
            $('#next-page').prop('disabled', true);
            $('.alert.alert-danger.data-error').show();
          },
-         scope: this
+        scope: this
       }
-   });
+  });
+}
+
+/**
+ * Get Audit export status
+ */
+function getExportStatus() {
+  Alfresco.util.Ajax.jsonGet({
+    url: Alfresco.constants.PROXY_URI + '/audit/export/status',
+    successCallback: {
+      fn: function (result) {
+        console.log(result.json);
+        if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
+          clearInterval(AuditLogBrowser.checkProcessId);
+        }
+      },
+      scope: this
+    },
+    failureCallback: {
+      fn: function (res) {
+        console.log(res);
+      },
+      scope: this
+    }
+  });
 }
 
 /**
  * Delete Audit Logs method
  */
-function deleteAuditLogs(endpointURL){
+function deleteAuditLogs(endpointURL) {
   Alfresco.util.Ajax.jsonDelete({
-      url: Alfresco.constants.URL_CONTEXT + endpointURL,
-      successCallback: {
-         fn: function (result) {
-           $('.alert.alert-primary').hide();
+    url: Alfresco.constants.URL_CONTEXT + endpointURL,
+    successCallback: {
+      fn: function (result) {
+        $('.alert.alert-primary').hide();
            $('.alert.alert-success').show();
            setTimeout(function(){
              $('#delAuditModal').hide();
