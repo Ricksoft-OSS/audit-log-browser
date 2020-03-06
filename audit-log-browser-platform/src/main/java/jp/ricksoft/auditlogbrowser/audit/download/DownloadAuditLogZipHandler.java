@@ -59,14 +59,11 @@ public class DownloadAuditLogZipHandler {
 
     @Async
     public void execExport(String fromDate, String fromTime, String toDate, String toTime, String user) {
-        LOG.info("Starting Create Audit log CSV.");
 
         try {
             this.setProgress(STATUS_IN_PROGRESS);
 
             this.createAuditLogsCSV(fromDate, fromTime, toDate, toTime, user);
-
-            LOG.info("Exec createAuditLogsCSV.");
 
             File zip = zipManager.prepareZip();
 
@@ -74,8 +71,6 @@ public class DownloadAuditLogZipHandler {
             if (!zip.exists()) {
                 throw new IOException(msgFailCreateZip);
             }
-
-            LOG.info("Finish Create Audit log CSV.");
 
             this.setProgress(STATUS_FINISHED);
 
