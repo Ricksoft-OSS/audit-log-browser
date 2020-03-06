@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
@@ -113,8 +114,13 @@ public class AuditlogArchiveScheduler {
             // for Zip
             File[] csvs = {csv};
 
-            File zip = zipManager.createZip(csvs);
-            repositoryFolderManager.addContent(dateFolder, zip);
+            try {
+                File zip = zipManager.createBlankZip("");
+                zipManager.prepareZip(zip, csvs);
+                repositoryFolderManager.addContent(dateFolder, zip);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             fileManager.cleanupTmpDir();
 

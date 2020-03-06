@@ -36,6 +36,7 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
         Map<String, Object> model = new HashMap<>();
         model.put("exportStatus", handler.getProgress());
+        model.put("processId", handler.getProcessId());
 
         return model;
     }
