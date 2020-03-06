@@ -5,8 +5,6 @@ import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 
@@ -19,13 +17,10 @@ import java.time.LocalTime;
 @Controller
 public class DownloadAuditLogZipHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
-
     public static String STATUS_STARTED = "Started";
     public static String STATUS_IN_PROGRESS = "In Progress";
     public static String STATUS_FINISHED = "Finished";
 
-    private String msgFailCreateZip;
     private CSVManager csvManager;
     private ZipManager zipManager;
     private String progress;
