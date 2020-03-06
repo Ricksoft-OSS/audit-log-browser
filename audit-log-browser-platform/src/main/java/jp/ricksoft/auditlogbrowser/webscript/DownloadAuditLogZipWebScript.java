@@ -17,7 +17,7 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
     private DownloadAuditLogZipHandler handler;
 
-    public void setDownloadAuditLogZipHandler(DownloadAuditLogZipHandler handler) {
+    public void setHandler(DownloadAuditLogZipHandler handler) {
         this.handler = handler;
     }
 
