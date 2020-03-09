@@ -1,0 +1,13 @@
+<!--
+  Copyright 2018 Ricksoft Co., Ltd.
+  All rights reserved.
+ -->
+<webscript>
+  <shortname>Get Export Status</shortname>
+  <description>Get Export Status</description>
+  <url>/audit/export/status</url>
+  <authentication>admin</authentication>
+  <format default="json"/>
+  <family>Admin</family>
+  <family>Ricksoft</family>
+</webscript>
