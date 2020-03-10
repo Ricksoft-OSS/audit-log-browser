@@ -142,6 +142,7 @@ $(function () {
       dataObj: input,
       successCallback: {
         fn: function (result) {
+          $('#dl-status-area').show();
           AuditLogBrowser.checkProcessId = setInterval(getExportStatus, 5000);
           console.log(result.json);
         },
@@ -359,6 +360,8 @@ function getExportStatus() {
       fn: function (result) {
         console.log(result.json);
         if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
+          $('#dl-in-progress').hide();
+          $('#dl-finish').show();
           clearInterval(AuditLogBrowser.checkProcessId);
         }
       },
