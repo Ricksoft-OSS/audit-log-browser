@@ -67,6 +67,10 @@
           </span>
         </span>
       </form>
+      <div class="download status" id="dl-status-area" style="display: none;">
+        <div id="dl-in-progress">${msg("message.download.status.inprogress")}</div>
+        <div id="dl-finish" style="display: none;">${msg("message.download.status.inprogress")}</div>
+      </div>
     </div>
     <div id="audit-log-table" class="table table-bordered"></div>
     <div class="yui-skin-lightTheme paging-button">
