@@ -358,7 +358,7 @@ function getExportStatus() {
     url: Alfresco.constants.PROXY_URI + '/audit/export/status',
     successCallback: {
       fn: function (result) {
-        console.log(result.json);
+        console.log(result.json.exportStatus);
         if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
           $('#dl-in-progress').hide();
           $('#dl-finish').show();
