@@ -10,7 +10,7 @@
 </@>
 <@markup id="js">
   <#-- JavaScript Dependencies -->
-  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery-3.2.1.min.js"/>
+  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery.min.js"/>
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/modaal.min.js"/>
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/audit-log-browser/display/audit-log-browser.js"/>
 </@>
