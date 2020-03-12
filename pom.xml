@@ -7,12 +7,19 @@
     <name>Audit Log Browser</name>
     <description>Browsing audit logs Add-on.</description>
     <packaging>pom</packaging>
+    <inceptionYear>2019</inceptionYear>
+
+    <organization>
+        <name>Ricksoft Co., Ltd.</name>
+        <url>https://www.ricksoft.jp/en/</url>
+    </organization>
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
         <alfresco.sdk.version>4.1.0</alfresco.sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <scm.url.base>https://github.com/Ricksoft-OSS/audit-log-browser</scm.url.base>
 
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
@@ -42,6 +49,24 @@
         <test.acs.endpoint.path/>
 
     </properties>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Ricksoft-OSS/audit-log-browser/issues</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:git:${scm.url.base}.git</connection>
+        <developerConnection>scm:git:${scm.url.base}</developerConnection>
+        <url>${scm.url.base}</url>
+    </scm>
 
     <!-- Libs used in Unit and Integration tests -->
     <!-- IMPORTANT - Test dependencies need to be here in the top parent POM as
