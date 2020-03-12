@@ -54,6 +54,7 @@
                 <configuration>
                     <useMissingFile>true</useMissingFile>
                     <excludedScopes>provided,test</excludedScopes>
+                    <sortArtifactByName>true</sortArtifactByName>
                 </configuration>
             </plugin>
         </plugins>
