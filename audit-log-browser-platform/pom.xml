@@ -46,12 +46,24 @@
                 <executions>
                     <execution>
                         <id>prepare-licenses</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check-file-header</goal>
+                            <goal>update-file-header</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>prepare-third-party-licenses</id>
                         <goals>
                             <goal>add-third-party</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
+                    <organizationName>${parent.organization.name}</organizationName>
+                    <inceptionYear>${parent.inceptionYear}</inceptionYear>
+                    <licenseName>apache_v2</licenseName>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                     <useMissingFile>true</useMissingFile>
                     <excludedScopes>provided,test</excludedScopes>
                     <sortArtifactByName>true</sortArtifactByName>
