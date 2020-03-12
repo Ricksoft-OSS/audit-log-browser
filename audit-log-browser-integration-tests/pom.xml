@@ -39,13 +39,13 @@
 
         <plugins>
 
-            <plugin>
-                <groupId>org.zeroturnaround</groupId>
-                <artifactId>jrebel-maven-plugin</artifactId>
-                <configuration>
-                    <rebelXmlDirectory>${project.build.testOutputDirectory}</rebelXmlDirectory>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.zeroturnaround</groupId>-->
+            <!--                <artifactId>jrebel-maven-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <rebelXmlDirectory>${project.build.testOutputDirectory}</rebelXmlDirectory>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
 
             <!-- Make sure we attach the tests so we can include them when running -->
             <plugin>
