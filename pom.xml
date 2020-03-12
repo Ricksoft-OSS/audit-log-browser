@@ -404,22 +404,6 @@
             <!--                    <alwaysGenerate>true</alwaysGenerate>-->
             <!--                </configuration>-->
             <!--            </plugin>-->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>prepare-licenses</id>
-                        <goals>
-                            <goal>aggregate-add-third-party</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <useMissingFile>true</useMissingFile>
-                    <excludedScopes>provided,test</excludedScopes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
