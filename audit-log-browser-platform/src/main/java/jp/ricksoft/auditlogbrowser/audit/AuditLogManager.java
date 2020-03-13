@@ -1,8 +1,29 @@
-/*
- * Copyright 2018 Ricksoft Co., Ltd.
- * All rights reserved.
- */
 package jp.ricksoft.auditlogbrowser.audit;
+
+/*-
+ * #%L
+ * Audit Log Browser Platform JAR Module
+ * %%
+ * Copyright (C) 2018 - 2020 Ricksoft Co., Ltd.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+import org.alfresco.service.cmr.audit.AuditQueryParameters;
+import org.alfresco.service.cmr.audit.AuditService;
+import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -11,14 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.alfresco.service.cmr.audit.AuditQueryParameters;
-import org.alfresco.service.cmr.audit.AuditService;
-import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
-
-import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-
-public class AuditLogManager
-{
+public class AuditLogManager {
 
     private static final String KEY_ID = "id";
     private static final String KEY_TIME = "time";

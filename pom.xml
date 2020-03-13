@@ -7,7 +7,7 @@
     <name>Audit Log Browser</name>
     <description>Browsing audit logs Add-on.</description>
     <packaging>pom</packaging>
-    <inceptionYear>2019</inceptionYear>
+    <inceptionYear>2018</inceptionYear>
 
     <organization>
         <name>Ricksoft Co., Ltd.</name>
