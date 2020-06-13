@@ -395,6 +395,52 @@
                 </executions>
             </plugin>
 
+
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.33.0</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <volumes>
+                        <volume>
+                            <name>audit-log-browser-acs-volume</name>
+                            <driver>local</driver>
+                            <opts>
+                                <type>tmpfs</type>
+                                <device>tmpfs</device>
+                            </opts>
+                        </volume>
+                        <volume>
+                            <name>audit-log-browser-db-volume</name>
+                            <driver>local</driver>
+                            <opts>
+                                <type>tmpfs</type>
+                                <device>tmpfs</device>
+                            </opts>
+                        </volume>
+                        <volume>
+                            <name>audit-log-browser-ass-volume</name>
+                            <driver>local</driver>
+                            <opts>
+                                <type>tmpfs</type>
+                                <device>tmpfs</device>
+                            </opts>
+                        </volume>
+                    </volumes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>prepare-volume</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>volume-create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <!-- Hot reloading with JRebel -->
             <!--            <plugin>-->
             <!--                <groupId>org.zeroturnaround</groupId>-->
