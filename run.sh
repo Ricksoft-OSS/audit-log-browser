@@ -8,12 +8,6 @@ else
   export MVN_EXEC="${M2_HOME}/bin/mvn"
 fi
 
-create() {
-    docker volume create audit-log-browser-acs-volume
-    docker volume create audit-log-browser-db-volume
-    docker volume create audit-log-browser-ass-volume
-}
-
 start() {
     docker-compose -f "$COMPOSE_FILE_PATH" up --build -d
 }
@@ -74,7 +68,6 @@ case "$1" in
   build_start)
     down
     build
-    create
     start
     tail
     ;;
@@ -82,7 +75,6 @@ case "$1" in
     down
     build
     prepare_test
-    create
     start
     tail
     ;;
@@ -115,7 +107,6 @@ case "$1" in
     down
     build
     prepare_test
-    create
     start
     test
     tail_all
@@ -123,9 +114,6 @@ case "$1" in
     ;;
   test)
     test
-    ;;
-  volume_create)
-    create
     ;;
   *)
     echo "Usage: $0 {build_start|build_start_it_supported|start|stop|purge|tail|reload_share|reload_acs|build_test|test}"
