@@ -24,10 +24,10 @@
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
         <alfresco.bomDependencyArtifactId>acs-community-packaging</alfresco.bomDependencyArtifactId>
-        <alfresco.platform.version>6.1.2-ga</alfresco.platform.version>
-        <alfresco.share.version>6.1.0-RC3</alfresco.share.version>
-        <alfresco.solr.version>1.4.1.1</alfresco.solr.version>
-        <alfresco.db.version>11.7-alpine</alfresco.db.version>
+        <alfresco.platform.version>6.2.0-ga</alfresco.platform.version>
+        <alfresco.share.version>6.2.0</alfresco.share.version>
+        <alfresco.solr.version>1.4.2</alfresco.solr.version>
+        <alfresco.db.version>11.8-alpine</alfresco.db.version>
 
         <!-- Docker images -->
         <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>
