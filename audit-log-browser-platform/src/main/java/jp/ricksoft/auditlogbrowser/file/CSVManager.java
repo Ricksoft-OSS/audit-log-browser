@@ -24,7 +24,6 @@ import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVStrategy;
-import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -38,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Configuration
 public class CSVManager
 {
     private static final char CSV_DELIMITER = ',';
