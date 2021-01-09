@@ -49,7 +49,7 @@ public class AuditLogManager {
         this.auditService = auditService;
     }
 
-    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user) throws IllegalArgumentException
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user)
     {
         return this.getAuditLogs(fromTime, toTime, fromId, user, 100);
     }
@@ -59,7 +59,7 @@ public class AuditLogManager {
      *
      * @author ebihara.yuki
      */
-    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit) throws IllegalArgumentException
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit)
     {
 
         // Audit log query callback function setting.
@@ -165,9 +165,7 @@ public class AuditLogManager {
             if (values != null)
             {
                 values.forEach((key, value) ->
-                {
-                    entry.put(key.substring(key.lastIndexOf("/") + 1), value);
-                });
+                        entry.put(key.substring(key.lastIndexOf("/") + 1), value));
             }
 
             entries.add(entry);
