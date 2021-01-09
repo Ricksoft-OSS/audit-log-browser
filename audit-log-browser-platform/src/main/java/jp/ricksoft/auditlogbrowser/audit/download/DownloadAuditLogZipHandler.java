@@ -39,10 +39,9 @@ import java.util.UUID;
 @Controller
 public class DownloadAuditLogZipHandler {
 
-    public static String STATUS_STARTED = "Started";
-    public static String STATUS_IN_PROGRESS = "In Progress";
-    public static String STATUS_FINISHED = "Finished";
-    public static String STATUS_FAILURE = "Failure";
+    public static final String STATUS_IN_PROGRESS = "In Progress";
+    public static final String STATUS_FINISHED = "Finished";
+    public static final String STATUS_FAILURE = "Failure";
 
     private CSVManager csvManager;
     private ZipManager zipManager;
@@ -120,11 +119,7 @@ public class DownloadAuditLogZipHandler {
 
         while (start <= end)
         {
-            dayEnd = DateTimeUtil.getEndOfDateEpochMilli(start);
-            if (dayEnd >= end)
-            {
-                dayEnd = end;
-            }
+            dayEnd = Math.min(DateTimeUtil.getEndOfDateEpochMilli(start), end);
 
             // Get Daily AuditLogs
             csvManager.createOneDayAuditLogCSV(start, dayEnd, user);
