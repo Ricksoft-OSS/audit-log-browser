@@ -33,7 +33,7 @@ public class ContentNameDataExtractor extends AbstractDataExtractor {
 
     private NamespaceService namespaceService;
 
-    private static final String PROP_KEY_FIELNAME = "cm:filename";
+    private static final String PROP_KEY_FILENAME = "cm:filename";
     private static final String PROP_KEY_MODELNAME = "cm:modelName";
     private static final String PROP_KEY_USERNAME = "cm:userName";
     private static final String PROP_KEY_AUTHORITYNAME = "cm:authorityName";
@@ -78,8 +78,8 @@ public class ContentNameDataExtractor extends AbstractDataExtractor {
             propMap.put(convertPrefixedQName(key), convertSerializableToString(value));
         });
         
-        if (propMap.containsKey(PROP_KEY_FIELNAME)) {
-            return propMap.get(PROP_KEY_FIELNAME);
+        if (propMap.containsKey(PROP_KEY_FILENAME)) {
+            return propMap.get(PROP_KEY_FILENAME);
         } else if (propMap.containsKey(PROP_KEY_MODELNAME)) {
             return propMap.get(PROP_KEY_MODELNAME);
         } else if (propMap.containsKey(PROP_KEY_USERNAME)) {
