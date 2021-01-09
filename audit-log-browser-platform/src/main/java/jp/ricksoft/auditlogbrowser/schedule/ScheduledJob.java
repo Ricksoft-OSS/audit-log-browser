@@ -37,7 +37,7 @@ public class ScheduledJob extends AbstractScheduledLockedJob {
     private static final String MSG_NO_SCHEDULER = "No valid job scheduler.";
     private static final String MSG_SCHEDULE_DISABLED = "Scheduler is disabled.";
     
-    private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduledJob.class);
 
     @Override
     public void executeJob(JobExecutionContext jobContext) {
