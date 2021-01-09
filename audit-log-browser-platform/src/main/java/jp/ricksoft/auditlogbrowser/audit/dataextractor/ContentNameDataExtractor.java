@@ -56,7 +56,7 @@ public class ContentNameDataExtractor extends AbstractDataExtractor {
      */
     @Override
     public boolean isSupported(Serializable data) {
-        return (data != null && data instanceof Map);
+        return (data instanceof Map);
     }
 
     /**
