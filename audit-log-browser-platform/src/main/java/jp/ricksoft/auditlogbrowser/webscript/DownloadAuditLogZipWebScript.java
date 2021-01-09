@@ -47,7 +47,6 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String toTime = req.getParameter("toTime");
         String user = req.getParameter("user");
 
-        handler.setProgress(handler.STATUS_STARTED);
         handler.execExport(fromDate, fromTime, toDate, toTime, user);
 
         Map<String, Object> model = new HashMap<>();
