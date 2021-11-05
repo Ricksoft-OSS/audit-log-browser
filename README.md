@@ -1,97 +1,46 @@
-# Audit Log Browser
+# Alfresco AIO Project - SDK 4.3
 
-### What is Audit Log Browser?
+This is an All-In-One (AIO) project for Alfresco SDK 4.3.
 
-Audit Log Browser is an add-on that allows you to view the Alfresco Content Services audit log from the browser.
+Run with `./run.sh build_start` or `./run.bat build_start` and verify that it
 
-### Description
+ * Runs Alfresco Content Service (ACS)
+ * Runs Alfresco Share
+ * Runs Alfresco Search Service (ASS)
+ * Runs PostgreSQL database
+ * Deploys the JAR assembled modules
+ 
+All the services of the project are now run as docker containers. The run script offers the next tasks:
 
-Alfresco's audit log is stored in Alfresco's database. However, there is no user-friendly way to see stored logs. Audit log Browser adds the function to display the audit log to Alfresco Content Services management console, and can check from the browser.
-For more information about features, see **Specifications** section.
+ * `build_start`. Build the whole project, recreate the ACS and Share docker images, start the dockerised environment composed by ACS, Share, ASS and 
+ PostgreSQL and tail the logs of all the containers.
+ * `build_start_it_supported`. Build the whole project including dependencies required for IT execution, recreate the ACS and Share docker images, start the 
+ dockerised environment composed by ACS, Share, ASS and PostgreSQL and tail the logs of all the containers.
+ * `start`. Start the dockerised environment without building the project and tail the logs of all the containers.
+ * `stop`. Stop the dockerised environment.
+ * `purge`. Stop the dockerised container and delete all the persistent data (docker volumes).
+ * `tail`. Tail the logs of all the containers.
+ * `reload_share`. Build the Share module, recreate the Share docker image and restart the Share container.
+ * `reload_acs`. Build the ACS module, recreate the ACS docker image and restart the ACS container.
+ * `build_test`. Build the whole project, recreate the ACS and Share docker images, start the dockerised environment, execute the integration tests from the
+ `integration-tests` module and stop the environment.
+ * `test`. Execute the integration tests (the environment must be already started).
 
-### Installation
+# Few things to notice
 
-1. Download jar file from [GitHub Release page](https://github.com/Ricksoft-OSS/audit-log-browser/releases).
-    1. audit-log-browser-platform-jar-x.y.z.jar
-    2. audit-log-browser-share-jar-x.y.z.jar
-2. Send jar files to Alfresco server.
-3. Place audit-log-browser-platform-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/platform directory. If the directory doesn't exist, create it before place jar file.
-4. Place audit-log-browser-share-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/share directory. If the directory doesn't exist, create it before place jar file.
-5. Change owner of platform, share directory, and placed jar files to Alfresco Content Services execution user.
-6. Restart Alfresco Content Services.
+ * No parent pom
+ * No WAR projects, the jars are included in the custom docker images
+ * No runner project - the Alfresco environment is now managed through [Docker](https://www.docker.com/)
+ * Standard JAR packaging and layout
+ * Works seamlessly with Eclipse and IntelliJ IDEA
+ * JRebel for hot reloading, JRebel maven plugin for generating rebel.xml [JRebel integration documentation]
+ * AMP as an assembly
+ * Persistent test data through restart thanks to the use of Docker volumes for ACS, ASS and database data
+ * Integration tests module to execute tests against the final environment (dockerised)
+ * Resources loaded from META-INF
+ * Web Fragment (this includes a sample servlet configured via web fragment)
 
-### Configuration
+# TODO
 
-You can set the following properties in alfresco-global.properties file. The default values are as shown in the table.
-
-|Setting contents|Property key|Default|
-|--------|--------------|------------|
-|Enable Schedule function |AuditLogBrowser.schedule.scheduledjob.enabled|true|
-|Enable Delete function at schedule setting|AuditLogBrowser.schedule.scheduledjob.dodelete|false|
-|Schedule processing execution timing |AuditLogBrowser.schedule.scheduledjob.cronexpression|0 0 * * * ?|
-|Time from the start of the ACS instance to the start of the scheduler (milli second)|AuditLogBrowser.schedule.scheduledjob.cronstartdelay|240000|
-|Retention period for Audit log (day)|AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod|7|
-
-### Specifications
-
-In this add-on, you can use the following features.
-
-1. Browse audit logs.
-2. Search logs by specifying search criteria.
-3. Delete logs.
-4. Scheduler(Archive・Delete)
-5. Download.
-
-Following information in audit logs can be displayed.
-
-- Login/Logout/Login Failure
-- Content preview/download (these are displayed as the same event)
-- Create/Delete folder
-- Copy/Move contents
-- Check-in/Check-out/Cancel check-out contents
-- Link Folder
-- Add/Delete properties
-- Add/Delete aspect
-- Create/update/delete users
-- Change authority on content
-- Change authority of things other than contents
-- Change site privileges
-- Setting of document owner
-- Document type after change
-- Create/delete/change group
-
-### Limitations
-
-1. Please use Firefox or Google Chrome when you use this add-on.
-2. On the Browser, maximum of 100 audit logs are displayed at a time.
-3. In the search function, when "start date" is not set, it is not used as a search condition even if "start time" is set (it is regarded as unset state).
-4. In the search function, when "end date" is not set, it is not used as a search condition even if "end time" is set (it is regarded as not set).
-5. With the search function, search criteria of users and contents must be exact match.
-6. In the deletion function, if either the start date or the end date is not set, it can not be deleted. When you delete audit logs, you must set "start date" and "end date".
-7. The scheduled deletion function assumes that the schedule function must be set. When the schedule function isn't set, the scheduled deletion function doesn't work.
-8. With the schedule function, the audit log is saved as a Zip file in the shared repository after 7 days since it is recorded. At that time, if the deletion function at schedule setting is set to on, the audit log is deleted from the database.
-9. If the amount of logs is large in the download function, there is a possibility that the performance of the server will be degraded and the timeout will result. By using the function to store the audit log in the repository, it is possible to download the compressed audit log separately every day.
-
-### Contribution
-
-If you would like to request bug fixes and additional functions, please create Issue or Pull Request in Github.
-
-### Credit
-
-- Yuuki Ebihara (ebihara.yuki@ricksoft.jp)
-
-### License
-
-Copyright 2018 Ricksoft Co., Ltd.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+  * Abstract assembly into a dependency so we don't have to ship the assembly in the archetype
+  * Functional/remote unit tests
