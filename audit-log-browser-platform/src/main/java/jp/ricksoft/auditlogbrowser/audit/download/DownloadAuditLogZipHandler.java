@@ -25,7 +25,7 @@ import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.FileManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 
@@ -110,7 +110,7 @@ public class DownloadAuditLogZipHandler {
      * @param user     Username
      */
     @Async
-    private void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime, String user) {
+    protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime, String user) {
 
         long start = prepareStartEpochMilli(fromDate, fromTime);
 

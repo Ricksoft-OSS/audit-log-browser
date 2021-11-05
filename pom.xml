@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.ricksoft</groupId>
@@ -13,10 +13,13 @@
         <name>Ricksoft Co., Ltd.</name>
         <url>https://www.ricksoft.jp/en/</url>
     </organization>
+  <prerequisites>
+    <maven>3.3.0</maven>
+  </prerequisites>
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
-        <alfresco.sdk.version>4.1.0</alfresco.sdk.version>
+        <alfresco.sdk.version>4.3.0</alfresco.sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scm.url.base>https://github.com/Ricksoft-OSS/audit-log-browser</scm.url.base>
@@ -24,16 +27,23 @@
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
         <alfresco.bomDependencyArtifactId>acs-community-packaging</alfresco.bomDependencyArtifactId>
-        <alfresco.platform.version>6.2.0-ga</alfresco.platform.version>
-        <alfresco.share.version>6.2.0</alfresco.share.version>
-        <alfresco.solr.version>1.4.2</alfresco.solr.version>
-        <alfresco.db.version>11.8-alpine</alfresco.db.version>
+        <alfresco.platform.version>7.1.0</alfresco.platform.version>
+        <alfresco.platform.docker.user>alfresco</alfresco.platform.docker.user>
+        <alfresco.share.version>11.77</alfresco.share.version>
+        <alfresco.share.docker.version>7.1.0.1</alfresco.share.docker.version>
 
         <!-- Docker images -->
         <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>
         <docker.share.image>alfresco/alfresco-share</docker.share.image>
-        <docker.solr.image>alfresco/alfresco-search-services</docker.solr.image>
-        <docker.db.image>postgres</docker.db.image>
+        <keystore.settings>-Dencryption.keystore.type=JCEKS
+            -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
+            -Dencryption.keyAlgorithm=AES
+            -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
+            -Dmetadata-keystore.password=mp6yc0UD9e
+            -Dmetadata-keystore.aliases=metadata
+            -Dmetadata-keystore.metadata.password=oKIWzVdEdA
+            -Dmetadata-keystore.metadata.algorithm=AES</keystore.settings>
+        <activemq.version>5.16.3</activemq.version>
 
         <!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
         <jrebel.version>1.1.8</jrebel.version>
@@ -102,6 +112,11 @@
             <artifactId>alfresco-rad</artifactId>
             <version>${alfresco.sdk.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-all</artifactId>
+            <version>${activemq.version}</version>
         </dependency>
     </dependencies>
 
@@ -224,6 +239,31 @@
                             <nonFilteredFileExtension>js</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
+        </plugin>
+                                                        
+        
+        
+        
+        
+        <plugin>
+                                                                      
+          
+          
+          
+          
+          <groupId>org.zeroturnaround</groupId>
+                                                                      
+          
+          
+          
+          
+          <artifactId>jrebel-maven-plugin</artifactId>
+                                                                      
+          
+          
+          
+          
+          <version>${jrebel.version}</version>
                 </plugin>
 
                 <!--                <plugin>-->
@@ -397,47 +437,106 @@
 
 
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.34.1</version>
-                <inherited>false</inherited>
-                <configuration>
-                    <volumes>
-                        <volume>
-                            <name>audit-log-browser-acs-volume</name>
-                            <driver>local</driver>
-                            <opts>
-                                <type>tmpfs</type>
-                                <device>tmpfs</device>
-                            </opts>
-                        </volume>
-                        <volume>
-                            <name>audit-log-browser-db-volume</name>
-                            <driver>local</driver>
-                            <opts>
-                                <type>tmpfs</type>
-                                <device>tmpfs</device>
-                            </opts>
-                        </volume>
-                        <volume>
-                            <name>audit-log-browser-ass-volume</name>
-                            <driver>local</driver>
-                            <opts>
-                                <type>tmpfs</type>
-                                <device>tmpfs</device>
-                            </opts>
-                        </volume>
-                    </volumes>
-                </configuration>
+        <groupId>org.zeroturnaround</groupId>
+                                                        
+        
+        
+        
+        
+        <artifactId>jrebel-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>prepare-volume</id>
-                        <phase>package</phase>
+           				<id>generate-rebel-xml</id>
+                        <phase>process-resources</phase>
                         <goals>
-                            <goal>volume-create</goal>
+                            <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>
+        <configuration>
+                                                                      
+          
+          
+          
+          
+          <!-- For more information about how to configure JRebel plugin see:
+                         http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
+                                                                      
+          
+          
+          
+          
+          <classpath>
+                                                                                    
+            
+            
+            
+            
+            <fallback>all</fallback>
+                                                                                    
+            
+            
+            
+            
+            <resources>
+                                                                                                  
+              
+              
+              
+              
+              <resource>
+                                                                                                                
+                
+                
+                
+                
+                <directory>${project.build.outputDirectory}</directory>
+                                                                                                                
+                
+                
+                
+                
+                <directory>${project.build.testOutputDirectory}</directory>
+                                                                                                            
+              
+              
+              
+              
+              </resource>
+                                                                                              
+            
+            
+            
+            
+            </resources>
+                                                                                
+          
+          
+          
+          
+          </classpath>
+                                                                      
+          
+          
+          
+          
+          <!--
+                      alwaysGenerate - default is false
+                      If 'false' - rebel.xml is generated if timestamps of pom.xml and the current rebel.xml file are not equal.
+                      If 'true' - rebel.xml will always be generated
+                    -->
+                                                                      
+          
+          
+          
+          
+          <alwaysGenerate>true</alwaysGenerate>
+                                                                  
+        
+        
+        
+        
+        </configuration>
             </plugin>
 
 

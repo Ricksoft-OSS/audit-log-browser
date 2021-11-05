@@ -9,6 +9,9 @@ else
 fi
 
 start() {
+    docker volume create audit-log-browser-acs-volume
+    docker volume create audit-log-browser-db-volume
+    docker volume create audit-log-browser-ass-volume
     docker-compose -f "$COMPOSE_FILE_PATH" up --build -d
 }
 
@@ -79,7 +82,6 @@ case "$1" in
     tail
     ;;
   start)
-    create
     start
     tail
     ;;
