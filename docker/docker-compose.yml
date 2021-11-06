@@ -1,4 +1,3 @@
-#set( $symbol_dollar = '$' )
 version: '3.4'
 services:
   audit-log-browser-share:
@@ -19,6 +18,7 @@ services:
       dockerfile: ./Dockerfile
       context: ../../../audit-log-browser-platform-docker/target
     environment:
+      JAVA_TOOL_OPTIONS: "${keystore.settings}"
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
     ports:
       - "${acs.port}:8080"
@@ -28,7 +28,7 @@ services:
     depends_on:
       - audit-log-browser-postgres
   audit-log-browser-postgres:
-    image: ${docker.db.image}:${alfresco.db.version}
+    image: postgres:9.6
     environment:
       POSTGRES_DB: alfresco
       POSTGRES_USER: alfresco
@@ -39,7 +39,7 @@ services:
     volumes:
       - audit-log-browser-db-volume:/var/lib/postgresql/data
   audit-log-browser-ass:
-    image: ${docker.solr.image}:${alfresco.solr.version}
+    image: alfresco/alfresco-search-services:1.2.0
     environment:
       SOLR_ALFRESCO_HOST: audit-log-browser-acs
       SOLR_ALFRESCO_PORT: 8080
