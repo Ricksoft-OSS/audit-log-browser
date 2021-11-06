@@ -22,8 +22,9 @@ package jp.ricksoft.auditlogbrowser.file;
 
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVStrategy;
+//import org.apache.commons.csv.CSVStrategy;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -95,8 +96,8 @@ public class CSVManager
 
         try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true)) {
             CSVPrinter printer = new CSVPrinter(csvWriter,
-                    new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
-            printer.println(labels);
+                    CSVFormat.EXCEL);
+//            printer.println(labels);
             printer.flush();
             return csvPath.toFile();
 
@@ -120,12 +121,12 @@ public class CSVManager
         {
 
             CSVPrinter printer = new CSVPrinter(csvWriter,
-                    new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
+                    CSVFormat.EXCEL);
 
             String[] record = Arrays.stream(keys)
                                     .map(key -> convertToStr(recordMap.get(key)))
                                     .toArray(String[]::new);
-            printer.println(record);
+//            printer.println(record);
             printer.flush();
 
         } catch (IOException ioe)
