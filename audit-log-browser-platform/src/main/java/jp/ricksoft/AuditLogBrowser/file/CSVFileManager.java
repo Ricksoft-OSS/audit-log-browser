@@ -8,8 +8,8 @@ import jp.ricksoft.AuditLogBrowser.audit.AuditLogManager;
 import jp.ricksoft.AuditLogBrowser.util.DateTimeUtil;
 import org.alfresco.repo.i18n.MessageService;
 import org.alfresco.service.ServiceRegistry;
+import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.csv.CSVStrategy;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -86,8 +86,8 @@ public class CSVFileManager
             
             // TODO: a
             CSVPrinter printer = new CSVPrinter(csvWriter,
-                    new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
-            printer.println(labelsString.split(DELIMITER));
+                                                CSVFormat.EXCEL);
+            printer.printRecord(labelsString.split(DELIMITER));
             printer.flush();
             return csvPath.toFile();
 
@@ -105,7 +105,7 @@ public class CSVFileManager
     /**
      * Add one csv record.
      * 
-     * @param tempDir temporary directory for csv
+     * @param csv temporary csv file
      * @param recordMap audit log entry
      */
     public void addRecord(File csv, Map<String, Object> recordMap)
@@ -117,7 +117,7 @@ public class CSVFileManager
         {
 
             CSVPrinter printer = new CSVPrinter(csvWriter,
-                    new CSVStrategy(CSV_DELIMITER, CSV_ENCAPSULATOR, CSV_COMMENT_START));
+                    CSVFormat.EXCEL);
 
             List<String> ret = new ArrayList<String>();
             Arrays.stream(keys).forEach(key ->
@@ -131,7 +131,7 @@ public class CSVFileManager
                 }
             });
             String[] record = ret.toArray(new String[0]);
-            printer.println(record);
+            printer.printRecord(record);
             printer.flush();
 
         } catch (IOException ioe)
@@ -170,7 +170,6 @@ public class CSVFileManager
      * 
      * @param fromDate  Start date of the audit log acquisition target period
      * @param toDate  End date of audit log acquisition period
-     * @param appName  Audit application name
      * @param user  Username
      * @param directory  Directory storing the csv file
      * @return Numbre of csv

@@ -1,6 +1,6 @@
 package jp.ricksoft.AuditLogBrowser.util;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.*;
 
@@ -9,8 +9,8 @@ public class DateTimeUtil
 
     /**
      * Convert FromDate
-     * @param date
-     * @param time
+     * @param tDate
+     * @param tTime
      * @return datetime
      */
     public static Long generateFromEpochMilli(String tDate, String tTime) {
@@ -29,8 +29,8 @@ public class DateTimeUtil
 
     /**
      * Convert ToDate
-     * @param date
-     * @param time
+     * @param tDate
+     * @param tTime
      * @return Long
      */
     public static Long generateToEpochMilli(String tDate, String tTime) {

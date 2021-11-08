@@ -29,7 +29,7 @@
 
     <!-- ジョブの詳細 -->
     <bean id="jp.ricksoft.schedule.scheduledjob.jobDetail"
-          class="org.springframework.scheduling.quartz.JobDetailBean">
+          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass">
         	<value>jp.ricksoft.AuditLogBrowser.schedule.ScheduledJob</value>
         </property>
@@ -59,7 +59,7 @@
 
     <!-- スケジュールトリガー -->
     <bean id="jp.ricksoft.schedule.scheduledjob.trigger"
-          class="org.springframework.scheduling.quartz.CronTriggerBean">
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail">
             <ref bean="jp.ricksoft.schedule.scheduledjob.jobDetail" />
         </property>
