@@ -136,40 +136,36 @@ $(function () {
 
   $('#download-audit-log').on('click',function(){
     var downloadURL = "/DownloadAuditLogZip";
+    var paramUser     = $('#executingUser').val();
+    var paramContent  = $('#contentValue').val();
+    var paramFromdate = $('#fromDate').val();
+    var paramFromtime = $('#fromTime').val();
+    var paramTodate   = $('#toDate').val();
+    var paramTotime   = $('#toTime').val();
 
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
-     || haveOnlyTimeInput(paramTodate, paramTotime)) {
-       Alfresco.util.PopupManager.displayMessage({
-         text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.nodateinput")
-       });
+        || haveOnlyTimeInput(paramTodate, paramTotime)) {
+      Alfresco.util.PopupManager.displayMessage({
+        text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.nodateinput")
+      });
       return;
     } else if (generateFromDate(paramFromdate, paramFromtime) > generateToDate(paramTodate, paramTotime)) {
       Alfresco.util.PopupManager.displayMessage({
-        text: Alfresco.util.message("Ricksoft.audit-log-browser.alert.message.reverseorder")
+        text: Alfresco.util.message("Ricksoft.auditlogbrowser.alert.message.reverseorder")
       });
       return;
     }
 
-    var input = createDownloadParams(paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime);
+    var input = {
+      user: $('#executingUser').val(),
+      content: $('#contentValue').val(),
+      fromDate: $('#fromDate').val(),
+      fromTime: $('#fromTime').val(),
+      toDate: $('#toDate').val(),
+      toTime: $('#toTime').val()
+    }
 
-    Alfresco.util.Ajax.jsonPost({
-      url: Alfresco.constants.PROXY_URI + downloadURL,
-      dataObj: input,
-      successCallback: {
-        fn: function (result) {
-          $('#dl-status-area').show();
-          AuditLogBrowser.checkProcessId = setInterval(getExportStatus, 5000);
-          console.log(result.json);
-        },
-        scope: this
-      },
-      failureCallback: {
-        fn: function (res) {
-          console.log(res);
-        },
-        scope: this
-      }
-    });
+    document.location.href = Alfresco.constants.PROXY_URI + downloadURL + "?" + $.param(input);
 
   });
 

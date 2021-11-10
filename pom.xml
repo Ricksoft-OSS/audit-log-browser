@@ -8,6 +8,11 @@
     <name>Audit Log Browser</name>
     <description>Browsing audit logs Add-on.</description>
     <packaging>pom</packaging>
+    <inceptionYear>2018</inceptionYear>
+    <organization>
+        <name>Ricksoft Co., Ltd.</name>
+        <url>https://www.ricksoft.jp/en/</url>
+    </organization>
     <prerequisites>
         <maven>3.3.0</maven>
     </prerequisites>
