@@ -1,33 +1,6 @@
-# Compiled class file
-*.class
+**.log*
 
-# Log file
-*.log
-*.log.*
-
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.rar
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-
-# eclipse setting files
-.project
-.classpath
-.settings/
-
-# alfresco files
+# Maven
 target/
 pom.xml.tag
 pom.xml.releaseBackup
@@ -37,9 +10,29 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
-# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
-!/.mvn/wrapper/maven-wrapper.jar
+# Eclipse
+.metadata
+.project
+.classpath
+bin/
+tmp/
+*.tmp
+.settings/
+.loadpath
+.recommenders
 
-alf_data_dev/
-*.lic
+# IntelliJ IDEA
+**.idea
+**.iml
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# macOS
+*.DS_Store

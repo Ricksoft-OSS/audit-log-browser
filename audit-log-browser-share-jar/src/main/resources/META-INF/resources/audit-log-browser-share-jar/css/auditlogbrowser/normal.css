@@ -1,7 +1,0 @@
-/*
- * Copyright 2018 Ricksoft Co., Ltd.
- * All rights reserved.
- */
-*, ::after, ::before {
-  box-sizing: content-box; !important;
-}

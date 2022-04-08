@@ -12,11 +12,11 @@ For more information about features, see **Specifications** section.
 ### Installation
 
 1. Download jar file from [GitHub Release page](https://github.com/Ricksoft-OSS/audit-log-browser/releases).
-    1. audit-log-browser-platform-jar-x.y.z.jar
-    2. audit-log-browser-share-jar-x.y.z.jar
+    1. audit-log-browser-platform-x.y.z.jar
+    2. audit-log-browser-share-x.y.z.jar
 2. Send jar files to Alfresco server.
-3. Place audit-log-browser-platform-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/platform directory. If the directory doesn't exist, create it before place jar file.
-4. Place audit-log-browser-share-jar-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/share directory. If the directory doesn't exist, create it before place jar file.
+3. Place audit-log-browser-platform-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/platform directory. If the directory doesn't exist, create it before place jar file.
+4. Place audit-log-browser-share-x.y.z.jar to ＜Alfresco Content Services Installation Directory＞/module/share directory. If the directory doesn't exist, create it before place jar file.
 5. Change owner of platform, share directory, and placed jar files to Alfresco Content Services execution user.
 6. Restart Alfresco Content Services.
 
@@ -26,11 +26,11 @@ You can set the following properties in alfresco-global.properties file. The def
 
 |Setting contents|Property key|Default|
 |--------|--------------|------------|
-|Enable Schedule function |AuditLogBrowser.schedule.scheduledjob.enabled|true|
-|Enable Delete function at schedule setting|AuditLogBrowser.schedule.scheduledjob.dodelete|false|
-|Schedule processing execution timing |AuditLogBrowser.schedule.scheduledjob.cronexpression|0 0 * * * ?|
-|Time from the start of the ACS instance to the start of the scheduler (milli second)|AuditLogBrowser.schedule.scheduledjob.cronstartdelay|240000|
-|Retention period for Audit log (day)|AuditLogBrowser.schedule.AuditlogArchiveScheduler.storageperiod|7|
+|Enable Schedule function |AuditLogBrowser.schedule.enabled|true|
+|Enable Delete function at schedule setting|AuditLogBrowser.schedule.delete.enabled|false|
+|Schedule processing execution timing |AuditLogBrowser.schedule.cron.expression|0 0 * * * ?|
+|Time from the start of the ACS instance to the start of the scheduler (milli second)|AuditLogBrowser.schedule.cron.start.delay|240000|
+|Retention period for Audit log (day)|AuditLogBrowser.schedule.archive.storage.period|7|
 
 ### Specifications
 
