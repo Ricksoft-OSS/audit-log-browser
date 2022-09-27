@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  #%L
+  Audit Log Browser Platform JAR Module
+  %%
+  Copyright (C) 2018 - 2020 Ricksoft Co., Ltd.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+    <!-- Exec Scheduled Job -->
+    <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler"
+          class="jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler">
+        <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
+        <property name="csvManager" ref="jp.ricksoft.csvManager"/>
+        <property name="fileManager" ref="jp.ricksoft.fileManager"/>
+        <property name="repositoryFolderManager" ref="jp.ricksoft.repositoryFolderManager"/>
+        <property name="zipManager" ref="jp.ricksoft.zipManager"/>
+    </bean>
+
+    <!-- Job Detail -->
+    <bean id="jp.ricksoft.schedule.scheduledjob.jobDetail"
+          class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="jp.ricksoft.auditlogbrowser.schedule.ScheduledJob"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="jobScheduler" value-ref="jp.ricksoft.schedule.AuditlogArchiveScheduler"/>
+                <entry key="jobLockService" value-ref="jobLockService"/>
+                <entry key="isEnabled" value="${AuditLogBrowser.schedule.enabled}"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- Scheculed Trigger -->
+    <bean id="jp.ricksoft.schedule.scheduledjob.trigger"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jp.ricksoft.schedule.scheduledjob.jobDetail"/>
+        <property name="cronExpression" value="${AuditLogBrowser.schedule.cron.expression}"/>
+        <property name="startDelay" value="${AuditLogBrowser.schedule.cron.start.delay}"/>
+    </bean>
+
+    <bean id="jp.ricksoft.schedule.scheduledjob.SchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="jp.ricksoft.schedule.scheduledjob.trigger"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>
