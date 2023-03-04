@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.ricksoft</groupId>
     <artifactId>audit-log-browser</artifactId>
@@ -13,9 +14,9 @@
         <name>Ricksoft Co., Ltd.</name>
         <url>https://www.ricksoft.jp/en/</url>
     </organization>
-  <prerequisites>
-    <maven>3.3.0</maven>
-  </prerequisites>
+    <prerequisites>
+        <maven>3.3.0</maven>
+    </prerequisites>
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
@@ -42,7 +43,8 @@
             -Dmetadata-keystore.password=mp6yc0UD9e
             -Dmetadata-keystore.aliases=metadata
             -Dmetadata-keystore.metadata.password=oKIWzVdEdA
-            -Dmetadata-keystore.metadata.algorithm=AES</keystore.settings>
+            -Dmetadata-keystore.metadata.algorithm=AES
+        </keystore.settings>
         <activemq.version>5.16.3</activemq.version>
 
         <!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
@@ -239,31 +241,11 @@
                             <nonFilteredFileExtension>js</nonFilteredFileExtension>
                         </nonFilteredFileExtensions>
                     </configuration>
-        </plugin>
-                                                        
-        
-        
-        
-        
-        <plugin>
-                                                                      
-          
-          
-          
-          
-          <groupId>org.zeroturnaround</groupId>
-                                                                      
-          
-          
-          
-          
-          <artifactId>jrebel-maven-plugin</artifactId>
-                                                                      
-          
-          
-          
-          
-          <version>${jrebel.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.zeroturnaround</groupId>
+                    <artifactId>jrebel-maven-plugin</artifactId>
+                    <version>${jrebel.version}</version>
                 </plugin>
 
                 <!--                <plugin>-->
@@ -437,108 +419,37 @@
 
 
             <plugin>
-        <groupId>org.zeroturnaround</groupId>
-                                                        
-        
-        
-        
-        
-        <artifactId>jrebel-maven-plugin</artifactId>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
                 <executions>
                     <execution>
-           				<id>generate-rebel-xml</id>
+                        <id>generate-rebel-xml</id>
                         <phase>process-resources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                     </execution>
                 </executions>
-        <configuration>
-                                                                      
-          
-          
-          
-          
-          <!-- For more information about how to configure JRebel plugin see:
-                         http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
-                                                                      
-          
-          
-          
-          
-          <classpath>
-                                                                                    
-            
-            
-            
-            
-            <fallback>all</fallback>
-                                                                                    
-            
-            
-            
-            
-            <resources>
-                                                                                                  
-              
-              
-              
-              
-              <resource>
-                                                                                                                
-                
-                
-                
-                
-                <directory>${project.build.outputDirectory}</directory>
-                                                                                                                
-                
-                
-                
-                
-                <directory>${project.build.testOutputDirectory}</directory>
-                                                                                                            
-              
-              
-              
-              
-              </resource>
-                                                                                              
-            
-            
-            
-            
-            </resources>
-                                                                                
-          
-          
-          
-          
-          </classpath>
-                                                                      
-          
-          
-          
-          
-          <!--
-                      alwaysGenerate - default is false
-                      If 'false' - rebel.xml is generated if timestamps of pom.xml and the current rebel.xml file are not equal.
-                      If 'true' - rebel.xml will always be generated
-                    -->
-                                                                      
-          
-          
-          
-          
-          <alwaysGenerate>true</alwaysGenerate>
-                                                                  
-        
-        
-        
-        
-        </configuration>
+                <configuration>
+                    <!-- For more information about how to configure JRebel plugin see:
+                                   http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml -->
+                    <classpath>
+                        <fallback>all</fallback>
+                        <resources>
+                            <resource>
+                                <directory>${project.build.outputDirectory}</directory>
+                                <directory>${project.build.testOutputDirectory}</directory>
+                            </resource>
+                        </resources>
+                    </classpath>
+                    <!--
+                                alwaysGenerate - default is false
+                                If 'false' - rebel.xml is generated if timestamps of pom.xml and the current rebel.xml file are not equal.
+                                If 'true' - rebel.xml will always be generated
+                              -->
+                    <alwaysGenerate>true</alwaysGenerate>
+                </configuration>
             </plugin>
-
 
             <!-- Hot reloading with JRebel -->
             <!--            <plugin>-->
@@ -654,11 +565,11 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-  <modules>
-    <module>audit-log-browser-platform</module>
-    <module>audit-log-browser-share</module>
-    <module>audit-log-browser-integration-tests</module>
-    <module>audit-log-browser-platform-docker</module>
-    <module>audit-log-browser-share-docker</module>
-  </modules>
+    <modules>
+        <module>audit-log-browser-platform</module>
+        <module>audit-log-browser-share</module>
+        <module>audit-log-browser-integration-tests</module>
+        <module>audit-log-browser-platform-docker</module>
+        <module>audit-log-browser-share-docker</module>
+    </modules>
 </project>
