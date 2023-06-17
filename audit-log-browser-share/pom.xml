@@ -31,6 +31,7 @@
             <artifactId>jquery</artifactId>
             <version>${webjars.jquery.version}</version>
         </dependency>
+
     </dependencies>
 
     <build>
