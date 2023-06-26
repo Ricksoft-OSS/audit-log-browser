@@ -33,7 +33,7 @@ services:
     depends_on:
       - audit-log-browser-postgres
   audit-log-browser-postgres:
-    image: postgres:9.6
+    image: postgres:14.8
     environment:
       POSTGRES_DB: alfresco
       POSTGRES_USER: alfresco
