@@ -18,7 +18,7 @@
  * #L%
  */
 var AuditLogBrowser = {};
-AuditLogBrowser.ENDPOINT = "proxy/alfresco-api/-default-/public/alfresco/versions/1/audit-applications/share-site-access/audit-entries";
+AuditLogBrowser.ENDPOINT = "proxy/alfresco-api/-default-/public/alfresco/versions/1/audit-applications/alb-share-access/audit-entries";
 AuditLogBrowser.MAX_ITEMS = 100;
 AuditLogBrowser.POPUP_HIDE_DELAY = 3000;
 AuditLogBrowser.param = {
@@ -253,7 +253,7 @@ function createWhereParams(user, contentName, fromDate, fromTime, toDate, toTime
 
   // Content
   if (contentName) {
-    params.valuesKey = "'/share-site-access/transaction/nodename'";
+    params.valuesKey = "'/alb-share-access/transaction/nodename'";
     params.valuesValue = "'" + contentName + "'";
   }
 
@@ -288,7 +288,7 @@ function createDownloadParams(user, contentName, fromDate, fromTime, toDate, toT
 
   // Content
   if (contentName) {
-    params.valuesKey = "'/share-site-access/transaction/nodename'";
+    params.valuesKey = "'/alb-share-access/transaction/nodename'";
     params.valuesValue = contentName;
   }
 
