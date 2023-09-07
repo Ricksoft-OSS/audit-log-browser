@@ -79,106 +79,106 @@
    </DataGenerators>
 
    <PathMappings>
-      <PathMap source="/alfresco-access" target="/share-site-access" />
-      <PathMap source="/alfresco-api/pre/ticketComponent/invalidateTicketById/args" target="/share-site-access/logout" />
-      <PathMap source="/alfresco-api/post/PersonService"     target="/share-site-access/userManage" />
-      <PathMap source="/alfresco-api/post/NodeService/setProperties" target="/share-site-access/nodeManage/setProperties" />
-      <PathMap source="/alfresco-api/post/AuthorityService"  target="/share-site-access/authManage" />
-      <PathMap source="/alfresco-api/post/PermissionService" target="/share-site-access/permissionManage" />
-      <PathMap source="/alfresco-api/post/NodeService/setType" target="/share-site-access/doctypeManage/to/setType" />
-      <PathMap source="/alfresco-api/post/AuthenticationService/authenticate" target="/share-site-access/login" />
-      <PathMap source="/alfresco-api/post/InvitationService" target="/share-site-access/invite" />
-      <PathMap source="/alfresco-api/post/OwnableService" target="/share-site-access/owner" />
-      <PathMap source="/alfresco-api/post/SiteService" target="/share-site-access/site" />
+      <PathMap source="/alfresco-access" target="/alb-share-access" />
+      <PathMap source="/alfresco-api/pre/ticketComponent/invalidateTicketById/args" target="/alb-share-access/logout" />
+      <PathMap source="/alfresco-api/post/PersonService"     target="/alb-share-access/userManage" />
+      <PathMap source="/alfresco-api/post/NodeService/setProperties" target="/alb-share-access/nodeManage/setProperties" />
+      <PathMap source="/alfresco-api/post/AuthorityService"  target="/alb-share-access/authManage" />
+      <PathMap source="/alfresco-api/post/PermissionService" target="/alb-share-access/permissionManage" />
+      <PathMap source="/alfresco-api/post/NodeService/setType" target="/alb-share-access/doctypeManage/to/setType" />
+      <PathMap source="/alfresco-api/post/AuthenticationService/authenticate" target="/alb-share-access/login" />
+      <PathMap source="/alfresco-api/post/InvitationService" target="/alb-share-access/invite" />
+      <PathMap source="/alfresco-api/post/OwnableService" target="/alb-share-access/owner" />
+      <PathMap source="/alfresco-api/post/SiteService" target="/alb-share-access/site" />
    </PathMappings>
 
-   <Application name="ShareSiteAccess" key="share-site-access">
+   <Application name="alb-share-access" key="alb-share-access">
      <AuditPath key="transaction">
     	 <RecordValue key="user"
 	       dataExtractor="simpleValue"
-	       dataSource="/share-site-access/transaction/user"
-	       dataTrigger="/share-site-access/transaction/user"/>
+	       dataSource="/alb-share-access/transaction/user"
+	       dataTrigger="/alb-share-access/transaction/user"/>
        <RecordValue key="action"
 	       dataExtractor="simpleValue"
-	       dataSource="/share-site-access/transaction/action"
-	       dataTrigger="/share-site-access/transaction/action"/>
+	       dataSource="/alb-share-access/transaction/action"
+	       dataTrigger="/alb-share-access/transaction/action"/>
 	     <RecordValue key="nodepath"
 	       dataExtractor="simpleValue"
-	       dataSource="/share-site-access/transaction/path"
-	       dataTrigger="/share-site-access/transaction/path"/>
+	       dataSource="/alb-share-access/transaction/path"
+	       dataTrigger="/alb-share-access/transaction/path"/>
 	     <RecordValue key="nodename"
 	       dataExtractor="nodeName"
-	       dataSource="/share-site-access/transaction/node"
-	       dataTrigger="/share-site-access/transaction/node"/>
+	       dataSource="/alb-share-access/transaction/node"
+	       dataTrigger="/alb-share-access/transaction/node"/>
 	     <RecordValue key="site"
 	       dataExtractor="siteName"
-	       dataSource="/share-site-access/transaction/path"
-	       dataTrigger="/share-site-access/transaction/path"/>
+	       dataSource="/alb-share-access/transaction/path"
+	       dataTrigger="/alb-share-access/transaction/path"/>
 	     <AuditPath key="aspects">
 	       <RecordValue key="add"
 	         dataExtractor="aspect"
-	         dataSource="/share-site-access/transaction/aspects/add"
-	         dataTrigger="/share-site-access/transaction/aspects/add" />
+	         dataSource="/alb-share-access/transaction/aspects/add"
+	         dataTrigger="/alb-share-access/transaction/aspects/add" />
 	       <RecordValue key="delete"
 	         dataExtractor="aspect"
-	         dataSource="/share-site-access/transaction/aspects/delete"
-	         dataTrigger="/share-site-access/transaction/aspects/delete" />
+	         dataSource="/alb-share-access/transaction/aspects/delete"
+	         dataTrigger="/alb-share-access/transaction/aspects/delete" />
 	     </AuditPath>
        <AuditPath key="properties">
 	       <RecordValue key="from"
 	         dataExtractor="property"
-	         dataSource="/share-site-access/transaction/properties/from"
-	         dataTrigger="/share-site-access/transaction/properties/from" />
+	         dataSource="/alb-share-access/transaction/properties/from"
+	         dataTrigger="/alb-share-access/transaction/properties/from" />
 	       <RecordValue key="to"
 	         dataExtractor="property"
-	         dataSource="/share-site-access/transaction/properties/to"
-	         dataTrigger="/share-site-access/transaction/properties/to" />
+	         dataSource="/alb-share-access/transaction/properties/to"
+	         dataTrigger="/alb-share-access/transaction/properties/to" />
            <RecordValue key="add"
 	         dataExtractor="property"
-	         dataSource="/share-site-access/transaction/properties/add"
-	         dataTrigger="/share-site-access/transaction/properties/add" />
+	         dataSource="/alb-share-access/transaction/properties/add"
+	         dataTrigger="/alb-share-access/transaction/properties/add" />
 	       <RecordValue key="delete"
 	         dataExtractor="property"
-	         dataSource="/share-site-access/transaction/properties/delete"
-	         dataTrigger="/share-site-access/transaction/properties/delete" />
+	         dataSource="/alb-share-access/transaction/properties/delete"
+	         dataTrigger="/alb-share-access/transaction/properties/delete" />
 	     </AuditPath>
 	     <AuditPath key="copy">
 	       <AuditPath key="from">
 	         <RecordValue key="path"
              dataExtractor="simpleValue"
-             dataSource="/share-site-access/transaction/copy/from/path"
-             dataTrigger="/share-site-access/transaction/copy/from/path" />
+             dataSource="/alb-share-access/transaction/copy/from/path"
+             dataTrigger="/alb-share-access/transaction/copy/from/path" />
          </AuditPath>
          <AuditPath key="to">
   	       <RecordValue key="path"
              dataExtractor="simpleValue"
-             dataSource="/share-site-access/transaction/copy/to/path"
-             dataTrigger="/share-site-access/transaction/copy/to/path" />
+             dataSource="/alb-share-access/transaction/copy/to/path"
+             dataTrigger="/alb-share-access/transaction/copy/to/path" />
 	       </AuditPath>
 	     </AuditPath>
        <AuditPath key="move">
 	       <AuditPath key="from">
 	         <RecordValue key="path"
              dataExtractor="simpleValue"
-             dataSource="/share-site-access/transaction/move/from/path"
-             dataTrigger="/share-site-access/transaction/move/from/path" />
+             dataSource="/alb-share-access/transaction/move/from/path"
+             dataTrigger="/alb-share-access/transaction/move/from/path" />
          </AuditPath>
          <AuditPath key="to">
   	       <RecordValue key="path"
              dataExtractor="simpleValue"
-             dataSource="/share-site-access/transaction/move/to/path"
-             dataTrigger="/share-site-access/transaction/move/to/path" />
+             dataSource="/alb-share-access/transaction/move/to/path"
+             dataTrigger="/alb-share-access/transaction/move/to/path" />
 	       </AuditPath>
 	     </AuditPath>
      </AuditPath>
 
      <AuditPath key="login">
        <AuditPath key="no-error">
-         <RecordValue key="user" dataExtractor="simpleValue" dataSource="/share-site-access/login/args/userName" />
+         <RecordValue key="user" dataExtractor="simpleValue" dataSource="/alb-share-access/login/args/userName" />
          <GenerateValue key="action" dataGenerator="loginAction" />
        </AuditPath>
        <AuditPath key="error">
-         <RecordValue key="user" dataExtractor="simpleValue" dataSource="/share-site-access/login/args/userName" />
+         <RecordValue key="user" dataExtractor="simpleValue" dataSource="/alb-share-access/login/args/userName" />
          <GenerateValue key="action" dataGenerator="loginFailureAction" />
        </AuditPath>
      </AuditPath>
@@ -191,23 +191,23 @@
      <AuditPath key="userManage">
        <AuditPath key="createPerson">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="userName" dataSource="/share-site-access/userManage/createPerson/args/properties" />
-           <RecordValue key="description" dataExtractor="property" dataSource="/share-site-access/userManage/createPerson/args/properties" />
+           <RecordValue key="nodename" dataExtractor="userName" dataSource="/alb-share-access/userManage/createPerson/args/properties" />
+           <RecordValue key="description" dataExtractor="property" dataSource="/alb-share-access/userManage/createPerson/args/properties" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="createUserAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="setPersonProperties">
          <AuditPath key="no-error">
-           <RecordValue key="changedUser" dataExtractor="simpleValue" dataSource="/share-site-access/userManage/setPersonProperties/args/userName" dataTrigger="/share-site-access/userManage/setPersonProperties/args/userName" />
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/userManage/setPersonProperties/args/properties" dataTrigger="/share-site-access/userManage/setPersonProperties/args/properties" />
+           <RecordValue key="changedUser" dataExtractor="simpleValue" dataSource="/alb-share-access/userManage/setPersonProperties/args/userName" dataTrigger="/alb-share-access/userManage/setPersonProperties/args/userName" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/userManage/setPersonProperties/args/properties" dataTrigger="/alb-share-access/userManage/setPersonProperties/args/properties" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="modUserAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="deletePerson">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/userManage/deletePerson/args/userName"/>
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/userManage/deletePerson/args/userName"/>
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="deleteUserAction" />
          </AuditPath>
@@ -217,8 +217,8 @@
      <AuditPath key="nodeManage">
        <AuditPath key="setProperties">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="contentName" dataSource="/share-site-access/nodeManage/setProperties/args/properties" dataTrigger="/share-site-access/nodeManage/setProperties/args/properties" />
-           <RecordValue key="description" dataExtractor="property" dataSource="/share-site-access/nodeManage/setProperties/args/properties" dataTrigger="/share-site-access/nodeManage/setProperties/args/properties" />
+           <RecordValue key="nodename" dataExtractor="contentName" dataSource="/alb-share-access/nodeManage/setProperties/args/properties" dataTrigger="/alb-share-access/nodeManage/setProperties/args/properties" />
+           <RecordValue key="description" dataExtractor="property" dataSource="/alb-share-access/nodeManage/setProperties/args/properties" dataTrigger="/alb-share-access/nodeManage/setProperties/args/properties" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="setPropsAction" />
          </AuditPath>
@@ -228,35 +228,35 @@
      <AuditPath key="authManage">
        <AuditPath key="createAuthority">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/authManage/createAuthority/result" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/authManage/createAuthority/result" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="createAuthAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="deleteAuthority">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/authManage/deleteAuthority/args/name" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/authManage/deleteAuthority/args/name" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="deleteAuthAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="setAuthorityDisplayName">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/authManage/setAuthorityDisplayName/args/authorityName" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/authManage/setAuthorityDisplayName/args/authorityName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="modAuthAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="addAuthority">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/authManage/addAuthority/args/parentName" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/authManage/addAuthority/args/parentName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="addSubmemberAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="removeAuthority">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/share-site-access/authManage/removeAuthority/args/parentName" />
+           <RecordValue key="nodename" dataExtractor="simpleValue" dataSource="/alb-share-access/authManage/removeAuthority/args/parentName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="deleteSubmemberAction" />
          </AuditPath>
@@ -266,42 +266,42 @@
      <AuditPath key="permissionManage">
        <AuditPath key="setPermission">
          <AuditPath key="no-error">
-            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/setPermission/args/authority" />
-            <RecordValue key="permission" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/setPermission/args/permission" />
-            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/permissionManage/setPermission/args/nodeRef" />
-            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/permissionManage/setPermission/args/nodeRef" />
-            <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/permissionManage/setPermission/args/nodeRef" />
+            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/setPermission/args/authority" />
+            <RecordValue key="permission" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/setPermission/args/permission" />
+            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/permissionManage/setPermission/args/nodeRef" />
+            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/permissionManage/setPermission/args/nodeRef" />
+            <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/permissionManage/setPermission/args/nodeRef" />
             <GenerateValue key="user" dataGenerator="currentUser" />
             <GenerateValue key="action" dataGenerator="setPermissionAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="deletePermission">
          <AuditPath key="no-error">
-            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/deletePermission/args/authority" />
-            <RecordValue key="permission" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/deletePermission/args/permission" />
-            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/permissionManage/deletePermission/args/nodeRef" />
-            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/permissionManage/deletePermission/args/nodeRef" />
-            <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/permissionManage/deletePermission/args/nodeRef" />
+            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/deletePermission/args/authority" />
+            <RecordValue key="permission" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/deletePermission/args/permission" />
+            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/permissionManage/deletePermission/args/nodeRef" />
+            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/permissionManage/deletePermission/args/nodeRef" />
+            <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/permissionManage/deletePermission/args/nodeRef" />
             <GenerateValue key="user" dataGenerator="currentUser" />
             <GenerateValue key="action" dataGenerator="deletePermissionAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="clearPermission">
          <AuditPath key="no-error">
-            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/clearPermission/args/authority" />
-            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/permissionManage/clearPermission/args/nodeRef" />
-            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/permissionManage/clearPermission/args/nodeRef" />
-            <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/permissionManage/clearPermission/args/nodeRef" />
+            <RecordValue key="authority" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/clearPermission/args/authority" />
+            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/permissionManage/clearPermission/args/nodeRef" />
+            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/permissionManage/clearPermission/args/nodeRef" />
+            <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/permissionManage/clearPermission/args/nodeRef" />
             <GenerateValue key="user" dataGenerator="currentUser" />
             <GenerateValue key="action" dataGenerator="clearPermissionAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="setInheritParentPermissions">
          <AuditPath key="no-error">
-            <RecordValue key="inheritParentPermissions" dataExtractor="simpleValue" dataSource="/share-site-access/permissionManage/setInheritParentPermissions/args/inheritParentPermissions" />
-            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
-            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
-            <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
+            <RecordValue key="inheritParentPermissions" dataExtractor="simpleValue" dataSource="/alb-share-access/permissionManage/setInheritParentPermissions/args/inheritParentPermissions" />
+            <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
+            <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
+            <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/permissionManage/setInheritParentPermissions/args/nodeRef" />
             <GenerateValue key="user" dataGenerator="currentUser" />
             <GenerateValue key="action" dataGenerator="setInheritParentPermissionsAction" />
          </AuditPath>
@@ -311,120 +311,120 @@
      <AuditPath key="invite">
        <AuditPath key="inviteNominated">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteNominated/args/inviteeUserName" />
-           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteNominated/args/inviteeRole" />
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteNominated/args/resourceName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteNominated/args/inviteeUserName" />
+           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteNominated/args/inviteeRole" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteNominated/args/resourceName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="inviteNominatedAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="inviteModerated">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteModerated/args/inviteeUserName" />
-           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteModerated/args/inviteeRole" />
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/invite/inviteModerated/args/resourceName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteModerated/args/inviteeUserName" />
+           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteModerated/args/inviteeRole" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/inviteModerated/args/resourceName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="inviteModeratedAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="sendNominatedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/sendNominatedInvitation/args/inviteId" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/sendNominatedInvitation/args/inviteId" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="sendNominatedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="sendModeratedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/sendModeratedInvitation/args/inviteId" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/sendModeratedInvitation/args/inviteId" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="sendModeratedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="updateModeratedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/updateModeratedInvitation/args/inviteeId" />
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/invite/updateModeratedInvitation/args/siteShortName" />
-           <RecordValue key="inviteeComments" dataExtractor="simpleValue" dataSource="/share-site-access/invite/updateModeratedInvitation/args/inviteeComments" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/updateModeratedInvitation/args/inviteeId" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/updateModeratedInvitation/args/siteShortName" />
+           <RecordValue key="inviteeComments" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/updateModeratedInvitation/args/inviteeComments" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="updateModeratedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="reject">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/reject/args/invitationId" />
-           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/share-site-access/invite/reject/args/reason" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/reject/args/invitationId" />
+           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/reject/args/reason" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="rejectInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="rejectModeratedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/siteName" />
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/Invitee" />
-           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/role" />
-           <RecordValue key="reviewer" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/reviewer" />
-           <RecordValue key="resourceType" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/resourceType" />
-           <RecordValue key="reviewComments" dataExtractor="simpleValue" dataSource="/share-site-access/invite/rejectModeratedInvitation/args/reviewComments" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/siteName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/Invitee" />
+           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/role" />
+           <RecordValue key="reviewer" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/reviewer" />
+           <RecordValue key="resourceType" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/resourceType" />
+           <RecordValue key="reviewComments" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/rejectModeratedInvitation/args/reviewComments" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="rejectModeratedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="accept">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/accept/args/invitationId" />
-           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/share-site-access/invite/accept/args/reason" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/accept/args/invitationId" />
+           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/accept/args/reason" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="acceptInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="acceptNominatedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="user"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/acceptNominatedInvitation/args/inviter" />
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/acceptNominatedInvitation/args/Invitee" />
-           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/acceptNominatedInvitation/args/siteName" />
-           <RecordValue key="role"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/acceptNominatedInvitation/args/role" />
+           <RecordValue key="user"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/acceptNominatedInvitation/args/inviter" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/acceptNominatedInvitation/args/Invitee" />
+           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/acceptNominatedInvitation/args/siteName" />
+           <RecordValue key="role"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/acceptNominatedInvitation/args/role" />
            <GenerateValue key="action" dataGenerator="acceptNominatedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="approve">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/approve/args/invitationId" />
-           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/share-site-access/invite/approve/args/reason" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approve/args/invitationId" />
+           <RecordValue key="reason" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approve/args/reason" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="approveInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="approveModeratedInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="user"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/approveModeratedInvitation/args/reviewer" />
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/approveModeratedInvitation/args/Invitee" />
-           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/approveModeratedInvitation/args/siteName" />
-           <RecordValue key="role"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/approveModeratedInvitation/args/role" />
+           <RecordValue key="user"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approveModeratedInvitation/args/reviewer" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approveModeratedInvitation/args/Invitee" />
+           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approveModeratedInvitation/args/siteName" />
+           <RecordValue key="role"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/approveModeratedInvitation/args/role" />
            <GenerateValue key="action" dataGenerator="approveModeratedInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="cancel">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/cancel/args/invitationId" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/cancel/args/invitationId" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="cancelInvAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="cancelInvitation">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/cancelInvitation/args/inviteId" />
-           <RecordValue key="invitee" dataExtractor="simpleValue" dataSource="/share-site-access/invite/cancelInvitation/args/Invitee" />
-           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/share-site-access/invite/cancelInvitation/args/siteName" />
-           <RecordValue key="currentInviteId" dataExtractor="simpleValue" dataSource="/share-site-access/invite/cancelInvitation/args/currentInviteId" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/cancelInvitation/args/inviteId" />
+           <RecordValue key="invitee" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/cancelInvitation/args/Invitee" />
+           <RecordValue key="site"    dataExtractor="simpleValue" dataSource="/alb-share-access/invite/cancelInvitation/args/siteName" />
+           <RecordValue key="currentInviteId" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/cancelInvitation/args/currentInviteId" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="cancelInvitationAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="deleteAuthenticationIfUnused">
          <AuditPath key="no-error">
-           <RecordValue key="invitee" dataExtractor="simpleValue" dataSource="/share-site-access/invite/deleteAuthenticationIfUnused/args/Invitee" />
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/invite/deleteAuthenticationIfUnused/args/currentInviteId" />
+           <RecordValue key="invitee" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/deleteAuthenticationIfUnused/args/Invitee" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/invite/deleteAuthenticationIfUnused/args/currentInviteId" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="deleteAuthenticationIfUnusedAction" />
          </AuditPath>
@@ -434,19 +434,19 @@
      <AuditPath key="owner">
        <AuditPath key="setOwner">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/owner/setOwner/args/userName" />
-           <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/owner/setOwner/args/nodeRef" />
-           <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/owner/setOwner/args/nodeRef" />
-           <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/owner/setOwner/args/nodeRef" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/owner/setOwner/args/userName" />
+           <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/owner/setOwner/args/nodeRef" />
+           <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/owner/setOwner/args/nodeRef" />
+           <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/owner/setOwner/args/nodeRef" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="setOwnerAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="takeOwnership">
          <AuditPath key="no-error">
-           <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/share-site-access/owner/takeOwnership/args/nodeRef" />
-           <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/share-site-access/owner/takeOwnership/args/nodeRef" />
-           <RecordValue key="site"     dataExtractor="siteName" dataSource="/share-site-access/owner/takeOwnership/args/nodeRef" />
+           <RecordValue key="nodename" dataExtractor="nodeName" dataSource="/alb-share-access/owner/takeOwnership/args/nodeRef" />
+           <RecordValue key="nodepath" dataExtractor="nodePath" dataSource="/alb-share-access/owner/takeOwnership/args/nodeRef" />
+           <RecordValue key="site"     dataExtractor="siteName" dataSource="/alb-share-access/owner/takeOwnership/args/nodeRef" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="takeOwnershipAction" />
          </AuditPath>
@@ -457,7 +457,7 @@
        <AuditPath key="to">
          <AuditPath key="setType">
            <AuditPath key="no-error">
-             <RecordValue key="description" dataExtractor="documentType" dataSource="/share-site-access/doctypeManage/to/setType/args/nodeRef" />
+             <RecordValue key="description" dataExtractor="documentType" dataSource="/alb-share-access/doctypeManage/to/setType/args/nodeRef" />
              <GenerateValue key="user" dataGenerator="currentUser" />
              <GenerateValue key="action" dataGenerator="changeDoctypeAction" />
            </AuditPath>
@@ -468,32 +468,32 @@
      <AuditPath key="site">
        <AuditPath key="createSite">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/site/createSite/args/sitePreset" />
-           <RecordValue key="site"     dataExtractor="simpleValue" dataSource="/share-site-access/site/createSite/args/shortName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/site/createSite/args/sitePreset" />
+           <RecordValue key="site"     dataExtractor="simpleValue" dataSource="/alb-share-access/site/createSite/args/shortName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="createSiteAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="deleteSite">
          <AuditPath key="no-error">
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/site/updateSite/args/shortName" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/site/updateSite/args/shortName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="deleteSiteAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="setMembership">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/site/setMembership/args/authorityName" />
-           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/share-site-access/site/setMembership/args/role" />
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/site/setMembership/args/shortName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/site/setMembership/args/authorityName" />
+           <RecordValue key="role" dataExtractor="simpleValue" dataSource="/alb-share-access/site/setMembership/args/role" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/site/setMembership/args/shortName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="setMembershipAction" />
          </AuditPath>
        </AuditPath>
        <AuditPath key="removeMembership">
          <AuditPath key="no-error">
-           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/share-site-access/site/removeMembership/args/authorityName" />
-           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/share-site-access/site/removeMembership/args/shortName" />
+           <RecordValue key="description" dataExtractor="simpleValue" dataSource="/alb-share-access/site/removeMembership/args/authorityName" />
+           <RecordValue key="site" dataExtractor="simpleValue" dataSource="/alb-share-access/site/removeMembership/args/shortName" />
            <GenerateValue key="user" dataGenerator="currentUser" />
            <GenerateValue key="action" dataGenerator="removeMembershipAction" />
          </AuditPath>
