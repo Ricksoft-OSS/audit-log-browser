@@ -86,6 +86,7 @@ AuditLogBrowser.RESPONSE_SCHEMA = {
 };
 
 AuditLogBrowser.checkProcessId;
+AuditLogBrowser.isInProgress = false;
 
 YAHOO.widget.DataTable.Formatter.auditDateFormatter = function (elLiner, oRecord, oColumn, oData) {
   if (oRecord.getData("entry.createdAt")) {
@@ -135,6 +136,14 @@ $(function () {
   });
 
   $('#download-audit-log').on('click',function(){
+
+    if(AuditLogBrowser.isInProgress){
+      return;
+    }
+    
+    $('#dl-in-progress').show();
+    $('#dl-finish').hide();
+
     var downloadURL = "/DownloadAuditLogZip";
 
     if (haveOnlyTimeInput(paramFromdate, paramFromtime)
@@ -152,6 +161,7 @@ $(function () {
 
     var input = createDownloadParams(paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime);
 
+    AuditLogBrowser.isInProgress = true;
     Alfresco.util.Ajax.jsonPost({
       url: Alfresco.constants.PROXY_URI + downloadURL,
       dataObj: input,
@@ -166,6 +176,7 @@ $(function () {
       failureCallback: {
         fn: function (res) {
           console.log(res);
+          AuditLogBrowser.isInProgress = false;
         },
         scope: this
       }
@@ -377,7 +388,9 @@ function getExportStatus() {
         if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
           $('#dl-in-progress').hide();
           $('#dl-finish').show();
+          $('#dl-link-button')[0].setAttribute('onClick', 'window.open("' + Alfresco.constants.URL_PAGECONTEXT + 'document-details?nodeRef=' + result.json.zipFileRef+ '")');
           clearInterval(AuditLogBrowser.checkProcessId);
+          AuditLogBrowser.isInProgress = false;
         }
       },
       scope: this

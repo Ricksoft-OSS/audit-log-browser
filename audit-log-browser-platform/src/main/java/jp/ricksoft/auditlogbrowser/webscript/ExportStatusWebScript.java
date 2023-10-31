@@ -44,6 +44,8 @@ public class ExportStatusWebScript extends DeclarativeWebScript {
         model.put("exportStatus", handler.getProgress());
         model.put("processId", handler.getProcessId());
 
+        model.put("zipFileRef", handler.getZipFileRef().toString());
+
         return model;
     }
 
