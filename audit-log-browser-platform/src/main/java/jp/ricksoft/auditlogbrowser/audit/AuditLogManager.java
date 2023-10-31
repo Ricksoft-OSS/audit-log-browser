@@ -1,5 +1,18 @@
 package jp.ricksoft.auditlogbrowser.audit;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.alfresco.service.cmr.audit.AuditQueryParameters;
+import org.alfresco.service.cmr.audit.AuditService;
+import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
+
+import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -20,18 +33,6 @@ package jp.ricksoft.auditlogbrowser.audit;
  * #L%
  */
 
-import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.alfresco.service.cmr.audit.AuditQueryParameters;
-import org.alfresco.service.cmr.audit.AuditService;
-import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class AuditLogManager {
 
     private static final String KEY_ID = "id";
@@ -44,13 +45,11 @@ public class AuditLogManager {
         this.appName = appName;
     }
 
-    public void setAuditService(AuditService auditService)
-    {
+    public void setAuditService(AuditService auditService) {
         this.auditService = auditService;
     }
 
-    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user)
-    {
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user) {
         return this.getAuditLogs(fromTime, toTime, fromId, user, 100);
     }
 
@@ -59,8 +58,7 @@ public class AuditLogManager {
      *
      * @author ebihara.yuki
      */
-    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit)
-    {
+    public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId, String user, int maxUnit) {
 
         // Audit log query callback function setting.
         MyAuditQueryCallback callback = new MyAuditQueryCallback();
@@ -69,20 +67,16 @@ public class AuditLogManager {
         AuditQueryParameters params = new AuditQueryParameters();
 
         params.setApplicationName(appName);
-        if (fromId != null)
-        {
+        if (fromId != null) {
             params.setFromId(fromId);
         }
-        if (fromTime != null)
-        {
+        if (fromTime != null) {
             params.setFromTime(fromTime);
         }
-        if (toTime != null)
-        {
+        if (toTime != null) {
             params.setToTime(toTime);
         }
-        if (user != null && !user.isEmpty())
-        {
+        if (user != null && !user.isEmpty()) {
             params.setUser(user);
         }
         params.setForward(true);
@@ -93,40 +87,42 @@ public class AuditLogManager {
         return callback.getEntries();
     }
 
-    public LocalDateTime getOldestLoggedDateTime(){
-        Map<String, Object> entry = this.getAuditLogs(null, null, null, null, 1).get(0);
-        return (LocalDateTime) entry.get(KEY_TIME);
+    public LocalDateTime getOldestLoggedDateTime() {
+        LocalDateTime oldestLocalDateTime = LocalDateTime.now();
+
+        List<Map<String, Object>> entries = this.getAuditLogs(null, null, null, null, 1);
+        if (entries != null && !entries.isEmpty()) {
+            oldestLocalDateTime = (LocalDateTime) entries.get(0).get(KEY_TIME);
+        }
+        return oldestLocalDateTime;
     }
 
     /**
      * Delete Audit Logs（Need to set period）
      *
-     * @param fromTime  FromDate to EpochMilli
-     * @param toTime    ToDate to EpochMilli
+     * @param fromTime FromDate to EpochMilli
+     * @param toTime   ToDate to EpochMilli
      */
-    public void delete(Long fromTime, Long toTime)
-    {
+    public void delete(Long fromTime, Long toTime) {
         auditService.clearAudit(appName, fromTime, toTime);
     }
 
-    private class MyAuditQueryCallback implements AuditQueryCallback
-    {
+    private class MyAuditQueryCallback implements AuditQueryCallback {
         // Query result save
         private List<Map<String, Object>> entries = new ArrayList<>();
 
-        public List<Map<String, Object>> getEntries()
-        {
+        public List<Map<String, Object>> getEntries() {
             return entries;
         }
 
         /**
-         * Determines whether the value argument needs to be set when the handleAuditEntry method is called from this callback.
+         * Determines whether the value argument needs to be set when the
+         * handleAuditEntry method is called from this callback.
          *
          * @return Need to set 'values' argument, set true.
          */
         @Override
-        public boolean valuesRequired()
-        {
+        public boolean valuesRequired() {
             return true;
         }
 
@@ -134,38 +130,34 @@ public class AuditLogManager {
          * Process audit entry error
          *
          * @param entryId  Audit entry ID
-         * @param errorMsg  Error Message
+         * @param errorMsg Error Message
          * @param error    Exception cause of error
          * @return if continue, return true. if not, false.
          */
         @Override
-        public boolean handleAuditEntryError(Long entryId, String errorMsg, Throwable error)
-        {
+        public boolean handleAuditEntryError(Long entryId, String errorMsg, Throwable error) {
             return true;
         }
 
         /**
          * Process audit log entry
          *
-         * @param entryId  Audit entry ID
-         * @param appName  Audit app name
-         * @param user  Audit action user
-         * @param time  Audit time
+         * @param entryId Audit entry ID
+         * @param appName Audit app name
+         * @param user    Audit action user
+         * @param time    Audit time
          * @param values  other audit value
          * @return if continue, return true. if not, false.
          */
         @Override
         public boolean handleAuditEntry(Long entryId, String appName, String user, long time,
-                                        Map<String, Serializable> values)
-        {
+                Map<String, Serializable> values) {
             Map<String, Object> entry = new HashMap<>();
             entry.put(KEY_ID, entryId);
             entry.put(KEY_TIME, DateTimeUtil.convertLocalDateTime(time));
 
-            if (values != null)
-            {
-                values.forEach((key, value) ->
-                        entry.put(key.substring(key.lastIndexOf("/") + 1), value));
+            if (values != null) {
+                values.forEach((key, value) -> entry.put(key.substring(key.lastIndexOf("/") + 1), value));
             }
 
             entries.add(entry);

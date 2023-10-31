@@ -52,5 +52,6 @@
       <property name="zipManager" ref="jp.ricksoft.zipManager"/>
       <property name="fileManager" ref="jp.ricksoft.fileManager"/>
       <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
+      <property name="repositoryFolderManager" ref="jp.ricksoft.repositoryFolderManager"/>
    </bean>
 </beans>

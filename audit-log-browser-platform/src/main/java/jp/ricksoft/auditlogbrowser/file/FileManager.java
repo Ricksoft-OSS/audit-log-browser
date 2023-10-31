@@ -20,9 +20,14 @@ package jp.ricksoft.auditlogbrowser.file;
  * #L%
  */
 
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 public class FileManager {
@@ -56,6 +61,23 @@ public class FileManager {
 
     public File getTmpDir() {
         return new File(tmpDirPath);
+    }
+
+    public Path createWorkDirInTmp(String identifier) {
+        File tmpDir = new File(this.tmpDirPath);
+        if (!tmpDir.exists() || !tmpDir.isDirectory()) {
+            throw new AlfrescoRuntimeException("Temporally directory is missing. Please check directory is existing.");
+        }
+
+        Path workingDir = Paths.get(tmpDir.getAbsolutePath(), identifier);
+        if (!workingDir.toFile().exists()) {
+            try {
+                Files.createDirectory(workingDir);
+            } catch (IOException e) {
+                throw new AlfrescoRuntimeException("Working directory for creating audit zip cannot be created. Please check permissions of temporally directory.", e);
+            }
+        }
+        return workingDir;
     }
 
 }

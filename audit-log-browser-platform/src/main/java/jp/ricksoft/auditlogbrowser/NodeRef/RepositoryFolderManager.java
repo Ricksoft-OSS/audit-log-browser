@@ -39,15 +39,16 @@ public class RepositoryFolderManager {
         this.nodeLocatorService = serviceRegistry.getNodeLocatorService();
         this.fileFolderService = serviceRegistry.getFileFolderService();
     }
-    
+
     /**
      * Get repository root.
+     *
      * @return
      */
     public NodeRef getCompanyHomeNodeRef() {
         return nodeLocatorService.getNode(CompanyHomeNodeLocator.NAME, null, null);
     }
-    
+
     /**
      * prepare folder.
      */
@@ -61,32 +62,35 @@ public class RepositoryFolderManager {
         }
 
     }
-    
+
     /**
      * Add content to folder
      */
-    public void addContent(NodeRef folder, File file) {
+    public NodeRef addContent(NodeRef folder, File file) {
         NodeRef zip = fileFolderService.create(folder, file.getName(), ContentModel.TYPE_CONTENT).getNodeRef();
         fileFolderService.getWriter(zip).putContent(file);
+
+        return zip;
     }
-    
+
     /**
      * Check if file exist in folder.
-     * @param folderNode  Search place
-     * @param filename    Search target
+     *
+     * @param folderNode Search place
+     * @param filename   Search target
      * @return
      */
     public boolean isExist(NodeRef folderNode, String filename) {
         NodeRef result = fileFolderService.searchSimple(folderNode, filename);
-        
-        if(result == null) {
+
+        if (result == null) {
             return false;
         }
-        
+
         return fileFolderService.exists(result);
-        
+
     }
-    
+
     /**
      * Prepare nested folder
      */
@@ -95,7 +99,7 @@ public class RepositoryFolderManager {
         // Backup data is always save to Company Home.
         NodeRef currentFolder = rootFolder;
 
-        for(String path : paths) {
+        for (String path : paths) {
             currentFolder = this.prepareFolder(currentFolder, path);
         }
 
