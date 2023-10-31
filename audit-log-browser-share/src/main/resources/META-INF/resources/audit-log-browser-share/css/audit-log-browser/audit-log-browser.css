@@ -38,6 +38,11 @@
     margin-right: 10px;
 }
 
+#dl-status-area {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .paging-button {
     text-align: center;
     margin-top: 10px;

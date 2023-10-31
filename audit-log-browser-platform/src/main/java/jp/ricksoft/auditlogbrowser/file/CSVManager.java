@@ -1,5 +1,24 @@
 package jp.ricksoft.auditlogbrowser.file;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -22,29 +41,15 @@ package jp.ricksoft.auditlogbrowser.file;
 
 import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
-//import org.apache.commons.csv.CSVStrategy;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
-public class CSVManager
-{
+public class CSVManager {
     private static final char CSV_DELIMITER = ',';
     private static final char CSV_ENCAPSULATOR = '"';
     private static final char CSV_COMMENT_START = '#';
 
     private static final String KEY_ID = "id";
+
+    private static final Logger LOG = LoggerFactory.getLogger(CSVManager.class);
 
     private String tmpDirPath;
     private String csvName;
@@ -69,8 +74,7 @@ public class CSVManager
         this.keys = keys;
     }
 
-    public void setAuditLogManager(AuditLogManager auditLogManager)
-    {
+    public void setAuditLogManager(AuditLogManager auditLogManager) {
         this.auditLogManager = auditLogManager;
     }
 
@@ -81,8 +85,18 @@ public class CSVManager
      * @return csv file
      */
     private File prepareCSV(String name) {
+        return this.prepareCSV(name, Paths.get(this.tmpDirPath));
+    }
 
-        Path csvPath = Paths.get(tmpDirPath, name);
+    /**
+     * Prepare csv file.
+     *
+     * @param name csv file name
+     * @return csv file
+     */
+    private File prepareCSV(String name, Path workDirPath) {
+
+        final Path csvPath = workDirPath.resolve(name);
         if (Files.exists(csvPath)) {
             return csvPath.toFile();
         }
@@ -94,15 +108,14 @@ public class CSVManager
             return null;
         }
 
-        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true)) {
-            CSVPrinter printer = new CSVPrinter(csvWriter,
-                    CSVFormat.EXCEL);
-//            printer.println(labels);
+        try (FileWriter csvWriter = new FileWriter(csvPath.toFile(), true);
+                CSVPrinter printer = new CSVPrinter(csvWriter, CSVFormat.EXCEL)) {
+
+            printer.printRecord(Arrays.asList(labels));
             printer.flush();
             return csvPath.toFile();
 
-        } catch (Exception ioe)
-        {
+        } catch (Exception ioe) {
             ioe.printStackTrace();
             return null;
         }
@@ -111,26 +124,21 @@ public class CSVManager
     /**
      * Add one csv record.
      * 
-     * @param csv target csv
+     * @param csv       target csv
      * @param recordMap audit log entry
      */
-    private void addRecord(File csv, Map<String, Object> recordMap)
-    {
+    private void addRecord(File csv, Map<String, Object> recordMap) {
 
-        try (FileWriter csvWriter = new FileWriter(csv, true))
-        {
+        try (FileWriter csvWriter = new FileWriter(csv, true);
+                CSVPrinter printer = new CSVPrinter(csvWriter, CSVFormat.EXCEL)) {
 
-            CSVPrinter printer = new CSVPrinter(csvWriter,
-                    CSVFormat.EXCEL);
-
-            String[] record = Arrays.stream(keys)
-                                    .map(key -> convertToStr(recordMap.get(key)))
-                                    .toArray(String[]::new);
-//            printer.println(record);
+            List<String> records = Arrays.stream(keys)
+                    .map(key -> convertToStr(recordMap.get(key)))
+                    .collect(Collectors.toList());
+            printer.printRecord(records);
             printer.flush();
 
-        } catch (IOException ioe)
-        {
+        } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
@@ -141,32 +149,39 @@ public class CSVManager
      * @param csv target CSV File
      * @return true if record exists
      */
-    public boolean hasRecord(File csv)
-    {
-        try  (Stream<String> st = Files.lines(csv.toPath(), StandardCharsets.UTF_8)){
+    public boolean hasRecord(File csv) {
+        try (Stream<String> st = Files.lines(csv.toPath(), StandardCharsets.UTF_8)) {
             return st.count() > 1;
-            
-        } catch (Exception ioe)
-        {
+
+        } catch (Exception ioe) {
             ioe.printStackTrace();
             return false;
         }
     }
 
     public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user) {
-        File csv = this.prepareCSV(String.format(csvName, DateTimeUtil.convertEpochMilliToYYYYMMDD(fromEpochMilli)));
+        return this.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, user, Paths.get(tmpDirPath));
+    }
+
+    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user, Path workDirPath) {
+        final File csv = this.prepareCSV(
+                String.format(csvName, DateTimeUtil.convertEpochMilliToYYYYMMDD(fromEpochMilli)), workDirPath);
+        if (csv == null) {
+            return null;
+        }
+
         Long entryId = null;
         List<Map<String, Object>> auditLogs;
 
         do {
-            auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId, user);
+            auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId,
+                    user);
 
             if (auditLogs.isEmpty()) {
-                break;
+                return null;
             }
 
             auditLogs.forEach(entry -> this.addRecord(csv, entry));
-
             entryId = (long) auditLogs.get(auditLogs.size() - 1).get(KEY_ID) + 1;
 
         } while (auditLogs.size() == 100);
