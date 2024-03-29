@@ -21,6 +21,7 @@ package jp.ricksoft.auditlogbrowser.webscript;
  */
 
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -44,7 +45,10 @@ public class ExportStatusWebScript extends DeclarativeWebScript {
         model.put("exportStatus", handler.getProgress());
         model.put("processId", handler.getProcessId());
 
-        model.put("zipFileRef", handler.getZipFileRef().toString());
+        final NodeRef zipFileRef = handler.getZipFileRef();
+        if (zipFileRef != null) {
+            model.put("zipFileRef", zipFileRef.toString());
+        }
 
         return model;
     }

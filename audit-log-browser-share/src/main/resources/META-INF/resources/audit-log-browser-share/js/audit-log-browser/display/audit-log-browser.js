@@ -143,6 +143,7 @@ $(function () {
     
     $('#dl-in-progress').show();
     $('#dl-finish').hide();
+    $('#download-audit-log').prop('disabled', true);
 
     var downloadURL = "/DownloadAuditLogZip";
 
@@ -159,7 +160,15 @@ $(function () {
       return;
     }
 
-    var input = createDownloadParams(paramUser, paramContent, paramFromdate, paramFromtime, paramTodate, paramTotime);
+    var input = createDownloadParams(
+      paramUser, 
+      paramContent, 
+      paramFromdate, 
+      paramFromtime, 
+      paramTodate, 
+      paramTotime, 
+      AuditLogBrowser.processId
+    );
 
     AuditLogBrowser.isInProgress = true;
     Alfresco.util.Ajax.jsonPost({
@@ -167,7 +176,6 @@ $(function () {
       dataObj: input,
       successCallback: {
         fn: function (result) {
-          $('#dl-status-area').show();
           AuditLogBrowser.checkProcessId = setInterval(getExportStatus, 5000);
           console.log(result.json);
         },
@@ -388,9 +396,12 @@ function getExportStatus() {
         if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
           $('#dl-in-progress').hide();
           $('#dl-finish').show();
-          $('#dl-link-button')[0].setAttribute('onClick', 'window.open("' + Alfresco.constants.URL_PAGECONTEXT + 'document-details?nodeRef=' + result.json.zipFileRef+ '")');
+          if(result.json.zipFileRef){
+            $('#dl-link-button')[0].setAttribute('onClick', 'window.open("' + Alfresco.constants.URL_PAGECONTEXT + 'document-details?nodeRef=' + result.json.zipFileRef+ '")');
+          }
           clearInterval(AuditLogBrowser.checkProcessId);
           AuditLogBrowser.isInProgress = false;
+          $('#download-audit-log').prop('disabled', false);
         }
       },
       scope: this
@@ -398,6 +409,7 @@ function getExportStatus() {
     failureCallback: {
       fn: function (res) {
         console.log(res);
+        $('#download-audit-log').prop('disabled', false);
       },
       scope: this
     }
