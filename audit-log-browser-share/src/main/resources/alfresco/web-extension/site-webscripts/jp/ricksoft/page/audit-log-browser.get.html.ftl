@@ -83,8 +83,8 @@
         </span>
       </form>
     </div>
-    <div class="download status yui-skin-lightTheme" id="dl-status-area" style="display: none;">
-      <span id="dl-in-progress">
+    <div class="download status yui-skin-lightTheme" id="dl-status-area" >
+      <span id="dl-in-progress" style="display: none;">
         <img src="${url.context}/res/resources/audit-log-browser-share/image/bars-rotate-fade.svg"/>
         <p>${msg("message.download.status.inprogress")}</p>
       </span>
