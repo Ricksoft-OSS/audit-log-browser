@@ -79,6 +79,7 @@ alfresco-global.properties で以下の設定を変更・追加することが�
 
 ### Credit
 
+- Shogo Yamaguchi (yamaguchi.shogo@ricksoft.jp)
 - Yuuki Ebihara (ebihara.yuki@ricksoft.jp)
 
 ### License

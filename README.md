@@ -78,6 +78,7 @@ If you would like to request bug fixes and additional functions, please create I
 
 ### Credit
 
+- Shogo Yamaguchi (yamaguchi.shogo@ricksoft.jp)
 - Yuuki Ebihara (ebihara.yuki@ricksoft.jp)
 
 ### License
