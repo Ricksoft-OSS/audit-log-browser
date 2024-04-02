@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.ConcurrentMap;
 
-import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,10 +53,6 @@ import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 @Controller
 public class DownloadAuditLogZipHandler {
 
-    public static final String STATUS_IN_PROGRESS = "In Progress";
-    public static final String STATUS_FINISHED = "Finished";
-    public static final String STATUS_FAILURE = "Failure";
-
     private static final String SUFFIX_ON_DEMAND_FOLDER = "on-demand";
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
@@ -70,12 +66,23 @@ public class DownloadAuditLogZipHandler {
     private AuditLogManager auditLogManager;
     private RepositoryFolderManager repositoryFolderManager;
 
-    private String progress;
-    private String processId;
-    private NodeRef zipFileRef = null;
+    private ConcurrentMap<String, DownloadProcessInfo> dlProcessesInProgress = Maps.newConcurrentMap();
 
-    public NodeRef getZipFileRef() {
-        return zipFileRef;
+    public NodeRef getZipFileRef(String pid) {
+        final DownloadProcessInfo dpi = this.dlProcessesInProgress.get(pid);
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            return null;
+        }
+
+        return this.dlProcessesInProgress.get(pid).getZipFileRef();
+    }
+
+    public void removeProcessInfo(String pid) {
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            return;
+        }
+
+        this.dlProcessesInProgress.remove(pid);
     }
 
     public void setCsvManager(CSVManager csvManager) {
@@ -98,38 +105,44 @@ public class DownloadAuditLogZipHandler {
         this.repositoryFolderManager = repositoryFolderManager;
     }
 
-    public String getProgress() {
-        return this.progress;
+    public DownloadProgress getProgress(String pid) {
+        final DownloadProcessInfo dlInfo = dlProcessesInProgress.get(pid);
+
+        LOG.debug("in-prog.: {}", this.dlProcessesInProgress);
+
+        // When dl-process encounter any unexpected error
+        if (dlInfo == null) {
+            return DownloadProgress.STATUS_FAILURE;
+        }
+
+        // When dl-process is any expected exceptions
+        if (dlInfo.isFailed()) {
+            return DownloadProgress.STATUS_FAILURE;
+        }
+
+        // When dl-process is completed
+        if (dlInfo.getZipFileRef() != null) {
+            return DownloadProgress.STATUS_FINISHED;
+        }
+
+        // Others = in-progress
+        return DownloadProgress.STATUS_IN_PROGRESS;
     }
 
-    public void setProgress(String progress) {
-        this.progress = progress;
-    }
+    public void execExport(String fromDate, String fromTime, String toDate, String toTime, String user,
+                           String pid) {
 
-    public String getProcessId() {
-        return this.processId;
-    }
-
-    public void setProcessId(String processId) {
-        this.processId = processId;
-    }
-
-    public synchronized void execExport(String fromDate, String fromTime, String toDate, String toTime, String user) {
-
-        this.setProgress(STATUS_IN_PROGRESS);
-        this.setProcessId(String.valueOf(UUID.randomUUID()));
-        this.zipFileRef = null;
+        final DownloadProcessInfo dlProcess = new DownloadProcessInfo(pid);
+        this.dlProcessesInProgress.put(pid, dlProcess);
 
         Path workDir = null;
-
         try {
-            workDir = this.fileManager.createWorkDirInTmp(this.processId);
+            workDir = this.fileManager.createWorkDirInTmp(pid);
+            final File zip = this.zipManager.createBlankZip(pid);
 
-            final File zip = this.zipManager.createBlankZip(processId);
-
-            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, workDir);
+            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, workDir, dlProcess);
         } catch (IOException e) {
-            this.setProgress(STATUS_FAILURE);
+            dlProcess.setFailed(true);
             e.printStackTrace();
         } finally {
             if (workDir != null && workDir.toFile().exists()) {
@@ -151,13 +164,7 @@ public class DownloadAuditLogZipHandler {
      */
     @Async
     protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime,
-            String user) {
-        this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, null);
-    }
-
-    @Async
-    protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime,
-            String user, Path workDirPath) {
+                                      String user, Path workDirPath, DownloadProcessInfo processInfo) {
 
         final List<File> createdFileList = Lists.newArrayList();
         long start = prepareStartEpochMilli(fromDate, fromTime);
@@ -176,7 +183,7 @@ public class DownloadAuditLogZipHandler {
 
         final File zipFile = zipManager.prepareZip(zip, createdFileList.toArray(new File[0]));
         if (zipFile == null) {
-            this.setProgress(STATUS_FAILURE);
+            processInfo.setFailed(true);
             return;
         }
 
@@ -184,9 +191,8 @@ public class DownloadAuditLogZipHandler {
             final NodeRef auditRootFolder = repositoryFolderManager
                     .prepareNestedFolder(repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
             final NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder,
-                    new String[] { SUFFIX_ON_DEMAND_FOLDER });
-            this.zipFileRef = repositoryFolderManager.addContent(dateFolder, zip);
-
+                    new String[]{SUFFIX_ON_DEMAND_FOLDER});
+            processInfo.setZipFileRef(repositoryFolderManager.addContent(dateFolder, zip));
         } finally {
             try {
                 Files.deleteIfExists(zipFile.toPath());
@@ -195,7 +201,6 @@ public class DownloadAuditLogZipHandler {
             }
         }
 
-        this.setProgress(STATUS_FINISHED);
     }
 
     private long prepareStartEpochMilli(String date, String time) {
