@@ -18,6 +18,5 @@
  #L%
 -->
 {
-"exportStatus": "${exportStatus}",
-"processId": "${processId}"
+"exportStatus": "${exportStatus}"
 }
