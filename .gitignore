@@ -48,3 +48,4 @@ main.iml
 .idea
 .vscode
 *.iml
+audit-log-browser-platform/effective-pom.xml

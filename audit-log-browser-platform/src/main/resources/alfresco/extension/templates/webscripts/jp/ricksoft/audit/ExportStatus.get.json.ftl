@@ -21,5 +21,6 @@
 <#if zipFileRef??>
     "zipFileRef": "${zipFileRef}",
 </#if>
-"exportStatus": "${exportStatus}"
+"exportStatus": "${exportStatus}",
+"percentage": "${percentage}"
 }
