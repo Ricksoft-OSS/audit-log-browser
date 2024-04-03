@@ -18,6 +18,9 @@
  #L%
 -->
 {
+<#if zipFileRef??>
+    "zipFileRef": "${zipFileRef}",
+</#if>
 "exportStatus": "${exportStatus}",
-"processId": "${processId}"
+"percentage": "${percentage}"
 }

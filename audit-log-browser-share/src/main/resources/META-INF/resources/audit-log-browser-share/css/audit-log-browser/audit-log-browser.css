@@ -38,15 +38,17 @@
     margin-right: 10px;
 }
 
+#dl-status-area {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 .paging-button {
     text-align: center;
     margin-top: 10px;
 }
 
-#prev-page:disabled {
+.yui-skin-lightTheme .alf-primary-button.yui-button button:disabled, .yui-skin-lightTheme .alf-primary-button.yui-button a:disabled {
     background-color: #EEE;
 }
 
-#next-page:disabled {
-    background-color: #EEE;
-}

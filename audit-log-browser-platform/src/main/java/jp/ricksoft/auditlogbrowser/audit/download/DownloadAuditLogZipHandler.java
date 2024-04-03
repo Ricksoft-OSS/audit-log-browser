@@ -1,5 +1,28 @@
 package jp.ricksoft.auditlogbrowser.audit.download;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.concurrent.ConcurrentMap;
+
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Controller;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import jp.ricksoft.auditlogbrowser.NodeRef.RepositoryFolderManager;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -25,31 +48,57 @@ import jp.ricksoft.auditlogbrowser.file.CSVManager;
 import jp.ricksoft.auditlogbrowser.file.FileManager;
 import jp.ricksoft.auditlogbrowser.file.ZipManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Controller;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.UUID;
 
 @Controller
 public class DownloadAuditLogZipHandler {
 
-    public static final String STATUS_IN_PROGRESS = "In Progress";
-    public static final String STATUS_FINISHED = "Finished";
-    public static final String STATUS_FAILURE = "Failure";
+    private static final String SUFFIX_ON_DEMAND_FOLDER = "on-demand";
+
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
+
+    @Value("${AuditLogBrowser.schedule.backup.directory}")
+    private String dstFolderPath;
 
     private CSVManager csvManager;
     private ZipManager zipManager;
     private FileManager fileManager;
     private AuditLogManager auditLogManager;
+    private RepositoryFolderManager repositoryFolderManager;
 
-    private String progress;
-    private String processId;
+    private ConcurrentMap<String, DownloadProcessInfo> dlProcessesInProgress = Maps.newConcurrentMap();
+
+    public NodeRef getZipFileRef(String pid) {
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            return null;
+        }
+
+        return this.dlProcessesInProgress.get(pid).getZipFileRef();
+    }
+
+    public void removeProcessInfo(String pid) {
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            return;
+        }
+
+        this.dlProcessesInProgress.remove(pid);
+    }
+
+    public int getProgressPercentage(String pid) {
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            return 0;
+        }
+
+        final int total = this.dlProcessesInProgress.get(pid).getTotal();
+        final int created = this.dlProcessesInProgress.get(pid).getCreated();
+
+        LOG.debug("DL: {} / {}", created, total);
+
+        if (total == -1) {
+            return 0;
+        }
+
+        return 100 * created / total;
+    }
 
     public void setCsvManager(CSVManager csvManager) {
         this.csvManager = csvManager;
@@ -63,39 +112,61 @@ public class DownloadAuditLogZipHandler {
         this.fileManager = fileManager;
     }
 
-    public void setAuditLogManager(AuditLogManager auditLogManager)
-    {
+    public void setAuditLogManager(AuditLogManager auditLogManager) {
         this.auditLogManager = auditLogManager;
     }
 
-    public String getProgress() {
-        return this.progress;
+    public void setRepositoryFolderManager(RepositoryFolderManager repositoryFolderManager) {
+        this.repositoryFolderManager = repositoryFolderManager;
     }
 
-    public void setProgress(String progress) {
-        this.progress = progress;
+    public DownloadProgress getProgress(String pid) {
+        final DownloadProcessInfo dlInfo = dlProcessesInProgress.get(pid);
+
+        LOG.debug("in-prog.: {}", this.dlProcessesInProgress);
+
+        // When dl-process encounter any unexpected error
+        if (dlInfo == null) {
+            return DownloadProgress.STATUS_FAILURE;
+        }
+
+        // When dl-process is any expected exceptions
+        if (dlInfo.isFailed()) {
+            return DownloadProgress.STATUS_FAILURE;
+        }
+
+        // When dl-process is completed
+        if (dlInfo.getZipFileRef() != null) {
+            return DownloadProgress.STATUS_FINISHED;
+        }
+
+        // Others = in-progress
+        return DownloadProgress.STATUS_IN_PROGRESS;
     }
 
-    public String getProcessId() {
-        return this.processId;
-    }
+    public void execExport(String fromDate, String fromTime, String toDate, String toTime,
+            String user, String pid) {
 
-    public void setProcessId(String processId) {
-        this.processId = processId;
-    }
+        final DownloadProcessInfo dlProcess = new DownloadProcessInfo(pid);
+        this.dlProcessesInProgress.put(pid, dlProcess);
 
-
-    public void execExport(String fromDate, String fromTime, String toDate, String toTime, String user) {
-
-        this.setProgress(STATUS_IN_PROGRESS);
-        this.setProcessId(String.valueOf(UUID.randomUUID()));
-
+        Path workDir = null;
         try {
-            File zip = zipManager.createBlankZip(processId);
-            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user);
+            workDir = this.fileManager.createWorkDirInTmp(pid);
+            final File zip = this.zipManager.createBlankZip(pid);
+
+            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, workDir,
+                    dlProcess);
         } catch (IOException e) {
-            this.setProgress(STATUS_FAILURE);
+            dlProcess.setFailed(true);
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            LOG.info("Downloading process is interrupted. PID[{}]", pid);
+        } finally {
+            if (workDir != null && workDir.toFile().exists()) {
+                this.fileManager.deleteAllFiles(workDir.toFile());
+                workDir.toFile().delete();
+            }
         }
 
     }
@@ -108,29 +179,69 @@ public class DownloadAuditLogZipHandler {
      * @param toDate   End date of audit log acquisition period
      * @param toTime   End time of audit log acquisition period
      * @param user     Username
+     * @throws InterruptedException
      */
     @Async
-    protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate, String toTime, String user) {
+    protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate,
+            String toTime, String user, Path workDirPath, DownloadProcessInfo processInfo)
+            throws InterruptedException {
 
+        final List<File> createdFileList = Lists.newArrayList();
         long start = prepareStartEpochMilli(fromDate, fromTime);
-
         long end = prepareEndEpochMilli(toDate, toTime);
-        long dayEnd;
 
-        while (start <= end)
-        {
-            dayEnd = Math.min(DateTimeUtil.getEndOfDateEpochMilli(start), end);
+        this.threadSafeAccessToProgressContainer(processInfo.getProcessId())
+                .setTotal(auditLogManager.getTotalAuditEntriesNum(start, end, user));
 
-            // Get Daily AuditLogs
-            csvManager.createOneDayAuditLogCSV(start, dayEnd, user);
+        while (start <= end) {
+            final long dayEnd = Math.min(DateTimeUtil.getEndOfDateEpochMilli(start), end);
+
+            final int dayTotal = auditLogManager.getTotalAuditEntriesNum(start, dayEnd, user);
+
+            if (dayTotal > 0) {
+                // Get Daily AuditLogs
+                final File auditLogCSV = csvManager.createOneDayAuditLogCSV(start, dayEnd, user, workDirPath);
+                if (auditLogCSV != null) {
+                    createdFileList.add(auditLogCSV);
+                }
+
+                this.threadSafeAccessToProgressContainer(processInfo.getProcessId())
+                        .addCreatedNum(dayTotal);
+            }
 
             start = dayEnd + 1;
-
         }
 
-        zipManager.prepareZip(zip, fileManager.getTmpDir().listFiles());
+        final File zipFile = zipManager.prepareZip(zip, createdFileList.toArray(new File[0]));
+        if (zipFile == null) {
+            processInfo.setFailed(true);
+            return;
+        }
 
-        this.setProgress(STATUS_FINISHED);
+        try {
+            final NodeRef auditRootFolder = repositoryFolderManager.prepareNestedFolder(
+                    repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
+            final NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder,
+                    new String[] { SUFFIX_ON_DEMAND_FOLDER });
+            processInfo.setZipFileRef(repositoryFolderManager.addContent(dateFolder, zip));
+        } finally {
+            try {
+                Files.deleteIfExists(zipFile.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private DownloadProcessInfo threadSafeAccessToProgressContainer(String pid)
+            throws InterruptedException {
+        if (this.dlProcessesInProgress.get(pid) == null) {
+            throw new InterruptedException();
+        }
+
+        return this.dlProcessesInProgress.get(pid);
+
     }
 
     private long prepareStartEpochMilli(String date, String time) {
@@ -139,7 +250,8 @@ public class DownloadAuditLogZipHandler {
         } else if (StringUtils.isBlank(time)) {
             return DateTimeUtil.convertEpochMilli(LocalDate.parse(date).atStartOfDay());
         } else {
-            return DateTimeUtil.convertEpochMilli(LocalDate.parse(date).atTime(LocalTime.parse(time)));
+            return DateTimeUtil
+                    .convertEpochMilli(LocalDate.parse(date).atTime(LocalTime.parse(time)));
         }
     }
 
@@ -147,9 +259,11 @@ public class DownloadAuditLogZipHandler {
         if (StringUtils.isBlank(date)) {
             return DateTimeUtil.convertEpochMilli(LocalDateTime.now());
         } else if (StringUtils.isBlank(time)) {
-            return DateTimeUtil.convertEpochMilli(LocalDate.parse(date).plusDays(1).atStartOfDay()) - 1;
+            return DateTimeUtil.convertEpochMilli(LocalDate.parse(date).plusDays(1).atStartOfDay())
+                    - 1;
         } else {
-            return DateTimeUtil.convertEpochMilli(LocalDate.parse(date).atTime(LocalTime.parse(time)).plusMinutes(1)) - 1;
+            return DateTimeUtil.convertEpochMilli(
+                    LocalDate.parse(date).atTime(LocalTime.parse(time)).plusMinutes(1)) - 1;
         }
     }
 }

@@ -81,11 +81,20 @@
             <a href="#delAuditModal" class="modal">${msg("button.form.delete")}</a>
           </span>
         </span>
-        <div class="download status" id="dl-status-area" style="display: none;">
-          <div id="dl-in-progress">${msg("message.download.status.inprogress")}</div>
-          <div id="dl-finish" style="display: none;">${msg("message.download.status.finish")}</div>
-        </div>
       </form>
+    </div>
+    <div class="download status yui-skin-lightTheme" id="dl-status-area" >
+      <span id="dl-in-progress" style="display: none;">
+        <img src="${url.context}/res/resources/audit-log-browser-share/image/bars-rotate-fade.svg"/>
+        <p>${msg("message.download.status.inprogress")}</p>
+        <p id="dl-in-progress-percentage">0%</p>
+      </span>
+      <span id="dl-finish" style="display: none;">
+        <span class="yui-button">
+          <button id="dl-link-button" class="first-child">DL link</button>
+        </span>
+        <p>${msg("message.download.status.finish")}</p>
+      </span>
     </div>
     <div id="audit-log-table" class="table table-bordered"></div>
     <div class="yui-skin-lightTheme paging-button">
