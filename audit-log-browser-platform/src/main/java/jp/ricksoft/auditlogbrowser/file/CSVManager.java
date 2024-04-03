@@ -16,9 +16,6 @@ import java.util.stream.Stream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -43,13 +40,13 @@ import jp.ricksoft.auditlogbrowser.audit.AuditLogManager;
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 
 public class CSVManager {
-    private static final char CSV_DELIMITER = ',';
-    private static final char CSV_ENCAPSULATOR = '"';
-    private static final char CSV_COMMENT_START = '#';
+    // private static final char CSV_DELIMITER = ',';
+    // private static final char CSV_ENCAPSULATOR = '"';
+    // private static final char CSV_COMMENT_START = '#';
 
     private static final String KEY_ID = "id";
 
-    private static final Logger LOG = LoggerFactory.getLogger(CSVManager.class);
+    // private static final Logger LOG = LoggerFactory.getLogger(CSVManager.class);
 
     private String tmpDirPath;
     private String csvName;
@@ -76,16 +73,6 @@ public class CSVManager {
 
     public void setAuditLogManager(AuditLogManager auditLogManager) {
         this.auditLogManager = auditLogManager;
-    }
-
-    /**
-     * Prepare csv file.
-     *
-     * @param name csv file name
-     * @return csv file
-     */
-    private File prepareCSV(String name) {
-        return this.prepareCSV(name, Paths.get(this.tmpDirPath));
     }
 
     /**

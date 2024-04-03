@@ -1,5 +1,12 @@
 package jp.ricksoft.auditlogbrowser.webscript;
 
+import java.io.IOException;
+
+import org.springframework.extensions.webscripts.AbstractWebScript;
+import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+import org.springframework.extensions.webscripts.WebScriptResponse;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -21,13 +28,6 @@ package jp.ricksoft.auditlogbrowser.webscript;
  */
 
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.extensions.webscripts.*;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ClearProcessWebScript extends AbstractWebScript {
 
@@ -40,7 +40,6 @@ public class ClearProcessWebScript extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest req, WebScriptResponse res) throws IOException {
         final String pid = req.getParameter("pid");
-        final DownloadProgress dlp = handler.getProgress(pid);
 
         if (pid == null || "".equals(pid)) {
             res.setStatus(Status.STATUS_BAD_REQUEST);
