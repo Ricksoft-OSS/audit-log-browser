@@ -1,5 +1,13 @@
 package jp.ricksoft.auditlogbrowser.webscript;
 
+import java.util.HashMap;
+import java.util.Map;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.springframework.extensions.webscripts.Cache;
+import org.springframework.extensions.webscripts.DeclarativeWebScript;
+import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -22,14 +30,6 @@ package jp.ricksoft.auditlogbrowser.webscript;
 
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.DeclarativeWebScript;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExportStatusWebScript extends DeclarativeWebScript {
 
@@ -60,6 +60,7 @@ public class ExportStatusWebScript extends DeclarativeWebScript {
             model.put("zipFileRef", zipFileRef.toString());
         }
         model.put("exportStatus", dlp);
+        model.put("percentage", handler.getProgressPercentage(pid));
 
         return model;
     }

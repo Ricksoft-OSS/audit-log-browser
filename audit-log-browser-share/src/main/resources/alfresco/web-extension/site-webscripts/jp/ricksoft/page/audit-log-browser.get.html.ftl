@@ -87,6 +87,7 @@
       <span id="dl-in-progress" style="display: none;">
         <img src="${url.context}/res/resources/audit-log-browser-share/image/bars-rotate-fade.svg"/>
         <p>${msg("message.download.status.inprogress")}</p>
+        <p id="dl-in-progress-percentage">0%</p>
       </span>
       <span id="dl-finish" style="display: none;">
         <span class="yui-button">

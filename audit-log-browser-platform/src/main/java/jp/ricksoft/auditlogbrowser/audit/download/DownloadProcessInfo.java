@@ -26,10 +26,17 @@ public class DownloadProcessInfo {
     private String processId;
     private NodeRef zipFileRef;
     private boolean failed;
+    private int total;
+    private int created;
+
+    // private static final Logger LOG =
+    // LoggerFactory.getLogger(DownloadProcessInfo.class);
 
     public DownloadProcessInfo(String processId) {
         this.processId = processId;
         this.failed = false;
+        this.total = -1;
+        this.created = 0;
     }
 
     public String getProcessId() {
@@ -50,6 +57,22 @@ public class DownloadProcessInfo {
 
     public void setFailed(boolean failed) {
         this.failed = failed;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public int getTotal() {
+        return this.total;
+    }
+
+    public void addCreatedNum(int num) {
+        this.created += num;
+    }
+
+    public int getCreated() {
+        return created;
     }
 
     public String toString() {

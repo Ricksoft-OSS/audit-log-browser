@@ -425,6 +425,9 @@ function getExportStatus() {
                     AuditLogBrowser.isInProgress = false;
                     $('#download-audit-log').prop('disabled', false);
                 }
+                else{
+                    $('#dl-in-progress-percentage').text(result.json.percentage + '%');
+                }
             },
             scope: this
         },
