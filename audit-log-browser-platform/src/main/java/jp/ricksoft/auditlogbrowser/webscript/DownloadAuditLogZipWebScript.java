@@ -1,5 +1,16 @@
 package jp.ricksoft.auditlogbrowser.webscript;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
+import org.json.JSONObject;
+import org.springframework.extensions.webscripts.Cache;
+import org.springframework.extensions.webscripts.DeclarativeWebScript;
+import org.springframework.extensions.webscripts.Status;
+import org.springframework.extensions.webscripts.WebScriptRequest;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -21,13 +32,6 @@ package jp.ricksoft.auditlogbrowser.webscript;
  */
 
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
-import org.springframework.extensions.webscripts.Cache;
-import org.springframework.extensions.webscripts.DeclarativeWebScript;
-import org.springframework.extensions.webscripts.Status;
-import org.springframework.extensions.webscripts.WebScriptRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
@@ -46,12 +50,35 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String toDate = req.getParameter("toDate");
         String toTime = req.getParameter("toTime");
         String user = req.getParameter("user");
+        String pid = req.getParameter("pid");
 
-        handler.execExport(fromDate, fromTime, toDate, toTime, user);
+        final Object body = req.parseContent();
+        if (body instanceof JSONObject) {
+            final JSONObject bodyJson = (JSONObject) body;
+            final Set<String> keys = bodyJson.keySet();
 
-        Map<String, Object> model = new HashMap<>();
-        model.put("exportStatus", handler.getProgress());
-        model.put("processId", handler.getProcessId());
+            fromDate = keys.contains("fromDate") ? bodyJson.getString("fromDate") : fromDate;
+            fromTime = keys.contains("fromTime") ? bodyJson.getString("fromTime") : fromTime;
+            toDate = keys.contains("toDate") ? bodyJson.getString("toDate") : toDate;
+            toTime = keys.contains("toTime") ? bodyJson.getString("toTime") : toTime;
+            user = keys.contains("user") ? bodyJson.getString("user") : user;
+            pid = keys.contains("pid") ? bodyJson.getString("pid") : pid;
+        }
+
+        final Map<String, Object> model = new HashMap<>();
+        // check mandatory parameter.
+        if (pid == null || "".equals(pid)) {
+            status.setCode(Status.STATUS_BAD_REQUEST, "pid is Mandatory.");
+            status.setRedirect(true);
+
+            return model;
+        }
+
+        if (!DownloadProgress.STATUS_IN_PROGRESS.equals(handler.getProgress(pid))) {
+            handler.execExport(fromDate, fromTime, toDate, toTime, user, pid);
+        }
+
+        model.put("exportStatus", handler.getProgress(pid).message());
 
         return model;
     }

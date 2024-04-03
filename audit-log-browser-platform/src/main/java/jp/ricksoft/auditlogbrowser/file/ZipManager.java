@@ -1,5 +1,19 @@
 package jp.ricksoft.auditlogbrowser.file;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -21,17 +35,6 @@ package jp.ricksoft.auditlogbrowser.file;
  */
 
 import com.google.common.io.Files;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.stream.Stream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class ZipManager {
     private static final Logger LOG = LoggerFactory.getLogger(ZipManager.class);
@@ -60,9 +63,7 @@ public class ZipManager {
         }
     }
 
-
-    private void addEntries(ZipOutputStream zos, File[] files)
-    {
+    private void addEntries(ZipOutputStream zos, File[] files) {
         Stream.of(files)
                 .forEach(file -> {
                     try {
@@ -81,7 +82,11 @@ public class ZipManager {
      * @throws IOException
      */
     public File createBlankZip(String suffix) throws IOException {
-        File zip = new File(tmpDirPath, zipName + suffix + ".zip");
+        return this.createBlankZip(Paths.get(this.tmpDirPath), suffix);
+    }
+
+    public File createBlankZip(Path directoryToCreate, String suffix) throws IOException {
+        File zip = new File(directoryToCreate.toFile(), zipName + "_" + suffix + ".zip");
         zip.createNewFile();
         return zip;
     }

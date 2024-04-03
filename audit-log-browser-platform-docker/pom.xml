@@ -10,7 +10,7 @@
     <parent>
         <groupId>jp.ricksoft</groupId>
         <artifactId>audit-log-browser</artifactId>
-        <version>2.1.0</version>
+        <version>2.2.0</version>
     </parent>
 
     <properties>
@@ -20,12 +20,12 @@
         <dependency>
             <groupId>jp.ricksoft</groupId>
             <artifactId>audit-log-browser-platform</artifactId>
-            <version>2.1.0</version>
+            <version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>jp.ricksoft</groupId>
             <artifactId>audit-log-browser-integration-tests</artifactId>
-            <version>2.1.0</version>
+            <version>2.2.0</version>
             <scope>test</scope>
             <classifier>tests</classifier>
         </dependency>
