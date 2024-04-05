@@ -116,7 +116,7 @@ public class CSVManager {
      */
     private void addRecord(File csv, Map<String, Object> recordMap) {
 
-        try (FileWriter csvWriter = new FileWriter(csv, true);
+        try (FileWriter csvWriter = new FileWriter(csv, StandardCharsets.UTF_8, true);
                 CSVPrinter printer = new CSVPrinter(csvWriter, CSVFormat.EXCEL)) {
 
             List<String> records = Arrays.stream(keys)
