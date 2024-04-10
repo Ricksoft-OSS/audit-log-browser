@@ -1,15 +1,19 @@
 package jp.ricksoft.auditlogbrowser.webscript;
 
-import java.util.HashMap;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
+
+import com.google.common.collect.Maps;
 
 /*-
  * #%L
@@ -32,10 +36,13 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
  */
 
 import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
+import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
 
 public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
     private DownloadAuditLogZipHandler handler;
+
+    private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipHandler.class);
 
     public void setHandler(DownloadAuditLogZipHandler handler) {
         this.handler = handler;
@@ -49,8 +56,10 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         String fromTime = req.getParameter("fromTime");
         String toDate = req.getParameter("toDate");
         String toTime = req.getParameter("toTime");
-        String user = req.getParameter("user");
+        String user = req.getParameter("createdByUser");
         String pid = req.getParameter("pid");
+        String valuesKey = req.getParameter("valuesKey");
+        String valuesValue = req.getParameter("valuesValue");
 
         final Object body = req.parseContent();
         if (body instanceof JSONObject) {
@@ -61,11 +70,14 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
             fromTime = keys.contains("fromTime") ? bodyJson.getString("fromTime") : fromTime;
             toDate = keys.contains("toDate") ? bodyJson.getString("toDate") : toDate;
             toTime = keys.contains("toTime") ? bodyJson.getString("toTime") : toTime;
-            user = keys.contains("user") ? bodyJson.getString("user") : user;
+            user = keys.contains("createdByUser") ? bodyJson.getString("createdByUser") : user;
             pid = keys.contains("pid") ? bodyJson.getString("pid") : pid;
+            valuesKey = keys.contains("valuesKey") ? bodyJson.getString("valuesKey") : valuesKey;
+            valuesValue = keys.contains("valuesValue") ? bodyJson.getString("valuesValue") : valuesValue;
         }
 
-        final Map<String, Object> model = new HashMap<>();
+        final Map<String, Object> model = Maps.newHashMap();
+        final Map<String, Serializable> searchValues = Maps.newHashMap();
         // check mandatory parameter.
         if (pid == null || "".equals(pid)) {
             status.setCode(Status.STATUS_BAD_REQUEST, "pid is Mandatory.");
@@ -74,8 +86,12 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
             return model;
         }
 
+        if (valuesKey != null && valuesValue != null) {
+            searchValues.put(valuesKey, valuesValue);
+        }
+
         if (!DownloadProgress.STATUS_IN_PROGRESS.equals(handler.getProgress(pid))) {
-            handler.execExport(fromDate, fromTime, toDate, toTime, user, pid);
+            handler.execExport(fromDate, fromTime, toDate, toTime, user, searchValues, pid);
         }
 
         model.put("exportStatus", handler.getProgress(pid).message());
