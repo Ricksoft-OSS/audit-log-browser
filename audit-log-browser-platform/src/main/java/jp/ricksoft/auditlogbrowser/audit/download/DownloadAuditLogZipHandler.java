@@ -2,12 +2,15 @@ package jp.ricksoft.auditlogbrowser.audit.download;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -145,7 +148,7 @@ public class DownloadAuditLogZipHandler {
     }
 
     public void execExport(String fromDate, String fromTime, String toDate, String toTime,
-            String user, String pid) {
+            String user, Map<String, Serializable> searchValues, String pid) {
 
         final DownloadProcessInfo dlProcess = new DownloadProcessInfo(pid);
         this.dlProcessesInProgress.put(pid, dlProcess);
@@ -155,7 +158,7 @@ public class DownloadAuditLogZipHandler {
             workDir = this.fileManager.createWorkDirInTmp(pid);
             final File zip = this.zipManager.createBlankZip(pid);
 
-            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, workDir,
+            this.createAuditLogsZip(zip, fromDate, fromTime, toDate, toTime, user, searchValues, workDir,
                     dlProcess);
         } catch (IOException e) {
             dlProcess.setFailed(true);
@@ -183,7 +186,8 @@ public class DownloadAuditLogZipHandler {
      */
     @Async
     protected void createAuditLogsZip(File zip, String fromDate, String fromTime, String toDate,
-            String toTime, String user, Path workDirPath, DownloadProcessInfo processInfo)
+            String toTime, String user, Map<String, Serializable> searchValue, Path workDirPath,
+            DownloadProcessInfo processInfo)
             throws InterruptedException {
 
         final List<File> createdFileList = Lists.newArrayList();
@@ -191,16 +195,18 @@ public class DownloadAuditLogZipHandler {
         long end = prepareEndEpochMilli(toDate, toTime);
 
         this.threadSafeAccessToProgressContainer(processInfo.getProcessId())
-                .setTotal(auditLogManager.getTotalAuditEntriesNum(start, end, user));
+                .setTotal(auditLogManager.getTotalAuditEntriesNum(start, end, user,
+                        searchValue));
 
         while (start <= end) {
             final long dayEnd = Math.min(DateTimeUtil.getEndOfDateEpochMilli(start), end);
-
-            final int dayTotal = auditLogManager.getTotalAuditEntriesNum(start, dayEnd, user);
+            final int dayTotal = auditLogManager.getTotalAuditEntriesNum(start, dayEnd,
+                    user, searchValue);
 
             if (dayTotal > 0) {
                 // Get Daily AuditLogs
-                final File auditLogCSV = csvManager.createOneDayAuditLogCSV(start, dayEnd, user, workDirPath);
+                final File auditLogCSV = csvManager.createOneDayAuditLogCSV(start, dayEnd, user, searchValue,
+                        workDirPath);
                 if (auditLogCSV != null) {
                     createdFileList.add(auditLogCSV);
                 }
@@ -209,6 +215,7 @@ public class DownloadAuditLogZipHandler {
                         .addCreatedNum(dayTotal);
             }
 
+            LOG.trace("created zip : {} - {}", new Date(start), new Date(dayEnd));
             start = dayEnd + 1;
         }
 
