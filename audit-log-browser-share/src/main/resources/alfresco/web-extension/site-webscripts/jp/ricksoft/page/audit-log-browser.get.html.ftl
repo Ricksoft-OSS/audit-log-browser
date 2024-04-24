@@ -27,7 +27,7 @@
   <#-- JavaScript Dependencies -->
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/jquery.min.js"/>
   <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/lib/modaal.min.js"/>
-  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/audit-log-browser/display/audit-log-browser.js"/>
+  <@script type="text/javascript" src="${url.context}/res/resources/audit-log-browser-share/js/audit-log-browser/display/audit-log-browser.min.js"/>
 </@>
 <@processJsonModel />
 <@markup id="html">

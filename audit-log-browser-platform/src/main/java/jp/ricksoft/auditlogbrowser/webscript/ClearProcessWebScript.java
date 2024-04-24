@@ -1,7 +1,8 @@
 package jp.ricksoft.auditlogbrowser.webscript;
 
 import java.io.IOException;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptRequest;
@@ -31,6 +32,8 @@ import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
 
 public class ClearProcessWebScript extends AbstractWebScript {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ClearProcessWebScript.class);
+
     private DownloadAuditLogZipHandler handler;
 
     public void setHandler(DownloadAuditLogZipHandler handler) {
@@ -42,6 +45,7 @@ public class ClearProcessWebScript extends AbstractWebScript {
         final String pid = req.getParameter("pid");
 
         if (pid == null || "".equals(pid)) {
+            LOG.error("pid is mandatory");
             res.setStatus(Status.STATUS_BAD_REQUEST);
             return;
         }
