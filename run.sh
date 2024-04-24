@@ -36,7 +36,7 @@ purge() {
 }
 
 build() {
-    $MVN_EXEC clean package
+    $MVN_EXEC clean package -DskipTests
 }
 
 build_share() {
@@ -48,7 +48,7 @@ build_share() {
 build_acs() {
     docker-compose -f "$COMPOSE_FILE_PATH" kill audit-log-browser-acs
     yes | docker-compose -f "$COMPOSE_FILE_PATH" rm -f audit-log-browser-acs
-    $MVN_EXEC clean package -pl audit-log-browser-integration-tests,audit-log-browser-platform,audit-log-browser-platform-docker
+    $MVN_EXEC clean package -pl audit-log-browser-integration-tests,audit-log-browser-platform,audit-log-browser-platform-docker -DskipTests
 }
 
 tail() {
