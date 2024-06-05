@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.ricksoft</groupId>
     <artifactId>audit-log-browser</artifactId>
-    <version>2.2.0</version>
+    <version>2.2.1</version>
     <name>Audit Log Browser</name>
     <description>Browsing audit logs Add-on.</description>
     <packaging>pom</packaging>
@@ -20,7 +20,7 @@
 
     <properties>
         <!-- Alfresco Maven Plugin version to use -->
-        <alfresco.sdk.version>4.5.0</alfresco.sdk.version>
+        <alfresco.sdk.version>4.8.0</alfresco.sdk.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scm.url.base>https://github.com/Ricksoft-OSS/audit-log-browser</scm.url.base>
@@ -28,22 +28,15 @@
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
         <alfresco.bomDependencyArtifactId>acs-packaging</alfresco.bomDependencyArtifactId>
-        <alfresco.platform.version>7.4.0</alfresco.platform.version>
+        <alfresco.platform.version>23.2.1</alfresco.platform.version>
         <alfresco.platform.docker.user>alfresco</alfresco.platform.docker.user>
-        <alfresco.share.version>17.137</alfresco.share.version>
-        <alfresco.share.docker.version>7.4.0</alfresco.share.docker.version>
+        <alfresco.share.version>23.2.0.72</alfresco.share.version>
+        <alfresco.share.docker.version>23.2.1</alfresco.share.docker.version>
 
         <!-- Docker images -->
         <docker.acs.image>quay.io/alfresco/alfresco-content-repository</docker.acs.image>
         <docker.share.image>alfresco/alfresco-share</docker.share.image>
-        <keystore.settings>-Dencryption.keystore.type=JCEKS
-            -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding
-            -Dencryption.keyAlgorithm=AES
-            -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore
-            -Dmetadata-keystore.password=mp6yc0UD9e
-            -Dmetadata-keystore.aliases=metadata
-            -Dmetadata-keystore.metadata.password=oKIWzVdEdA
-            -Dmetadata-keystore.metadata.algorithm=AES
+        <keystore.settings>-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding -Dencryption.keyAlgorithm=AES -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=AES
         </keystore.settings>
 
         <!-- JRebel Hot reloading of classpath stuff and web resource stuff -->
@@ -124,11 +117,6 @@
                  NOTE: It defaults to the latest version this SDK pom has been tested with,
                        but alfresco version can/should be overridden in your project's pom
             -->
-            <!-- <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-core</artifactId>
-                <version>2.3.0.1</version>
-            </dependency> -->
             <dependency>
                 <groupId>${alfresco.groupId}</groupId>
                 <artifactId>${alfresco.bomDependencyArtifactId}</artifactId>
@@ -208,7 +196,7 @@
                     <version>3.1.0</version>
                     <configuration>
                         <encoding>UTF-8</encoding>
-                        <nonFilteredFileExtensions> <!-- jpg, jpeg, gif, bmp and png are added automatically -->
+                        <nonFilteredFileExtensions>                            <!-- jpg, jpeg, gif, bmp and png are added automatically -->
                             <nonFilteredFileExtension>ftl</nonFilteredFileExtension>
                             <nonFilteredFileExtension>acp</nonFilteredFileExtension>
                             <nonFilteredFileExtension>svg</nonFilteredFileExtension>
@@ -241,12 +229,6 @@
                     <artifactId>jrebel-maven-plugin</artifactId>
                     <version>${jrebel.version}</version>
                 </plugin>
-
-                <!--                <plugin>-->
-                <!--                    <groupId>org.zeroturnaround</groupId>-->
-                <!--                    <artifactId>jrebel-maven-plugin</artifactId>-->
-                <!--                    <version>${jrebel.version}</version>-->
-                <!--                </plugin>-->
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -357,55 +339,65 @@
                 </executions>
             </plugin>
 
-            <!-- Compress JavaScript files and store as *-min.js -->
+            <!-- Compress JavaScript files and store as *.min.js -->
             <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>yuicompressor-maven-plugin</artifactId>
-                <version>1.5.1</version>
+                <groupId>com.github.blutorange</groupId>
+                <artifactId>closure-compiler-maven-plugin</artifactId>
+                <version>2.28.0</version>
                 <executions>
                     <!-- Compress the JS files under the assembly folder -->
                     <execution>
                         <id>compress-assembly</id>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>compress</goal>
+                            <goal>minify</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/assembly/web</sourceDirectory>
-                            <outputDirectory>${project.basedir}/src/main/assembly/web</outputDirectory>
+                            <baseSourceDir>${project.basedir}/src/main/assembly</baseSourceDir>
+                            <baseTargetDir>${project.basedir}/src/main/assembly</baseTargetDir>
+                            <sourceDir>web</sourceDir>
+                            <targetDir>web</targetDir>
+                            <skipMerge>true</skipMerge>
+                            <includes>
+                                <include>**/*.js</include>
+                            </includes>
                             <excludes>
                                 <exclude>**/webscripts/**</exclude>
                                 <exclude>**/site-webscripts/**</exclude>
                                 <exclude>**/META-INF/**</exclude>
                                 <exclude>**/*.lib.js</exclude>
                                 <exclude>**/*.css</exclude>
-                                <exclude>**/*min.js</exclude>
-                                <exclude>**/*-min.js</exclude>
-                                <exclude>**/*min.css</exclude>
-                                <exclude>**/*-min.css</exclude>
+                                <exclude>**/*.min.js</exclude>
+                                <exclude>**/*.min.css</exclude>
                             </excludes>
                             <force>true</force>
-                            <jswarn>false</jswarn>
                         </configuration>
                     </execution>
                     <!-- Compress the JS files under the resources folder -->
                     <execution>
                         <id>compress-resources</id>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>compress</goal>
+                            <goal>minify</goal>
                         </goals>
                         <configuration>
+                            <baseSourceDir>${project.basedir}/src/main</baseSourceDir>
+                            <baseTargetDir>${project.basedir}/src/main</baseTargetDir>
+                            <sourceDir>resources</sourceDir>
+                            <targetDir>resources</targetDir>
+                            <skipMerge>true</skipMerge>
+                            <includes>
+                                <include>**/*.js</include>
+                            </includes>
                             <excludes>
                                 <exclude>**/webscripts/**</exclude>
                                 <exclude>**/site-webscripts/**</exclude>
                                 <exclude>**/*.lib.js</exclude>
                                 <exclude>**/*.css</exclude>
-                                <exclude>**/*-min.js</exclude>
-                                <exclude>**/*min.js</exclude>
-                                <exclude>**/*-min.css</exclude>
-                                <exclude>**/*min.css</exclude>
+                                <exclude>**/*.min.js</exclude>
+                                <exclude>**/*.min.css</exclude>
                             </excludes>
                             <force>true</force>
-                            <jswarn>false</jswarn>
                         </configuration>
                     </execution>
                 </executions>
@@ -444,41 +436,6 @@
                     <alwaysGenerate>true</alwaysGenerate>
                 </configuration>
             </plugin>
-
-            <!-- Hot reloading with JRebel -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.zeroturnaround</groupId>-->
-            <!--                <artifactId>jrebel-maven-plugin</artifactId>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>generate-rebel-xml</id>-->
-            <!--                        <phase>process-resources</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>generate</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    &lt;!&ndash; For more information about how to configure JRebel plugin see:-->
-            <!--                         http://manuals.zeroturnaround.com/jrebel/standalone/maven.html#maven-rebel-xml &ndash;&gt;-->
-            <!--                    <classpath>-->
-            <!--                        <fallback>all</fallback>-->
-            <!--                        <resources>-->
-            <!--                            <resource>-->
-            <!--                                <directory>${project.build.outputDirectory}</directory>-->
-            <!--                                <directory>${project.build.testOutputDirectory}</directory>-->
-            <!--                            </resource>-->
-            <!--                        </resources>-->
-            <!--                    </classpath>-->
-
-            <!--                    &lt;!&ndash;-->
-            <!--                      alwaysGenerate - default is false-->
-            <!--                      If 'false' - rebel.xml is generated if timestamps of pom.xml and the current rebel.xml file are not equal.-->
-            <!--                      If 'true' - rebel.xml will always be generated-->
-            <!--                    &ndash;&gt;-->
-            <!--                    <alwaysGenerate>true</alwaysGenerate>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 
@@ -558,8 +515,12 @@
         </repository>
         <!-- Alfresco Enterprise Edition Artifacts, put username/pwd for server in settings.xml -->
         <repository>
-           <id>alfresco-private-repository</id>
-           <url>https://artifacts.alfresco.com/nexus/content/groups/private</url>
+            <id>alfresco-private-repository</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/private</url>
+        </repository>
+        <repository>
+            <id>alfresco-internal</id>
+            <url>https://artifacts.alfresco.com/nexus/content/groups/internal</url>
         </repository>
     </repositories>
 

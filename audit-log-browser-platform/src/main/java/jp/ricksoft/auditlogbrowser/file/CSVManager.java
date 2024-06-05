@@ -3,6 +3,7 @@ package jp.ricksoft.auditlogbrowser.file;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -116,7 +117,7 @@ public class CSVManager {
      */
     private void addRecord(File csv, Map<String, Object> recordMap) {
 
-        try (FileWriter csvWriter = new FileWriter(csv, true);
+        try (FileWriter csvWriter = new FileWriter(csv, StandardCharsets.UTF_8, true);
                 CSVPrinter printer = new CSVPrinter(csvWriter, CSVFormat.EXCEL)) {
 
             List<String> records = Arrays.stream(keys)
@@ -146,11 +147,13 @@ public class CSVManager {
         }
     }
 
-    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user) {
-        return this.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, user, Paths.get(tmpDirPath));
+    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user,
+            Map<String, Serializable> searchValues) {
+        return this.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, user, searchValues, Paths.get(tmpDirPath));
     }
 
-    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user, Path workDirPath) {
+    public File createOneDayAuditLogCSV(long fromEpochMilli, long toEpochMilli, String user,
+            Map<String, Serializable> searchValues, Path workDirPath) {
         final File csv = this.prepareCSV(
                 String.format(csvName, DateTimeUtil.convertEpochMilliToYYYYMMDD(fromEpochMilli)), workDirPath);
         if (csv == null) {
@@ -162,7 +165,7 @@ public class CSVManager {
 
         do {
             auditLogs = auditLogManager.getAuditLogs(fromEpochMilli, toEpochMilli, entryId,
-                    user);
+                    user, searchValues);
 
             if (auditLogs.isEmpty()) {
                 return null;
