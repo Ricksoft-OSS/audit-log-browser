@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.alfresco.service.cmr.audit.AuditQueryParameters;
 import org.alfresco.service.cmr.audit.AuditService;
 import org.alfresco.service.cmr.audit.AuditService.AuditQueryCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jp.ricksoft.auditlogbrowser.util.DateTimeUtil;
 
 /*-
@@ -36,6 +40,8 @@ public class AuditLogManager {
     private static final String KEY_ID = "id";
     private static final String KEY_TIME = "time";
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuditLogManager.class);
+
     private String appName;
     private AuditService auditService;
 
@@ -48,8 +54,8 @@ public class AuditLogManager {
     }
 
     public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId,
-            String user) {
-        return this.getAuditLogs(fromTime, toTime, fromId, user, 100);
+            String user, Map<String, Serializable> searchValues) {
+        return this.getAuditLogs(fromTime, toTime, fromId, user, searchValues, 100);
     }
 
     /**
@@ -58,14 +64,14 @@ public class AuditLogManager {
      * @author ebihara.yuki
      */
     public List<Map<String, Object>> getAuditLogs(Long fromTime, Long toTime, Long fromId,
-            String user, int maxUnit) {
+            String user, Map<String, Serializable> searchValues, int maxUnit) {
 
         // Audit log query callback function setting.
         MyAuditQueryCallback callback = new MyAuditQueryCallback();
 
         // Execute Query
         auditService.auditQuery(callback,
-                this.buildAuditQueryParameters(fromTime, toTime, fromId, user), maxUnit);
+                this.buildAuditQueryParameters(fromTime, toTime, fromId, user, searchValues), maxUnit);
 
         return callback.getEntries();
     }
@@ -73,7 +79,7 @@ public class AuditLogManager {
     public LocalDateTime getOldestLoggedDateTime() {
         LocalDateTime oldestLocalDateTime = LocalDateTime.now();
 
-        List<Map<String, Object>> entries = this.getAuditLogs(null, null, null, null, 1);
+        List<Map<String, Object>> entries = this.getAuditLogs(null, null, null, null, null, 1);
         if (entries != null && !entries.isEmpty()) {
             oldestLocalDateTime = (LocalDateTime) entries.get(0).get(KEY_TIME);
         }
@@ -84,7 +90,7 @@ public class AuditLogManager {
      * Delete Audit Logs（Need to set period）
      *
      * @param fromTime FromDate to EpochMilli
-     * @param toTime ToDate to EpochMilli
+     * @param toTime   ToDate to EpochMilli
      */
     public void delete(Long fromTime, Long toTime) {
         auditService.clearAudit(appName, fromTime, toTime);
@@ -93,13 +99,14 @@ public class AuditLogManager {
     /**
      * Get the total number of audit logs
      */
-    public int getTotalAuditEntriesNum(Long fromTime, Long toTime, String user) {
+    public int getTotalAuditEntriesNum(Long fromTime, Long toTime, String user,
+            Map<String, Serializable> searchValues) {
         return this.auditService.getAuditEntriesCountByAppAndProperties(this.appName,
-                this.buildAuditQueryParameters(fromTime, toTime, null, user));
+                this.buildAuditQueryParameters(fromTime, toTime, null, user, searchValues));
     }
 
     private AuditQueryParameters buildAuditQueryParameters(Long fromTime, Long toTime, Long fromId,
-            String user) {
+            String user, Map<String, Serializable> searchValues) {
         // Query Condition Setting
         AuditQueryParameters params = new AuditQueryParameters();
 
@@ -116,6 +123,15 @@ public class AuditLogManager {
         if (user != null && !user.isEmpty()) {
             params.setUser(user);
         }
+        if (searchValues != null && !searchValues.isEmpty()) {
+            searchValues.forEach((k, v) -> {
+                params.addSearchKey(k, v);
+            });
+        }
+
+        LOG.trace("{} / {} / {} / {} / {}", params.getFromId(), params.getFromTime(), params.getToTime(),
+                params.getUser(), params.getSearchKeyValues());
+
         params.setForward(true);
 
         return params;
@@ -130,7 +146,8 @@ public class AuditLogManager {
         }
 
         /**
-         * Determines whether the value argument needs to be set when the handleAuditEntry method is
+         * Determines whether the value argument needs to be set when the
+         * handleAuditEntry method is
          * called from this callback.
          *
          * @return Need to set 'values' argument, set true.
@@ -143,9 +160,9 @@ public class AuditLogManager {
         /**
          * Process audit entry error
          *
-         * @param entryId Audit entry ID
+         * @param entryId  Audit entry ID
          * @param errorMsg Error Message
-         * @param error Exception cause of error
+         * @param error    Exception cause of error
          * @return if continue, return true. if not, false.
          */
         @Override
@@ -158,9 +175,9 @@ public class AuditLogManager {
          *
          * @param entryId Audit entry ID
          * @param appName Audit app name
-         * @param user Audit action user
-         * @param time Audit time
-         * @param values other audit value
+         * @param user    Audit action user
+         * @param time    Audit time
+         * @param values  other audit value
          * @return if continue, return true. if not, false.
          */
         @Override

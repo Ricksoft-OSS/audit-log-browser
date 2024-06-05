@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 services:
   audit-log-browser-share:
     image: alfresco-share-audit-log-browser:development
@@ -19,11 +19,12 @@ services:
       context: ../../../audit-log-browser-platform-docker/target
     environment:
       JAVA_TOOL_OPTIONS: "${keystore.settings}"
-      JAVA_OPTS: "
+      JAVA_OPTS: '
         -Dsolr.secureComms=secret
         -Dsolr.sharedSecret=secret
-        -Dmessaging.broker.url=\"failover:(nio://audit-log-browser-activemq:61616)?timeout=3000&jms.useCompression=true\"
-        "
+        -Dfile.encoding=UTF-8
+        -Dmessaging.broker.url="failover:(nio://audit-log-browser-activemq:61616)?timeout=3000&jms.useCompression=true"
+        '
       CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
     ports:
       - "${acs.port}:8080"
@@ -59,13 +60,13 @@ services:
       - audit-log-browser-ass-volume:/opt/alfresco-search-services/contentstore
       - audit-log-browser-ass-volume:/opt/alfresco-search-services/data
   audit-log-browser-activemq:
-      image: alfresco/alfresco-activemq:5.16.1
-      mem_limit: 1g
-      ports:
-        - 8161:8161 # Web Console
-        - 5672:5672 # AMQP
-        - 61616:61616 # OpenWire
-        - 61613:61613 # STOMP
+    image: alfresco/alfresco-activemq:5.16.1
+    mem_limit: 1g
+    ports:
+      - 8161:8161 # Web Console
+      - 5672:5672 # AMQP
+      - 61616:61616 # OpenWire
+      - 61613:61613 # STOMP
 volumes:
   audit-log-browser-acs-volume:
     external: true

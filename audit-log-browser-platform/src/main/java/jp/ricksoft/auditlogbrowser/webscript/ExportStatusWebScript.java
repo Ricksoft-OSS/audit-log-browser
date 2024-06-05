@@ -2,6 +2,7 @@ package jp.ricksoft.auditlogbrowser.webscript;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
@@ -59,7 +60,7 @@ public class ExportStatusWebScript extends DeclarativeWebScript {
             handler.removeProcessInfo(pid);
             model.put("zipFileRef", zipFileRef.toString());
         }
-        model.put("exportStatus", dlp);
+        model.put("exportStatus", dlp.message());
         model.put("percentage", handler.getProgressPercentage(pid));
 
         return model;

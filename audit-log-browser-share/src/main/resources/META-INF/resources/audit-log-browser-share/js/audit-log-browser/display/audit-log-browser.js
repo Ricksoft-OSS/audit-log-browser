@@ -324,7 +324,7 @@ function createDownloadParams(user, contentName, fromDate, fromTime, toDate, toT
 
     // Content
     if (contentName) {
-        params.valuesKey = "'/alb-share-access/transaction/nodename'";
+        params.valuesKey = "/alb-share-access/transaction/nodename";
         params.valuesValue = contentName;
     }
 

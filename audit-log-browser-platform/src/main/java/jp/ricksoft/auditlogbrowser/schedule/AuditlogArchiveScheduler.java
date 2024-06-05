@@ -120,7 +120,7 @@ public class AuditlogArchiveScheduler {
                 long fromEpochMilli = DateUtil.generateFromEpochMilli(targetDate);
                 long toEpochMilli = DateUtil.generateToEpochMilli(targetDate);
 
-                File csv = csvManager.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, null, workDir);
+                File csv = csvManager.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, null, null, workDir);
 
                 targetDate = targetDate.plusDays(1);
 
