@@ -19,17 +19,17 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import com.google.common.collect.Maps;
 
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadProcessInfo;
-import jp.ricksoft.auditlogbrowser.webscript.ClearProcessWebScript;
+import jp.ricksoft.auditlogbrowser.alfresco.webscript.ClearProcessWebScript;
+import jp.ricksoft.auditlogbrowser.service.manager.download.DownloadProcessInfo;
+import jp.ricksoft.auditlogbrowser.service.DownloadProcessService;
 
 @RunWith(value = AlfrescoTestRunner.class)
 public class ClearProcessWebScriptIT extends AbstractAlfrescoIT {
 
     private static final Logger logger = LoggerFactory.getLogger(ClearProcessWebScriptIT.class);
 
-    private DownloadAuditLogZipHandler mockedHandler = (DownloadAuditLogZipHandler) getApplicationContext()
-            .getBean("jp.ricksoft.audit.handler");
+    private DownloadProcessService downloadProcessManager = (DownloadProcessService) getApplicationContext()
+            .getBean("jp.ricksoft.downloadProcessManager");
     private ClearProcessWebScript ws = (ClearProcessWebScript) getApplicationContext()
             .getBean("webscript.jp.ricksoft.audit.ClearProcess.post");
 
@@ -45,9 +45,9 @@ public class ClearProcessWebScriptIT extends AbstractAlfrescoIT {
         dlProcessesInProgress.put("abcd", new DownloadProcessInfo("abcd"));
 
         try {
-            Field field = DownloadAuditLogZipHandler.class.getDeclaredField("dlProcessesInProgress");
+            Field field = DownloadProcessService.class.getDeclaredField("dlProcessesInProgress");
             field.setAccessible(true);
-            field.set(mockedHandler, dlProcessesInProgress);
+            field.set(downloadProcessManager, dlProcessesInProgress);
             ws.execute(req, res);
             assertEquals(0L, dlProcessesInProgress.size());
         } catch (NoSuchFieldException e) {

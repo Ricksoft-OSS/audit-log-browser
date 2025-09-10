@@ -22,5 +22,7 @@
     "zipFileRef": "${zipFileRef}",
 </#if>
 "exportStatus": "${exportStatus}",
-"percentage": "${percentage}"
+"percentage": "${percentage}",
+"total": "${total}",
+"created": "${created}"
 }

@@ -27,18 +27,18 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadAuditLogZipHandler;
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadProcessInfo;
-import jp.ricksoft.auditlogbrowser.audit.download.DownloadProgress;
-import jp.ricksoft.auditlogbrowser.webscript.ExportStatusWebScript;
+import jp.ricksoft.auditlogbrowser.alfresco.webscript.ExportStatusWebScript;
+import jp.ricksoft.auditlogbrowser.service.manager.download.DownloadProcessInfo;
+import jp.ricksoft.auditlogbrowser.service.DownloadProcessService;
+import jp.ricksoft.auditlogbrowser.service.manager.download.DownloadProgress;
 
 @RunWith(value = AlfrescoTestRunner.class)
 public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
 
     private static final Logger logger = LoggerFactory.getLogger(ExportStatusWebScriptTest.class);
 
-    private DownloadAuditLogZipHandler handler = (DownloadAuditLogZipHandler) getApplicationContext()
-            .getBean("jp.ricksoft.audit.handler");
+    private DownloadProcessService downloadProcessManager = (DownloadProcessService) getApplicationContext()
+            .getBean("jp.ricksoft.downloadProcessManager");
 
     private ExportStatusWebScript ws = (ExportStatusWebScript) getApplicationContext()
             .getBean("webscript.jp.ricksoft.audit.ExportStatus.get");
@@ -74,7 +74,7 @@ public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
         final String pid = "efgh";
         final DownloadProcessInfo dlProcInfo = new DownloadProcessInfo(pid);
         dlProcInfo.setTotal(100);
-        dlProcInfo.addCreatedNum(30);
+        dlProcInfo.setCreated(30);
 
         Object retObj = null;
         try {
@@ -103,7 +103,7 @@ public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
         final String dummyRefString = "dummy://dummy/dummy";
         final DownloadProcessInfo dlProcInfo = new DownloadProcessInfo(pid);
         dlProcInfo.setTotal(100);
-        dlProcInfo.addCreatedNum(100);
+        dlProcInfo.setCreated(100);
         dlProcInfo.setZipFileRef(new NodeRef(dummyRefString));
 
         Object retObj = null;
@@ -123,7 +123,7 @@ public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
 
         assertEquals(dummyRefString, zipFileRef);
         assertSame(DownloadProgress.STATUS_FINISHED.message(), exportStatus);
-        assertSame(0, percentage);
+        assertSame(100, percentage);
     }
 
     @Test
@@ -189,11 +189,11 @@ public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
         infoList.forEach(info -> dlProcessesInProgress.put(info.getProcessId(), info));
 
         try {
-            Field field = DownloadAuditLogZipHandler.class.getDeclaredField("dlProcessesInProgress");
+            Field field = DownloadProcessService.class.getDeclaredField("dlProcessesInProgress");
             Method method = ExportStatusWebScript.class.getDeclaredMethod("executeImpl",
                     WebScriptRequest.class, Status.class, Cache.class);
             field.setAccessible(true);
-            field.set(handler, dlProcessesInProgress);
+            field.set(downloadProcessManager, dlProcessesInProgress);
 
             method.setAccessible(true);
             return method.invoke(ws, req, status, null);
@@ -203,7 +203,7 @@ public class ExportStatusWebScriptTest extends AbstractAlfrescoIT {
             e.printStackTrace();
             throw e;
         } finally {
-            handler.removeProcessInfo(pid);
+            downloadProcessManager.removeProcessInfo(pid);
         }
     }
 }

@@ -145,6 +145,7 @@ $(function () {
 
         $('#dl-in-progress').show();
         $('#dl-finish').hide();
+        $('#dl-in-progress-percentage').text('0%');
         $('#download-audit-log').prop('disabled', true);
 
         AuditLogBrowser.pid = crypto.randomUUID();
@@ -416,6 +417,7 @@ function getExportStatus() {
             fn: function (result) {
                 console.log(result.json.exportStatus);
                 if (result.json.exportStatus === 'Finished' || result.json.exportStatus === 'Failure') {
+                    $('#dl-in-progress-percentage').text('100%');
                     $('#dl-in-progress').hide();
                     $('#dl-finish').show();
                     if (result.json.zipFileRef) {
@@ -424,8 +426,7 @@ function getExportStatus() {
                     clearInterval(AuditLogBrowser.checkProcessId);
                     AuditLogBrowser.isInProgress = false;
                     $('#download-audit-log').prop('disabled', false);
-                }
-                else{
+                } else {
                     $('#dl-in-progress-percentage').text(result.json.percentage + '%');
                 }
             },

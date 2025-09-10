@@ -7,7 +7,7 @@ import org.alfresco.rad.test.AlfrescoTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import jp.ricksoft.auditlogbrowser.schedule.AuditlogArchiveScheduler;
+import jp.ricksoft.auditlogbrowser.alfresco.schedule.AuditlogArchiveScheduler;
 
 @RunWith(value = AlfrescoTestRunner.class)
 public class AuditlogArchiveSchedulerTest extends AbstractAlfrescoIT {
@@ -19,6 +19,7 @@ public class AuditlogArchiveSchedulerTest extends AbstractAlfrescoIT {
         try {
             scheduler.execute();
         } catch (Exception e) {
+            e.printStackTrace();
             fail(e.getMessage());
         }
     }

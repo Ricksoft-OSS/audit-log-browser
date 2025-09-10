@@ -27,7 +27,7 @@
     <!-- The bootstrap-context.xml file is used for patch definitions, importers, 
 		 workflow, and loading custom content models.  -->
     <bean id="jp.ricksoft.InitConfigModuleComponent"
-          class="jp.ricksoft.auditlogbrowser.setup.InitConfigModuleComponent"
+          class="jp.ricksoft.auditlogbrowser.alfresco.setup.InitConfigModuleComponent"
           parent="module.baseComponent">
 
         <!-- Module Details -->
