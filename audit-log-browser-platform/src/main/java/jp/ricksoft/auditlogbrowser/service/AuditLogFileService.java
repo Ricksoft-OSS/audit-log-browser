@@ -45,8 +45,9 @@ import java.util.List;
 import java.util.Map;
 
 public class AuditLogFileService {
+    public static final String SUFFIX_ON_DEMAND_FOLDER = "on-demand";
+
     private static final Logger LOG = LoggerFactory.getLogger(AuditLogFileService.class);
-    private static final String SUFFIX_ON_DEMAND_FOLDER = "on-demand";
 
     @Value("${AuditLogBrowser.schedule.backup.directory}")
     private String dstFolderPath;
@@ -83,13 +84,24 @@ public class AuditLogFileService {
         this.repositoryFolderManager = repositoryFolderManager;
     }
 
-    public void exportAuditLogsZipToRepo(String fromDate, String fromTime, String toDate, String toTime,
-                                         String user, Map<String, Serializable> searchValues, String pid) {
+    public void exportAuditLogsZipToRepo(String fromDateStr, String fromTimeStr, String toDateStr, String toTimeStr,
+                                         String user, Map<String, Serializable> searchValues, String[] repoPaths, String pid) {
 
-        // TODO: longを貰えるようにする
-        // TODO: 格納先のパス名とファイル名を受け取れるようにする
-        final long start = prepareStartEpochMilli(fromDate, fromTime);
-        final long end = prepareEndEpochMilli(toDate, toTime);
+        final long start = this.prepareStartEpochMilli(fromDateStr, fromTimeStr);
+        final long end = this.prepareEndEpochMilli(toDateStr, toTimeStr);
+
+        this.exportAuditLogsZipToRepo(start, end, user, searchValues, repoPaths, pid);
+
+    }
+
+    public void exportAuditLogsZipToRepo(long start, long end,
+                                         String user, Map<String, Serializable> searchValues, String[] repoPaths, String pid) {
+
+        // For schedule executor
+        // Do nothing when retention period exceeds a length of term contains audit logs.
+        if(start > end){
+            return;
+        }
 
         this.downloadProcessManager.registerDownloadProcess(pid);
 
@@ -100,13 +112,13 @@ public class AuditLogFileService {
 
             // NOTE: THIS METHOD CALL IS HEAVY
             // get audit logs csv
-            final List<File> createdFileList = this.createAuditLogsZip(start, end, user, searchValues, workDir, pid);
+            final List<File> createdFileList = this.createAuditLogsCsv(start, end, user, searchValues, workDir, pid);
 
             // zip csv files
             zipFile = zipManager.copyFilesToZip(this.zipManager.createBlankZip(pid), createdFileList);
 
             // register a zipped files to ACS repo
-            final NodeRef zipRefRegistered = this.registerAuditLogsZip(zipFile, new String[]{SUFFIX_ON_DEMAND_FOLDER});
+            final NodeRef zipRefRegistered = this.registerAuditLogsZip(zipFile, repoPaths);
 
             // finish process and record NodeRef
             this.downloadProcessManager.setZipFileRef(pid, zipRefRegistered);
@@ -127,13 +139,22 @@ public class AuditLogFileService {
         }
     }
 
+    public LocalDateTime getOldestLoggedDateTime(){
+        return this.auditLogManager.getOldestLoggedDateTime();
+    }
+
+    public void deleteAuditLogs(long start, long end){
+        this.auditLogManager.delete(start, end);
+    }
+
+
     /**
      * Acquire audit log and create csv file.
      *
      * @param user Username
      * @throws InterruptedException
      */
-    private List<File> createAuditLogsZip(long start, long end,
+    private List<File> createAuditLogsCsv(long start, long end,
                                           String user, Map<String, Serializable> searchValue,
                                           Path workDirPath, String pid)
             throws InterruptedException {
@@ -158,6 +179,7 @@ public class AuditLogFileService {
                                 user,
                                 searchValue
                         ),
+                        // CSV File name
                         String.format(csvManager.getCsvName(), DateTimeUtil.convertEpochMilliToYYYYMMDD(start)),
                         workDirPath, pid);
                 if (auditLogCSV != null) {

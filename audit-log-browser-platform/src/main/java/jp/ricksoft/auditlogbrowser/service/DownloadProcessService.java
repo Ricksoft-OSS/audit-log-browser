@@ -93,16 +93,28 @@ public class DownloadProcessService {
     }
 
     public void registerDownloadProcess(String pid) {
+        if(pid == null || pid.isEmpty()){
+            return;
+        }
+
         final DownloadProcessInfo dlProcess = new DownloadProcessInfo(pid);
         this.dlProcessesInProgress.put(pid, dlProcess);
     }
 
     public void setProcessIsFailed(String pid) {
+        if(pid == null || pid.isEmpty()){
+            return;
+        }
+
         this.dlProcessesInProgress.get(pid).setFailed(true);
 
     }
 
     public void setTotalNum(String pid, int total) throws InterruptedException {
+        if(pid == null || pid.isEmpty()){
+            return;
+        }
+
         if (!isActiveProcess(pid)) {
             throw new InterruptedException();
         }
@@ -110,6 +122,10 @@ public class DownloadProcessService {
     }
 
     public void addCreatedNum(String pid, int createdNum) throws InterruptedException {
+        if(pid == null || pid.isEmpty()){
+            return;
+        }
+
         if (!isActiveProcess(pid)) {
             throw new InterruptedException();
         }
@@ -117,6 +133,10 @@ public class DownloadProcessService {
     }
 
     public void setZipFileRef(String pid, NodeRef zipFileRef) throws InterruptedException {
+        if(pid == null || pid.isEmpty()){
+            return;
+        }
+
         if (!isActiveProcess(pid)) {
             throw new InterruptedException();
         }
@@ -124,6 +144,9 @@ public class DownloadProcessService {
     }
 
     public boolean isActiveProcess(String pid) {
+        if(pid == null || pid.isEmpty()){
+            return false;
+        }
         return this.dlProcessesInProgress.containsKey(pid);
     }
 

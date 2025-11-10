@@ -97,7 +97,16 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
         }
 
         if (!DownloadProgress.STATUS_IN_PROGRESS.equals(downloadProcessManager.getProgress(pid))) {
-            auditLogFileService.exportAuditLogsZipToRepo(fromDate, fromTime, toDate, toTime, user, searchValues, pid);
+            auditLogFileService.exportAuditLogsZipToRepo(
+                    fromDate,
+                    fromTime,
+                    toDate,
+                    toTime,
+                    user,
+                    searchValues,
+                    new String[]{AuditLogFileService.SUFFIX_ON_DEMAND_FOLDER},
+                    pid
+            );
         }
 
         model.put("exportStatus", downloadProcessManager.getProgress(pid).message());

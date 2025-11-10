@@ -24,11 +24,6 @@
 
     <!-- Exec Scheduled Job -->
     <bean id="jp.ricksoft.schedule.AuditlogArchiveScheduler" class="jp.ricksoft.auditlogbrowser.alfresco.schedule.AuditlogArchiveScheduler">
-        <property name="auditLogManager" ref="jp.ricksoft.auditLogManager"/>
-        <property name="csvManager" ref="jp.ricksoft.csvManager"/>
-        <property name="fileManager" ref="jp.ricksoft.fileManager"/>
-        <property name="repositoryFolderManager" ref="jp.ricksoft.repositoryFolderManager"/>
-        <property name="zipManager" ref="jp.ricksoft.zipManager"/>
         <property name="auditLogFileService" ref="jp.ricksoft.audit.service" />
     </bean>
 

@@ -1,4 +1,5 @@
 package jp.ricksoft.auditlogbrowser.alfresco.schedule;
+
 /*-
  * #%L
  * Audit Log Browser Platform JAR Module
@@ -38,126 +39,85 @@ import jp.ricksoft.auditlogbrowser.util.DateUtil;
 
 public class AuditlogArchiveScheduler {
 
-    private static final String NAME_DAILYZIP = "Auditlogs_%s.zip";
-    private static final String MSG_NO_BACKUP_DIRECTORY = "No backup directory set.";
-    private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+  private static final String NAME_DAILYZIP = "Auditlogs_%s.zip";
+  private static final String MSG_NO_BACKUP_DIRECTORY = "No backup directory set.";
+  private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
+  private static final Logger LOG = LoggerFactory.getLogger(AuditlogArchiveScheduler.class);
 
-    @Value("${AuditLogBrowser.schedule.delete.enabled}")
-    private boolean isDeleteEnabled;
-    @Value("${AuditLogBrowser.schedule.archive.storage.period}")
-    private int retentionPeriod;
-    @Value("${AuditLogBrowser.schedule.backup.directory}")
-    private String dstFolderPath;
+  @Value("${AuditLogBrowser.schedule.delete.enabled}")
+  private boolean isDeleteEnabled;
 
-    private AuditLogFileService auditLogFileService;
+  @Value("${AuditLogBrowser.schedule.archive.storage.period}")
+  private int retentionPeriod;
 
-    public void setAuditLogFileService(AuditLogFileService auditLogFileService) {
-        this.auditLogFileService = auditLogFileService;
+  private AuditLogFileService auditLogFileService;
+
+  public void setAuditLogFileService(AuditLogFileService auditLogFileService) {
+    this.auditLogFileService = auditLogFileService;
+  }
+
+  /** Executer implementation */
+  public void execute() {
+
+    LOG.debug("============ Start Schedule Archive.");
+
+    final String processId = String.valueOf(UUID.randomUUID());
+    Path workDir = null;
+
+    // from
+    LocalDate fromDate = this.auditLogFileService.getOldestLoggedDateTime().toLocalDate();
+    // to
+    LocalDate toDate = LocalDate.now().minusDays(retentionPeriod);
+    LOG.debug("============ FromDate: {}", fromDate);
+    LOG.debug("============ ToDate: {}", toDate);
+
+    LocalDate targetDate = fromDate;
+
+    while (targetDate.isBefore(toDate)) {
+      LOG.debug("============ Loop Start {} ============", targetDate);
+
+      String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
+      long fromEpochMilli = DateUtil.generateFromEpochMilli(targetDate);
+      long toEpochMilli = DateUtil.generateToEpochMilli(targetDate);
+
+      targetDate = targetDate.plusDays(1);
+      String zipName = String.format(NAME_DAILYZIP, targetDateStr);
+
+      this.auditLogFileService.exportAuditLogsZipToRepo(
+          fromEpochMilli,
+          toEpochMilli,
+          null,
+          null,
+          targetDateStr.split("-"),
+          // set PID blank when called by scheduled jobs.
+          "");
+
+      LOG.debug("============ Loop End ============");
     }
 
-    /**
-     * Executer implementation
-     */
-    public void execute() {
-
-        LOG.debug("============ Start Schedule Archive.");
-
-        final String processId = String.valueOf(UUID.randomUUID());
-        Path workDir = null;
-
-        try {
-            // No backup directory set.
-            if (dstFolderPath == null || dstFolderPath.isEmpty()) {
-                throw new AlfrescoRuntimeException(MSG_NO_BACKUP_DIRECTORY);
-            }
-
-//            workDir = fileManager.createWorkDirInTmp(processId);
-
-            // from
-            LocalDate fromDate = auditLogManager.getOldestLoggedDateTime().toLocalDate();
-            // to
-            LocalDate toDate = LocalDate.now().minusDays(retentionPeriod);
-
-            LOG.debug("============ FromDate: {}", fromDate);
-            LOG.debug("============ ToDate: {}", toDate);
-
-            // Need to prepare folder for Backup data.
-            NodeRef auditRootFolder = repositoryFolderManager
-                    .prepareNestedFolder(repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
-            LocalDate targetDate = fromDate;
-
-            while (targetDate.isBefore(toDate)) {
-                LOG.debug("============ Loop Start {} ============", targetDate);
-
-                String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
-                long fromEpochMilli = DateUtil.generateFromEpochMilli(targetDate);
-                long toEpochMilli = DateUtil.generateToEpochMilli(targetDate);
-
-                File csv = this.auditLogFileService.createOneDayAuditLogCSV(fromEpochMilli, toEpochMilli, null, null,
-                        workDir, UUID.randomUUID().toString());
-
-                targetDate = targetDate.plusDays(1);
-
-                // If there is only a header line, subsequent processing is not performed.
-                if (csv == null || !csv.exists() || !csvManager.hasRecord(csv)) {
-                    LOG.debug("============ There is no data found: {} ============", targetDateStr);
-                    continue;
-                }
-
-                NodeRef dateFolder = repositoryFolderManager.prepareNestedFolder(auditRootFolder,
-                        targetDateStr.split("-"));
-                String zipName = String.format(NAME_DAILYZIP, targetDateStr);
-
-                if (repositoryFolderManager.isExist(dateFolder, zipName)) {
-                    continue;
-                }
-
-                // for Zip
-                File[] csvs = {csv};
-
-                File zip = zipManager.createBlankZip(workDir, targetDateStr);
-                zipManager.prepareZip(zip, csvs);
-                repositoryFolderManager.addContent(dateFolder, zip);
-
-                LOG.debug("============ Loop End ============");
-
-            }
-
-            if (isDeleteEnabled) {
-                this.cleanUp(fromDate, toDate);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } finally {
-            if (workDir != null && workDir.toFile().exists()) {
-                this.fileManager.deleteAllFiles(workDir.toFile());
-                workDir.toFile().delete();
-            }
-        }
-
-        LOG.debug("============ Finish Schedule Archive.");
-
+    if (isDeleteEnabled) {
+      this.cleanUp(fromDate, toDate);
     }
 
-    /**
-     * @param fromDate Delete start DateTime.
-     * @param toDate   Delete end DateTime.
-     */
-    private void cleanUp(LocalDate fromDate, LocalDate toDate) {
-        LOG.debug("============ Delete old audit log start");
-        // Even if you delete old logs, there is no problem
-        LOG.debug("============ fromDate: {}", fromDate);
-        LOG.debug("============ toDate: {}", toDate);
+    LOG.debug("============ Finish Schedule Archive.");
+  }
 
-        long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
-        long toEpochMilli = DateUtil.generateToEpochMilli(toDate);
+  /**
+   * @param fromDate Delete start DateTime.
+   * @param toDate Delete end DateTime.
+   */
+  private void cleanUp(LocalDate fromDate, LocalDate toDate) {
+    LOG.debug("============ Delete old audit log start");
+    // Even if you delete old logs, there is no problem
+    LOG.debug("============ fromDate: {}", fromDate);
+    LOG.debug("============ toDate: {}", toDate);
 
-        auditLogManager.delete(fromEpochMilli, toEpochMilli);
+    long fromEpochMilli = DateUtil.generateFromEpochMilli(fromDate);
+    long toEpochMilli = DateUtil.generateToEpochMilli(toDate);
 
-        LOG.debug("============ Delete old audit log end");
-    }
+    this.auditLogFileService.deleteAuditLogs(fromEpochMilli, toEpochMilli);
+
+    LOG.debug("============ Delete old audit log end");
+  }
 }
