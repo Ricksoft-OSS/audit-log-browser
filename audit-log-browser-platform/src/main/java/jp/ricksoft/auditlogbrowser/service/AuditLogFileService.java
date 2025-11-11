@@ -85,17 +85,19 @@ public class AuditLogFileService {
     }
 
     public void exportAuditLogsZipToRepo(String fromDateStr, String fromTimeStr, String toDateStr, String toTimeStr,
-                                         String user, Map<String, Serializable> searchValues, String[] repoPaths, String pid) {
+                                         String user, Map<String, Serializable> searchValues, String[] repoPaths,
+                                         String zipFileName, String pid) {
 
         final long start = this.prepareStartEpochMilli(fromDateStr, fromTimeStr);
         final long end = this.prepareEndEpochMilli(toDateStr, toTimeStr);
 
-        this.exportAuditLogsZipToRepo(start, end, user, searchValues, repoPaths, pid);
+        this.exportAuditLogsZipToRepo(start, end, user, searchValues, repoPaths, zipFileName, pid);
 
     }
 
     public void exportAuditLogsZipToRepo(long start, long end,
-                                         String user, Map<String, Serializable> searchValues, String[] repoPaths, String pid) {
+                                         String user, Map<String, Serializable> searchValues, String[] repoPaths,
+                                         String zipFileName, String pid) {
 
         // For schedule executor
         // Do nothing when retention period exceeds a length of term contains audit logs.
@@ -115,7 +117,7 @@ public class AuditLogFileService {
             final List<File> createdFileList = this.createAuditLogsCsv(start, end, user, searchValues, workDir, pid);
 
             // zip csv files
-            zipFile = zipManager.copyFilesToZip(this.zipManager.createBlankZip(pid), createdFileList);
+            zipFile = zipManager.copyFilesToZip(this.zipManager.createBlankZip(zipFileName), createdFileList);
 
             // register a zipped files to ACS repo
             final NodeRef zipRefRegistered = this.registerAuditLogsZip(zipFile, repoPaths);
@@ -145,6 +147,20 @@ public class AuditLogFileService {
 
     public void deleteAuditLogs(long start, long end){
         this.auditLogManager.delete(start, end);
+    }
+
+    /** return false when target folder contains any archived log file having same name. **/
+    public boolean prepareArchiveStoreFolder(String[] targetPath, String fileName){
+        final NodeRef auditRootFolder = repositoryFolderManager.prepareNestedFolder(
+                repositoryFolderManager.getCompanyHomeNodeRef(), dstFolderPath.split("/"));
+
+        final NodeRef archiveStoreFolder = this.repositoryFolderManager.prepareNestedFolder(
+                auditRootFolder,
+                targetPath
+        );
+
+        return this.repositoryFolderManager.isExist(archiveStoreFolder, fileName);
+
     }
 
 

@@ -21,15 +21,12 @@ package jp.ricksoft.auditlogbrowser.alfresco.schedule;
  */
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.UUID;
 
-import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +36,7 @@ import jp.ricksoft.auditlogbrowser.util.DateUtil;
 
 public class AuditlogArchiveScheduler {
 
-  private static final String NAME_DAILYZIP = "Auditlogs_%s.zip";
+//  private static final String NAME_DAILYZIP = "Auditlogs_%s.zip";
   private static final String MSG_NO_BACKUP_DIRECTORY = "No backup directory set.";
   private static final DateTimeFormatter FORMAT_DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -50,6 +47,12 @@ public class AuditlogArchiveScheduler {
 
   @Value("${AuditLogBrowser.schedule.archive.storage.period}")
   private int retentionPeriod;
+
+  @Value("${AuditLogBrowser.daily.zip.name}")
+  private String dailyZipFileName;
+
+  @Value("${AuditLogBrowser.debug}")
+  private boolean debug;
 
   private AuditLogFileService auditLogFileService;
 
@@ -62,8 +65,14 @@ public class AuditlogArchiveScheduler {
 
     LOG.debug("============ Start Schedule Archive.");
 
+    // Retention periods < 1 is NOT RECOMMENDED because it can cause unexpected behaviour.
+    // If you must set the parameter as it, you should execute this as debug mode.
+    if(!debug && retentionPeriod < 1){
+        LOG.error("Setting a retention period less than 1 is not permitted.: {}", retentionPeriod);
+        return;
+    }
+
     final String processId = String.valueOf(UUID.randomUUID());
-    Path workDir = null;
 
     // from
     LocalDate fromDate = this.auditLogFileService.getOldestLoggedDateTime().toLocalDate();
@@ -74,7 +83,8 @@ public class AuditlogArchiveScheduler {
 
     LocalDate targetDate = fromDate;
 
-    while (targetDate.isBefore(toDate)) {
+    // NOTE: "!A.isAfter(B)" and "A.isBefore(B)" is not equilibrate
+    while (!targetDate.isAfter(toDate)) {
       LOG.debug("============ Loop Start {} ============", targetDate);
 
       String targetDateStr = targetDate.format(FORMAT_DATE.withResolverStyle(ResolverStyle.STRICT));
@@ -82,16 +92,26 @@ public class AuditlogArchiveScheduler {
       long toEpochMilli = DateUtil.generateToEpochMilli(targetDate);
 
       targetDate = targetDate.plusDays(1);
-      String zipName = String.format(NAME_DAILYZIP, targetDateStr);
+//      String zipName = String.format(dailyZipFileName, targetDateStr);
+      String zipName = this.buildZipFileName(this.dailyZipFileName, targetDateStr);
+      String[] targetRepositoryPath = targetDateStr.split("-");
+
+      // Check if there is already created archived file.
+      if(this.auditLogFileService.prepareArchiveStoreFolder(targetRepositoryPath, zipName)){
+          LOG.warn("There is already archived log. Creation skipped: {}/{}", String.join("/", targetRepositoryPath), zipName);
+          continue;
+      }
+      LOG.debug("FILE to create: {}/{}", String.join("/", targetRepositoryPath), zipName);
 
       this.auditLogFileService.exportAuditLogsZipToRepo(
           fromEpochMilli,
           toEpochMilli,
           null,
           null,
-          targetDateStr.split("-"),
+          targetRepositoryPath,
+          zipName,
           // set PID blank when called by scheduled jobs.
-          "");
+          processId);
 
       LOG.debug("============ Loop End ============");
     }
@@ -119,5 +139,9 @@ public class AuditlogArchiveScheduler {
     this.auditLogFileService.deleteAuditLogs(fromEpochMilli, toEpochMilli);
 
     LOG.debug("============ Delete old audit log end");
+  }
+
+  private String buildZipFileName(String fileName, String dateStr){
+      return String.format(fileName, dateStr);
   }
 }

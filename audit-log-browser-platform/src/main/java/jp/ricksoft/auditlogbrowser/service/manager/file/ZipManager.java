@@ -79,12 +79,12 @@ public class ZipManager {
      * @return created zip file
      * @throws IOException
      */
-    public File createBlankZip(String suffix) throws IOException {
-        return this.createBlankZip(Paths.get(this.tmpDirPath), suffix);
+    public File createBlankZip(String fileName) throws IOException {
+        return this.createBlankZip(Paths.get(this.tmpDirPath), fileName);
     }
 
-    public File createBlankZip(Path directoryToCreate, String suffix) throws IOException {
-        File zip = new File(directoryToCreate.toFile(), zipName + "_" + suffix + ".zip");
+    public File createBlankZip(Path directoryToCreate, String fileName) throws IOException {
+        File zip = new File(directoryToCreate.toFile(), fileName);
         zip.createNewFile();
         return zip;
     }

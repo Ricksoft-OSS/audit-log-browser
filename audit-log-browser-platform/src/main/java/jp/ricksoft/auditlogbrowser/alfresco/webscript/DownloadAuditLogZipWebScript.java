@@ -7,6 +7,7 @@ import java.util.Set;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.extensions.webscripts.Cache;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
@@ -43,6 +44,9 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
 
     private DownloadProcessService downloadProcessManager;
     private AuditLogFileService auditLogFileService;
+
+    @Value("${AuditLogBrowser.zip.name}")
+    private String zipFileName;
 
     private static final Logger LOG = LoggerFactory.getLogger(DownloadAuditLogZipWebScript.class);
 
@@ -105,13 +109,23 @@ public class DownloadAuditLogZipWebScript extends DeclarativeWebScript {
                     user,
                     searchValues,
                     new String[]{AuditLogFileService.SUFFIX_ON_DEMAND_FOLDER},
-                    pid
-            );
+                    this.buildZipFileName(pid),
+                    pid);
         }
 
         model.put("exportStatus", downloadProcessManager.getProgress(pid).message());
 
         return model;
+    }
+
+    private String buildZipFileName(String pid){
+        final StringBuilder zipFileName = new StringBuilder(this.zipFileName);
+
+        zipFileName.append("_");
+        zipFileName.append(pid);
+        zipFileName.append(".zip");
+
+        return zipFileName.toString();
     }
 
 }

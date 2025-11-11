@@ -96,7 +96,7 @@ public class RepositoryFolderManager {
      */
     public NodeRef prepareNestedFolder(NodeRef rootFolder, String[] paths) {
 
-        // Backup data is always save to Company Home.
+        // Backup data is always saved to Company Home.
         NodeRef currentFolder = rootFolder;
 
         for (String path : paths) {
