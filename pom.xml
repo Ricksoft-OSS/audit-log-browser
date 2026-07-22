@@ -27,14 +27,16 @@
 
         <!-- Properties used in dependency declarations, you don't need to change these -->
         <alfresco.groupId>org.alfresco</alfresco.groupId>
-        <alfresco.bomDependencyArtifactId>acs-packaging</alfresco.bomDependencyArtifactId>
+        <alfresco.bomDependencyArtifactId>acs-community-packaging</alfresco.bomDependencyArtifactId>
         <alfresco.platform.version>23.2.1</alfresco.platform.version>
         <alfresco.platform.docker.user>alfresco</alfresco.platform.docker.user>
         <alfresco.share.version>23.2.0.72</alfresco.share.version>
         <alfresco.share.docker.version>23.2.1</alfresco.share.docker.version>
+        <alfresco.solr.version>2.0.21</alfresco.solr.version>
+        <alfresco.activemq.version>5.16.8-jre17-rockylinux8</alfresco.activemq.version>
 
         <!-- Docker images -->
-        <docker.acs.image>quay.io/alfresco/alfresco-content-repository</docker.acs.image>
+        <docker.acs.image>alfresco/alfresco-content-repository-community</docker.acs.image>
         <docker.share.image>alfresco/alfresco-share</docker.share.image>
         <keystore.settings>-Dencryption.keystore.type=JCEKS -Dencryption.cipherAlgorithm=AES/CBC/PKCS5Padding -Dencryption.keyAlgorithm=AES -Dencryption.keystore.location=/usr/local/tomcat/shared/classes/alfresco/extension/keystore/keystore -Dmetadata-keystore.password=mp6yc0UD9e -Dmetadata-keystore.aliases=metadata -Dmetadata-keystore.metadata.password=oKIWzVdEdA -Dmetadata-keystore.metadata.algorithm=AES
         </keystore.settings>
@@ -494,6 +496,13 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>enterprise</id>
+            <properties>
+                <alfresco.bomDependencyArtifactId>acs-packaging</alfresco.bomDependencyArtifactId>
+                <docker.acs.image>quay.io/alfresco/alfresco-content-repository</docker.acs.image>
+            </properties>
         </profile>
     </profiles>
 
